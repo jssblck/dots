@@ -1,0 +1,13 @@
+show=drun
+width=70%
+height=70%
+always_parse_args=true
+show_all=false
+term=kitty
+hide_scroll=true
+print_command=true
+insensitive=true
+matching=fuzzy
+normal_window=true
+prompt=
+columns=3
