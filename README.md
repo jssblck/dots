@@ -132,6 +132,19 @@ i also am fine with adwaita themes generally, but if you prefer other looks foll
   - this may not work at first, try rebooting. last time i was debugging it just randomly started working.
   - good luck
 
+> [!TIP]
+> make sure to enable git signing for your commits:
+> https://blog.1password.com/git-commit-signing/
+>
+> make sure to set up `op` for your scripts too!
+> i make scripts in `tools` that i use like `. {script_name}`
+> which run `op` commands to export variables into the current session.
+> for example:
+> ```shell
+> #!/usr/bin/env zsh
+> export GITHUB_TOKEN=$(op read 'op://Private/Github Personal Access Token/password')
+> ```
+
 ### firefox
 
 1. easy: `paru -S firefox`, works out of the box.
@@ -185,4 +198,3 @@ timeshift is amazing for snapshotting the system. this is the main reason we use
 1. if you want to use obs as a virtual camera (e.g. for discord screen sharing workarounds), install `paru -S v4l2loopback`
   - despite repeated attempts i've yet to get discord screen sharing to work even when running inside firefox
   - i'm hopeful this is just some sort of driver bug, or bug with the xdg portal.
-
