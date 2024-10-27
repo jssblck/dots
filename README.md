@@ -4,7 +4,7 @@
 this is mostly for self reference; it's public so that i can access it on new system startup before authenticating github etc.
 sharing in case anyone finds it useful.
 
-> [!NOTE]
+> [!TIP]
 > standalone commands in this document assume `~` as the CWD.
 > sequences of commands in code blocks assume you're starting in `~`, and then may move around in the sequence.
 
@@ -46,7 +46,7 @@ make sure the prior steps have been completed (or know that things may break).
 
 ## desktop
 
-> [!NOTE]
+> [!TIP]
 > the installer should have installed these, but if you're not sure,
 > run this step after getting paru set up but before installing dots:
 > `paru -Syu grim slurp hyprland`
@@ -95,7 +95,7 @@ i also am fine with adwaita themes generally, but if you prefer other looks foll
 
 ## apps
 
-> [!NOTE] i use a lot of electron apps.
+> [!TIP] i use a lot of electron apps.
 > lots of docs online talk about setting like, special launch options and whatever to make them work with wayland.
 > i didn't do any of that and things seemed to work fine for me (for my needs anyway).
 > but maybe if i did this section differently things would be better. i don't mind running stuff on xwayland.
@@ -115,7 +115,7 @@ i also am fine with adwaita themes generally, but if you prefer other looks foll
 
 ### 1password
 
-> [!NOTE]
+> [!TIP]
 > the 1password app sometimes crashes immediately on startup.
 > if this happens, it may take a few seconds for another relaunch to work.
 > i suspect this may be due to missing `xdg-desktop-portal` stuff? that's installed later, if you want.
@@ -146,13 +146,13 @@ i also am fine with adwaita themes generally, but if you prefer other looks foll
 
 timeshift is amazing for snapshotting the system. this is the main reason we use `btrfs`: it enables snapshots using a lot less space.
 
-> [!NOTE]
+> [!TIP]
 > i don't run grub, so can't use `grub-btrfs`, which automates booting into snapshots.
 > if your system gets broken but you can still log in, you should be able to use timeshift to restore snapshots.
 > if your system can boot but not log in, you should be able to use a different tty to use timeshift to restore snapshots.
 > if your system can't boot at all, you should be able to use arch install media to boot and then just `chroot` into the system, then use timeshift to restore snapshots.
 
-> [!NOTE]
+> [!TIP]
 > i don't snapshot `@home`: everything in there is backed up other ways (generally, through git).
 > feel free to snapshot `@home` if you want, it'll likely be a lot of data though.
 
