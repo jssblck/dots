@@ -22,9 +22,12 @@
 		"disable-scroll": true,
 		"all-outputs": true,
 		"warp-on-scroll": false,
+		"show-special": true,
+		"special-visible-only": true,
 		"format": "{icon}",
 		"format-icons": {
-			"default": ""
+			"default": "",
+			"special": ""
 		}
 	},
 	"tray": {
