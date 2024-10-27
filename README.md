@@ -4,6 +4,8 @@
 this is mostly for self reference; it's public so that i can access it on new system startup before authenticating github etc.
 sharing in case anyone finds it useful.
 
+![image of my desktop with these dotfiles](./assets/desktop.png)
+
 > [!TIP]
 > standalone commands in this document assume `~` as the CWD.
 > sequences of commands in code blocks assume you're starting in `~`, and then may move around in the sequence.
