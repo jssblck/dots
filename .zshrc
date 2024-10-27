@@ -1,3 +1,4 @@
+autoload -U compinit; compinit
 
 PS1='; '
 
@@ -16,4 +17,3 @@ bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
 bindkey '^H' kill-line
 bindkey '^K' clear-screen
-
