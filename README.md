@@ -195,6 +195,54 @@ timeshift is amazing for snapshotting the system. this is the main reason we use
 1. optionally, install these for enhanced previews:
   - `paru -S ffmpegthumbnailer jq poppler fd ripgrep fzf wl-clipboard p7zip imagemagick bat`
 
+### gaming
+
+> [!WARNING]
+> make sure to take a timeshift backup first, we're going to be messing with drivers a lot.
+
+> [!IMPORTANT]
+> you need to enable multilib if you haven't already in order to install basically everything in this section.
+
+> [!INFO]
+> i was always planning to install lutris _and_ steam- if you only care about one,
+> you may not need all these steps.
+>
+> for game compatibility:
+> - https://www.protondb.com/
+> - https://lutris.net/
+>
+> generally i try to run stuff in steam if i can, and use lutris as a fallback if i can't.
+
+1. install drivers, wine, gamemode, and required libraries:
+```shell
+# yes this seems like a lot but you need it all
+sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
+sudo pacman -S gamemode lib32-gamemode # make sure to add yourself to the `gamemode` group
+sudo pacman -S wine-staging
+sudo pacman -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse \
+lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite \
+lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs \
+lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2
+```
+1. install steam: `sudo pacman -S steam`
+1. boot steam, sign in, go to `settings -> compatibility` and enable steam play for everything.
+1. install lutris: `sudo pacman -S lutris`
+1. launch lutris, log in, and turn on library sync.
+1. go to settings -> system, make sure `Vulkan`, `Esync`, `Fsync`, `Wine`, `Gamemode`, and `Steam` are all "YES".
+1. go to settings -> updates, make sure "Stable" is selected. click the buttons to have lutris download wine and any missing media for you.
+
+> [!TIP]
+> if fonts look bad, try `paru -S ttf-ms-fonts`
+
+you should be good!
+to run games:
+- in steam, just launch steam and have it download. it should just work, check `protondb` if it doesn't.
+- in lutris, click "+" in the top left corner and search. it should just work, check the lutris website if it doesn't.
+  - often the installation modal will have instructions, make sure to follow them.
+
+> [!TIP]
+> press Super+G to make a game fullscreen!
+
 ## screen sharing
 
 > [!WARNING]
