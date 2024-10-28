@@ -30,3 +30,4 @@ cp -r .config/waypaper ~/.config
 cp -r .config/xsettingsd ~/.config
 cp -r .config/nwg-look ~/.config
 cp -r .config/gtk-3.0 ~/.config
+cp -r .config/dunst ~/.config
