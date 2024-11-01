@@ -74,6 +74,7 @@
 		"menu": "on-click",
 		"menu-file": "$HOME/.config/waybar/power_menu.xml",
 		"menu-actions": {
+			"sleep": "systemctl suspend",
 			"shutdown": "shutdown now",
 			"reboot": "reboot"
 		}
