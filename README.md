@@ -66,6 +66,7 @@ make sure the prior steps have been completed (or know that things may break).
 1. clone dots: `git clone https://github.com/jssblck/dots.git`
 1. install other tools:
   - rust: `rustup update stable`
+  - ghc: `paru -S ghcup-hs-bin`; install with `ghcup tui`
   - paru: `mkdir tools && cd tools && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si && paru --gendb`
     - optional: enable colors in `/etc/pacman.conf`
   - sync paru: `paru -Syu && paru -Fy`
