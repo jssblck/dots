@@ -11,10 +11,14 @@ alias cat='bat'
 alias ..='cd .. && pwd'
 alias pq='psql -h localhost' # docker pull postgres && docker run --network=host --name postgres-latest -e POSTGRES_USER=jess -e POSTGRES_PASSWORD=123 -d --restart=always postgres
 alias ntr='cargo nextest run'
+alias ps='procs'
+alias trash='trashy put'
 
 source <(fzf --zsh)
 source <(volta completions zsh)
 source <(op completion zsh)
+source <(procs --gen-completion-out zsh)
+source <(trashy completions zsh)
 eval "$(zoxide init zsh)"
 
 bindkey '^[[H' beginning-of-line

@@ -66,15 +66,15 @@ make sure the prior steps have been completed (or know that things may break).
 1. clone dots: `git clone https://github.com/jssblck/dots.git`
 1. install other tools:
   - rust: `rustup update stable`
-  - ghc: `paru -S ghcup-hs-bin`; install with `ghcup tui`
   - paru: `mkdir tools && cd tools && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si && paru --gendb`
     - optional: enable colors in `/etc/pacman.conf`
   - sync paru: `paru -Syu && paru -Fy`
-  - utils: `paru -S nerd-fonts jq xh ripgrep eza zoxide fzf hyprpaper hyprpolkitagent waybar waypaper wf-recorder nwg-look gnome-themes-extra wl-copy`
+  - utils: `paru -S nerd-fonts jq xh ripgrep eza zoxide fzf hyprpaper hyprpolkitagent waybar waypaper wf-recorder nwg-look gnome-themes-extra wl-copy trashy-git procs`
     - i just install all the `nerd-fonts`, follow your heart
     - if you get conflicts between `*-git` and non-git variants, generally pick the git variants
     - the main difference is that they're built from source so are more up to date
     - but as usual, use your judgement...
+  - ghc: `paru -S ghcup-hs-bin`; install with `ghcup tui`
 1. install the dots: `cp -rT dots .`
   - this copies the readme into your home directory, feel free to delete it but it may be useful for referencing later
 1. switch to zsh: `chsh -s $(which zsh)`
