@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+case "$1" in
+    "super")
+        export FOSSA_API_KEY=$(op --account team-fossa.1password.com read 'op://Employee/fossakeys/super')
+        ;;
+    "prod")
+        export FOSSA_API_KEY=$(op --account team-fossa.1password.com read 'op://Employee/fossakeys/production')
+        ;;
+    "prod-full")
+        export FOSSA_API_KEY=$(op --account team-fossa.1password.com read 'op://Employee/fossakeys/production-full')
+        ;;
+    "staging")
+        export FOSSA_API_KEY=$(op --account team-fossa.1password.com read 'op://Employee/fossakeys/staging')
+        ;;
+    *)
+        echo "Usage: $0 {super|prod|prod-full|staging}"
+        exit 1
+        ;;
+esac
+
+echo "Exported FOSSA_API_KEY for $1 in current shell"
