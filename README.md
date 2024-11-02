@@ -235,6 +235,14 @@ lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32
 > [!TIP]
 > if fonts look bad, try `paru -S ttf-ms-fonts`
 
+> [!TIP]
+> optionally, install these too:
+> ```shell
+> paru -S gamescope # VRR, HDR, customize the screen size for games, and more
+> ```
+> you can then customize steam games with launch options, e.g.:
+> `gamescope -W 5120 -H 1440 --adaptive-sync -- %command%`
+
 you should be good!
 to run games:
 - in steam, just launch steam and have it download. it should just work, check `protondb` if it doesn't.
