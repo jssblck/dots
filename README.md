@@ -69,7 +69,7 @@ make sure the prior steps have been completed (or know that things may break).
   - paru: `mkdir tools && cd tools && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si && paru --gendb`
     - optional: enable colors in `/etc/pacman.conf`
   - sync paru: `paru -Syu && paru -Fy`
-  - utils: `paru -S nerd-fonts jq xh ripgrep eza zoxide fzf hyprpaper hyprpolkitagent waybar waypaper wf-recorder nwg-look gnome-themes-extra wl-copy trashy-git procs`
+  - utils: `paru -S nerd-fonts jq xh ripgrep eza zoxide fzf hyprpaper hyprpolkitagent waybar waypaper wf-recorder nwg-look gnome-themes-extra wl-copy trashy-git procs waybar-module-pacman-updates-git`
     - i just install all the `nerd-fonts`, follow your heart
     - if you get conflicts between `*-git` and non-git variants, generally pick the git variants
     - the main difference is that they're built from source so are more up to date
