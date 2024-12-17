@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+case "$1" in
+    "resolve")
+        xh "https://analysis.fossa.com/api/v1/project/$(urlencode $2)/resolve"
+        ;;
+    "getMetadata")
+        xh "https://analysis.fossa.com/api/v1/project/$(urlencode $2)/metadata"
+        ;;
+    "download")
+        URL=$(xh "https://analysis.fossa.com/api/v1/project/$(urlencode $2)/resolve" | jaq ".download_url" -r)
+        curl $URL
+        ;;
+    *)
+        echo "Usage: $0 {resolve|getMetadata|download} $SOME_LOCATOR"
+        exit 1
+        ;;
+esac
+
