@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# usage: . fossaenv {super|prod|prod-full|staging}
+
 case "$1" in
     "super")
         export FOSSA_API_KEY=$(op --account team-fossa.1password.com read 'op://Employee/fossakeys/super')

@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# prune all branches and tags except those on the remote.
+# usage: gitprune
+
 git fetch --prune
 git checkout $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
 git pull
@@ -7,4 +10,3 @@ git pull
 git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 < (git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -D
 git branch --no-color | grep -v "master\|main" | xargs git branch -D
 git fetch --prune --prune-tags -f
-

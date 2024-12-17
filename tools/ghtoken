@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
 
+# usage: . ghtoken
+
 export GITHUB_TOKEN=$(op --account my.1password.com read 'op://Private/Github Personal Access Token/token')
 echo "Exported GITHUB_TOKEN in current shell"

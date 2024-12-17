@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# Use the `analysis.fossa.com` API to resolve, get metadata, and download a project.
+# usage: . fetcher {resolve|getMetadata|download} <locator>
+
 case "$1" in
     "resolve")
         xh "https://analysis.fossa.com/api/v1/project/$(urlencode $2)/resolve"
@@ -12,8 +15,7 @@ case "$1" in
         curl $URL
         ;;
     *)
-        echo "Usage: $0 {resolve|getMetadata|download} $SOME_LOCATOR"
+        echo "Usage: $0 {resolve|getMetadata|download} <locator>"
         exit 1
         ;;
 esac
-
