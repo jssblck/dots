@@ -15,9 +15,5 @@ export PATH="$HOME/.local/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/libpq/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/libpq/include"
 
-HISTFILE=~/.zsh_history
-HISTSIZE=100000
-SAVEHIST=100000
-setopt appendhistory
 
 . "$HOME/.cargo/env"

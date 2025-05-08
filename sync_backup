@@ -2,7 +2,6 @@
 
 cp ~/.zshrc .
 cp ~/.zshenv .
-cp ~/.zprofile .
 cp ~/.profile .
 
 rm -rf .config
