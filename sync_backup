@@ -1,14 +1,124 @@
 #!/usr/bin/env zsh
+set -euo pipefail
 
-cp ~/.zshrc .
-cp ~/.zshenv .
-cp ~/.profile .
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+DEST=$(pwd)
+MODE="generic"
 
-rm -rf .config
-mkdir .config
-cp -r ~/.config/kitty .config
-rm -rf .config/docker # Docker may store credentials inside this folder
+if [[ "$DEST" == "$SCRIPT_DIR" ]]; then
+  MODE="repo"
+elif [[ "$DEST" == "$SCRIPT_DIR"/.backup/* ]]; then
+  MODE="snapshot"
+fi
 
-rm -rf tools
-mkdir tools
-cp -r ~/tools .
+copy_file() {
+  local src="$1"
+  local rel="$2"
+  local dst="$DEST/$rel"
+  [[ -f "$src" ]] || return 0
+  mkdir -p "${dst:h}"
+  cp "$src" "$dst"
+}
+
+copy_portable_file() {
+  local src="$1"
+  local rel="$2"
+  local dst="$DEST/$rel"
+  [[ -f "$src" ]] || return 0
+  mkdir -p "${dst:h}"
+  if [[ "$MODE" == "repo" ]]; then
+    HOME_VALUE="$HOME" perl -0pe 's/\Q$ENV{HOME_VALUE}\E/__HOME__/g' "$src" > "$dst"
+  else
+    cp "$src" "$dst"
+  fi
+}
+
+replace_dir() {
+  local src="$1"
+  local rel="$2"
+  local dst="$DEST/$rel"
+  [[ -d "$src" ]] || return 0
+  rm -rf "$dst"
+  mkdir -p "$dst"
+  rsync -a "$src/" "$dst/"
+}
+
+replace_dir_with_excludes() {
+  local src="$1"
+  local rel="$2"
+  shift 2
+  local dst="$DEST/$rel"
+  [[ -d "$src" ]] || return 0
+  rm -rf "$dst"
+  mkdir -p "$dst"
+  local args=("$@")
+  rsync -a "${args[@]}" "$src/" "$dst/"
+}
+
+
+write_web_tools_example() {
+  local dst="$DEST/.pi/web-tools.json.example"
+  mkdir -p "${dst:h}"
+  cat > "$dst" <<'EOF'
+{
+  "exaApiKey": "__PI_EXA_API_KEY__"
+}
+EOF
+}
+
+if [[ "$MODE" == "repo" ]]; then
+  rm -f "$DEST/.pi/web-tools.json.example" "$DEST/.claude/settings.local.json" "$DEST/.codex/AGENTS.md"
+fi
+
+copy_file "$HOME/.zshrc" ".zshrc"
+copy_file "$HOME/.zshenv" ".zshenv"
+copy_file "$HOME/.zprofile" ".zprofile"
+copy_file "$HOME/.profile" ".profile"
+
+replace_dir_with_excludes "$HOME/.config/kitty" ".config/kitty" --exclude current-theme.conf.bak
+rm -rf "$DEST/.config/docker"
+
+replace_dir "$HOME/tools" "tools"
+
+copy_file "$HOME/.pi/agent/AGENTS.md" ".pi/agent/AGENTS.md"
+copy_portable_file "$HOME/.pi/agent/settings.json" ".pi/agent/settings.json"
+replace_dir "$HOME/.pi/agent/agents" ".pi/agent/agents"
+replace_dir "$HOME/.pi/agent/prompts" ".pi/agent/prompts"
+replace_dir_with_excludes "$HOME/.pi/agent/extensions" ".pi/agent/extensions" --exclude node_modules --exclude disabled --exclude workspace
+copy_file "$HOME/.pi/bin/npm-no-scripts" ".pi/bin/npm-no-scripts"
+
+if [[ "$MODE" == "repo" ]]; then
+  [[ -f "$HOME/.pi/web-tools.json" ]] && write_web_tools_example
+  rm -f "$DEST/.pi/companion.json" "$DEST/.pi/pi-mesh.json" "$DEST/.pi/agent/pi-messenger.json"
+else
+  copy_file "$HOME/.pi/web-tools.json" ".pi/web-tools.json"
+  copy_file "$HOME/.pi/companion.json" ".pi/companion.json"
+  copy_file "$HOME/.pi/pi-mesh.json" ".pi/pi-mesh.json"
+  copy_file "$HOME/.pi/agent/pi-messenger.json" ".pi/agent/pi-messenger.json"
+fi
+
+# .agents/skills (explicit list; .claude/skills is a symlink to this)
+for skill in chrome-cdp electron-control find-skills frontend-design \
+             merge-fixup pull-request skill-creator ssh-debugging wtp-workspaces; do
+  replace_dir "$HOME/.agents/skills/$skill" ".agents/skills/$skill"
+done
+
+copy_file "$HOME/.claude/CLAUDE.md" ".claude/CLAUDE.md"
+copy_portable_file "$HOME/.claude/settings.json" ".claude/settings.json"
+copy_file "$HOME/.claude/settings.local.json" ".claude/settings.local.json"
+copy_file "$HOME/.claude/statusline-command.sh" ".claude/statusline-command.sh"
+copy_file "$HOME/.claude/plugins/blocklist.json" ".claude/plugins/blocklist.json"
+# .claude/skills — symlink to .agents/skills on this machine, just copy the repo snapshot
+for skill in chrome-cdp electron-control find-skills frontend-design \
+             merge-fixup pull-request skill-creator ssh-debugging wtp-workspaces; do
+  replace_dir "$HOME/.claude/skills/$skill" ".claude/skills/$skill"
+done
+
+copy_portable_file "$HOME/.codex/config.toml" ".codex/config.toml"
+copy_file "$HOME/.codex/AGENTS.md" ".codex/AGENTS.md"
+copy_portable_file "$HOME/.codex/rules/default.rules" ".codex/rules/default.rules"
+
+if [[ "$MODE" == "repo" ]]; then
+  rm -f "$DEST/.claude/settings.local.json"
+  [[ -s "$DEST/.codex/AGENTS.md" ]] || rm -f "$DEST/.codex/AGENTS.md"
+fi

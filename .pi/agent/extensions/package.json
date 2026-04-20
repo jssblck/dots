@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@mariozechner/pi-ai": "^0.56.0",
+    "@mariozechner/pi-tui": "^0.56.0"
+  }
+}

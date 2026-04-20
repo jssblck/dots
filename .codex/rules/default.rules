@@ -1,0 +1,2 @@
+prefix_rule(pattern=["git", "fetch"], decision="allow")
+prefix_rule(pattern=["git", "-C", "__HOME__/org/attune/tuna/reference/pi-mono", "reset", "--hard", "origin/main"], decision="allow")

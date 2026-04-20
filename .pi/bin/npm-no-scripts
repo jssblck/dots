@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Wrapper around npm that adds --ignore-scripts to install commands.
+# Used by pi's npmCommand setting to avoid broken postinstall scripts
+# in transitive dependencies (e.g. pi-dcp -> @stacksjs/clapp -> bunx git-hooks).
+
+args=("$@")
+
+is_install=false
+for arg in "$@"; do
+  case "$arg" in
+    install|i|add) is_install=true; break ;;
+  esac
+done
+
+if $is_install; then
+  exec npm --ignore-scripts "${args[@]}"
+else
+  exec npm "${args[@]}"
+fi

@@ -1,3 +1,2 @@
-. "$HOME/.cargo/env"
 
-. "$HOME/.circe/bin/env"
+. "$HOME/.cargo/env"

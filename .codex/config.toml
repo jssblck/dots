@@ -1,0 +1,31 @@
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+personality = "friendly"
+commit_attribution = "Codex <noreply@openai.com>"
+
+[projects."__HOME__/org/attune/infra"]
+trust_level = "trusted"
+
+[projects."__HOME__/org/attune/tuna"]
+trust_level = "trusted"
+
+[projects."__HOME__/org/attune/bifrost"]
+trust_level = "trusted"
+
+[projects."__HOME__/org/attune/l2fg"]
+trust_level = "trusted"
+
+[projects."__HOME__"]
+trust_level = "trusted"
+
+[features]
+codex_git_commit = true
+multi_agent = true
+prevent_idle_sleep = true
+js_repl = true
+
+[notice]
+hide_full_access_warning = true
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "model-name", "context-remaining", "five-hour-limit", "weekly-limit", "total-input-tokens", "total-output-tokens"]

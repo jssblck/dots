@@ -1,26 +1,113 @@
 #!/usr/bin/env zsh
+set -euo pipefail
 
-ROOT=$(pwd)
-mkdir .backup 2> /dev/null
-cd .backup
-
+ROOT=$(cd "$(dirname "$0")" && pwd)
+BACKUP_ROOT="$ROOT/.backup"
 NOW=$(date +'%Y-%m-%dT%H:%M:%S%z')
-mkdir $NOW
-cd $NOW
+BACKUP_DIR="$BACKUP_ROOT/$NOW"
 
-$ROOT/sync_backup.sh
-echo "current config backed up to $(pwd)"
-echo "contents:"
-eza -Ta
+copy_file() {
+  local rel="$1"
+  local dst="$2"
+  local src="$ROOT/$rel"
+  [[ -f "$src" ]] || return 0
+  mkdir -p "${dst:h}"
+  cp "$src" "$dst"
+}
 
-cd $ROOT
-cp .zshrc ~
-cp .zshenv ~
-cp .zprofile ~
-cp .profile ~
+render_portable_file() {
+  local rel="$1"
+  local dst="$2"
+  local src="$ROOT/$rel"
+  [[ -f "$src" ]] || return 0
+  mkdir -p "${dst:h}"
+  HOME_VALUE="$HOME" perl -0pe 's/__HOME__/$ENV{HOME_VALUE}/g' "$src" > "$dst"
+}
 
-mkdir ~/.config 2> /dev/null
-cp -r .config/kitty ~/.config
+replace_dir() {
+  local rel="$1"
+  local dst="$2"
+  local src="$ROOT/$rel"
+  [[ -d "$src" ]] || return 0
+  rm -rf "$dst"
+  mkdir -p "$dst"
+  rsync -a "$src/" "$dst/"
+}
 
-mkdir ~/tools 2> /dev/null
-cp -r tools ~/tools
+mkdir -p "$BACKUP_ROOT" "$BACKUP_DIR"
+(
+  cd "$BACKUP_DIR"
+  "$ROOT/sync_backup"
+)
+
+echo "current config backed up to $BACKUP_DIR"
+if command -v eza >/dev/null 2>&1; then
+  echo "contents:"
+  eza -Ta "$BACKUP_DIR"
+fi
+
+copy_file ".zshrc" "$HOME/.zshrc"
+copy_file ".zshenv" "$HOME/.zshenv"
+copy_file ".zprofile" "$HOME/.zprofile"
+copy_file ".profile" "$HOME/.profile"
+
+replace_dir ".config/kitty" "$HOME/.config/kitty"
+replace_dir "tools" "$HOME/tools"
+
+# .agents/skills (explicit list; .claude/skills is a symlink to this)
+for skill in chrome-cdp electron-control find-skills frontend-design \
+             merge-fixup pull-request skill-creator ssh-debugging wtp-workspaces; do
+  replace_dir ".agents/skills/$skill" "$HOME/.agents/skills/$skill"
+done
+
+copy_file ".pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+render_portable_file ".pi/agent/settings.json" "$HOME/.pi/agent/settings.json"
+replace_dir ".pi/agent/agents" "$HOME/.pi/agent/agents"
+replace_dir ".pi/agent/prompts" "$HOME/.pi/agent/prompts"
+replace_dir ".pi/agent/extensions" "$HOME/.pi/agent/extensions"
+copy_file ".pi/bin/npm-no-scripts" "$HOME/.pi/bin/npm-no-scripts"
+chmod +x "$HOME/.pi/bin/npm-no-scripts" 2>/dev/null || true
+
+if [[ -n "${PI_EXA_API_KEY:-}" ]]; then
+  mkdir -p "$HOME/.pi"
+  cat > "$HOME/.pi/web-tools.json" <<EOF
+{
+  "exaApiKey": "$PI_EXA_API_KEY"
+}
+EOF
+elif [[ -f "$HOME/.pi/web-tools.json" ]]; then
+  echo "keeping existing ~/.pi/web-tools.json (PI_EXA_API_KEY not set)"
+else
+  echo "skipping ~/.pi/web-tools.json (set PI_EXA_API_KEY to restore Exa web tools)"
+fi
+
+rm -f "$HOME/.pi/agent/pi-messenger.json" "$HOME/.pi/pi-mesh.json" "$HOME/.pi/companion.json"
+
+copy_file ".claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+render_portable_file ".claude/settings.json" "$HOME/.claude/settings.json"
+copy_file ".claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+chmod +x "$HOME/.claude/statusline-command.sh" 2>/dev/null || true
+copy_file ".claude/plugins/blocklist.json" "$HOME/.claude/plugins/blocklist.json"
+# .claude/skills -- symlink to .agents/skills on this machine, just copy the repo snapshot
+for skill in chrome-cdp electron-control find-skills frontend-design \
+             merge-fixup pull-request skill-creator ssh-debugging wtp-workspaces; do
+  replace_dir ".claude/skills/$skill" "$HOME/.claude/skills/$skill"
+done
+
+render_portable_file ".codex/config.toml" "$HOME/.codex/config.toml"
+copy_file ".codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
+render_portable_file ".codex/rules/default.rules" "$HOME/.codex/rules/default.rules"
+
+if command -v npm >/dev/null 2>&1 && [[ -f "$HOME/.pi/agent/extensions/package-lock.json" ]]; then
+  (
+    cd "$HOME/.pi/agent/extensions"
+    npm ci --ignore-scripts
+  )
+elif command -v npm >/dev/null 2>&1 && [[ -f "$HOME/.pi/agent/extensions/package.json" ]]; then
+  (
+    cd "$HOME/.pi/agent/extensions"
+    npm install --ignore-scripts
+  )
+else
+  echo "skipping ~/.pi/agent/extensions dependency install (npm not found)"
+fi

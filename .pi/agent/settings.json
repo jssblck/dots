@@ -1,0 +1,44 @@
+{
+  "lastChangelogVersion": "0.68.0",
+  "collapseChangelog": true,
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-4-6",
+  "enabledModels": [
+    "anthropic/claude-opus-4-6",
+    "openai-codex/gpt-5.4"
+  ],
+  "packages": [
+    "npm:pi-subagents",
+    "npm:@aliou/pi-guardrails",
+    "npm:@aliou/pi-processes",
+    "npm:pi-interactive-shell",
+    "npm:pi-mermaid",
+    "npm:pi-ghostty",
+    "npm:pi-usage-bars",
+    "npm:@coctostan/pi-exa-gh-web-tools",
+    "npm:lsp-pi",
+    "git:github.com/pasky/chrome-cdp-skill",
+    "npm:pi-dcp",
+    "npm:glimpseui",
+    "npm:pi-ask-me"
+  ],
+  "defaultThinkingLevel": "high",
+  "theme": "catppuccin-mocha",
+  "terminal": {
+    "clearOnShrink": true
+  },
+  "quietStartup": false,
+  "doubleEscapeAction": "tree",
+  "editorPaddingX": 1,
+  "transport": "auto",
+  "hideThinkingBlock": true,
+  "extensions": [
+    "-extensions/pi-review-loop/index.ts"
+  ],
+  "lsp": {
+    "hookMode": "edit_write"
+  },
+  "npmCommand": [
+    "__HOME__/.pi/bin/npm-no-scripts"
+  ]
+}
