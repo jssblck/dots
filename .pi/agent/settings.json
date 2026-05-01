@@ -1,11 +1,11 @@
 {
-  "lastChangelogVersion": "0.68.0",
+  "lastChangelogVersion": "0.70.6",
   "collapseChangelog": true,
-  "defaultProvider": "anthropic",
-  "defaultModel": "claude-opus-4-6",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
   "enabledModels": [
     "anthropic/claude-opus-4-6",
-    "openai-codex/gpt-5.4"
+    "openai-codex/gpt-5.5"
   ],
   "packages": [
     "npm:pi-subagents",
@@ -20,9 +20,12 @@
     "git:github.com/pasky/chrome-cdp-skill",
     "npm:pi-dcp",
     "npm:glimpseui",
-    "npm:pi-ask-me"
+    "npm:pi-ask-me",
+    "npm:pi-manage-todo-list",
+    "npm:pi-imagegen",
+    "npm:@benvargas/pi-openai-fast"
   ],
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "xhigh",
   "theme": "catppuccin-mocha",
   "terminal": {
     "clearOnShrink": true

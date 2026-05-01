@@ -1,0 +1,14 @@
+{
+  "name": "pi-goal-extension",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@mariozechner/pi-agent-core": "0.70.6",
+    "@mariozechner/pi-ai": "0.70.6",
+    "@mariozechner/pi-coding-agent": "0.70.6",
+    "typebox": "1.1.34"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  }
+}
