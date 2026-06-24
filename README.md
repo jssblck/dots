@@ -23,7 +23,6 @@ Tracked:
 - `~/.claude/skills/` (`code-craft`, `impeccable`, `stop-slop`)
 - `~/.codex/config.toml` (curated, see below)
 - `~/.codex/AGENTS.md`
-- `~/.codex/rules/default.rules`
 - `~/.agents/AGENTS.md` and `~/.agents/skills/` (shared cross-agent copies:
   `AGENTS.md` mirrors the Codex one; `impeccable` is the Codex-flavored
   superset, including its `agents/*.toml` + `openai.yaml` agent definitions,
@@ -34,7 +33,6 @@ Not tracked:
 - Claude / Codex auth (`~/.claude/.credentials.json`, `~/.codex/auth.json`)
 - sessions, history, logs, sqlite, caches, shell snapshots, telemetry
 - machine-local Claude permissions in `~/.claude/settings.local.json`
-- `~/.claude/plugins/` install state and the remote-fetched `blocklist.json` cache
 - Codex runtime state: marketplaces, mcp_servers, hook trust hashes,
   per-project trust paths, the `notify` hook path, runtime-bundled plugins
 

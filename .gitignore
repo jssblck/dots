@@ -21,10 +21,6 @@
 .claude/shell-snapshots/
 .claude/tasks/
 
-# Claude plugins: all install state and fetched caches (incl. the remote-fetched
-# blocklist.json), nothing here is durable hand-authored config
-.claude/plugins/
-
 # Codex: auth, sessions, logs, sqlite, caches, runtime, computer-use state
 .codex/auth.json
 .codex/*.json
