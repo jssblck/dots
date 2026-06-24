@@ -3,6 +3,9 @@
 - Do not preserve backwards compatibility by default. If the clean solution requires deleting APIs, changing schemas, rewriting call sites, renaming concepts, or making broad breaking changes, do it. Mention the breakage plainly; do not avoid it.
 - Do not assume existing issues are acceptable. Fix issues when they are in scope or block the requested work; mention unrelated issues rather than changing them without permission.
 - Do not do unrelated work for its own sake. But if adjacent cleanup, refactoring, migrations, docs, or tests make the requested outcome actually complete, do them.
+- Comments are great, but only when they explain _why_ the code does something instead of _what_ the code does. The code already explains what it's doing; include comments only as additional context and signal as to why we are doing it this way.
+
+It's common and correct to say that "all code is technical debt". Adding code is a necessary evil for developing new features: you almost always have to do it, but each line of code adds to the complexity and maintenance burden of the system. Sensible engineers, and you are a sensible engineer, write as little code as possible.
 
 ## Boil the ocean
 
@@ -52,6 +55,12 @@ The standard isn't "good enough", it's "holy shit, that's done". Search before b
 - Use `bun -e '...'` with a multiline script when the task needs shared state, parsing, iteration, branching, or coordinated updates.
 - Prefer plain shell commands only for simple one-step operations.
 - When a command continues running in the background after the foreground wait period, do not send a message whose only purpose is to say that the command is still running. Send an update only when there is new information, a decision point, a result, or user-visible risk.
+
+## Long-running commands
+
+- For expected long-running commands, wait silently until the command exits, produces meaningful output, times out, or needs user input.
+- Do not send progress updates whose only content is that a command is still running.
+- When checking a background command is necessary, use the longest available quiet polling interval.
 
 ## Codex automations
 

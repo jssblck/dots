@@ -57,7 +57,7 @@ Copied verbatim in both directions.
 ### Tool config
 
 - `~/.claude/settings.json`           -> `dotclaude/settings.json` (sanitized, see below)
-- `~/.claude/statusline-command.ps1`  -> `dotclaude/statusline-command.ps1` (verbatim; referenced by settings.json)
+- `~/.claude/statusline-command.mjs`  -> `dotclaude/statusline-command.mjs` (verbatim; cross-platform Bun statusline, referenced by settings.json)
 - `~/.codex/config.toml`              -> `dotcodex/config.toml` (curated, see below)
 
 ## What is never synced
@@ -79,11 +79,16 @@ Sanitization is applied on **backup** and reversed on **restore**.
 
 ### `settings.json` (Claude)
 
-The only machine-specific value is the statusline command's absolute path.
+The statusline runs `statusline-command.mjs` under Bun, which is cross-platform
+(macOS and Windows), so a single command works on every machine. `bun` is
+invoked from `PATH` (its installer adds `~/.bun/bin` on both OSes), so the only
+machine-specific value is the script's absolute path.
 
-- **Backup:** replace the literal home directory with the token `__HOME__`.
-  Result: `pwsh -NoProfile -NonInteractive -File __HOME__\\.claude\\statusline-command.ps1`
-- **Restore:** expand `__HOME__` back to the machine's real home directory.
+- **Backup:** replace the literal home directory in the script path with the
+  token `__HOME__`.
+  Result: `bun __HOME__/.claude/statusline-command.mjs`
+- **Restore:** expand `__HOME__` back to the machine's real home directory. Bun
+  accepts the forward-slash path on Windows too, so no per-OS variant is needed.
 
 The rest of `settings.json` is durable preferences and is safe to copy/overwrite.
 
@@ -118,7 +123,7 @@ For each tool dir:
    delete removed; strip nested `.git/`; skip `.system/`).
 2. Copy the instruction file (`CLAUDE.md` / `AGENTS.md`) verbatim.
 3. Copy `settings.json` (with `__HOME__` sanitization) and
-   `statusline-command.ps1` for Claude; copy `config.toml` (curated) for Codex.
+   `statusline-command.mjs` for Claude; copy `config.toml` (curated) for Codex.
 4. Stage and commit. The `.gitignore` blocks anything sensitive that slipped in;
    if a commit would include an ignored-category file, stop and fix the copy
    step rather than force-adding it.
@@ -130,7 +135,7 @@ For each tool dir:
 1. Mirror `dot<tool>/skills/` back into `~/.<tool>/skills/` (preserving
    `~/.codex/skills/.system/`, which the repo never tracks).
 2. Copy the instruction file back verbatim.
-3. Claude: write `statusline-command.ps1`, then write `settings.json` with
+3. Claude: write `statusline-command.mjs`, then write `settings.json` with
    `__HOME__` expanded to the real home path.
 4. Codex: **merge** the curated `config.toml` durable keys into the live file
    (see above); do not clobber machine-specific sections.

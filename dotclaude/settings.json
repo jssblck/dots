@@ -19,7 +19,8 @@
     "claude-md-management@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "slack@claude-plugins-official": true
   },
   "effortLevel": "high",
   "autoCompactWindow": 400000,
@@ -38,7 +39,7 @@
   "useAutoModeDuringPlan": false,
   "statusLine": {
     "type": "command",
-    "command": "pwsh -NoProfile -NonInteractive -File __HOME__\\.claude\\statusline-command.ps1"
+    "command": "bun __HOME__/.claude/statusline-command.mjs"
   },
   "skipWorkflowUsageWarning": true
 }
