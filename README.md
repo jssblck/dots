@@ -7,64 +7,23 @@ branches are for different systems.
 - macOS: `macos`; https://github.com/jssblck/dots/tree/macos
 - Arch Linux: `arch`; https://github.com/jssblck/dots/tree/arch
 
-This branch (`agents`) is my Windows user-level Claude Code and Codex config.
+This branch (`agents`) backs up my Windows user-level agent config (Claude Code,
+Codex, and shared cross-agent files). It is kept in sync by an agent routine
+that runs both directions: home to repo (backup) and repo to home (restore).
 
-## Agent config backup policy
+## Layout
 
-Only durable, hand-authored or portable agent config is tracked here.
-Auth, sessions, logs, caches, sqlite, telemetry, and other machine state are
-intentionally excluded (see `.gitignore`).
+Each top-level directory mirrors a home agent directory:
 
-Tracked:
+| Repo dir     | Home dir     | Tool               |
+| ------------ | ------------ | ------------------ |
+| `dotclaude/` | `~/.claude/` | Claude Code        |
+| `dotcodex/`  | `~/.codex/`  | Codex              |
+| `dotagents/` | `~/.agents/` | Shared cross-agent |
 
-- `~/.claude/CLAUDE.md`
-- `~/.claude/settings.json` (home path written as `__HOME__`)
-- `~/.claude/statusline-command.ps1`
-- `~/.claude/skills/` (`code-craft`, `impeccable`, `stop-slop`)
-- `~/.codex/config.toml` (curated, see below)
-- `~/.codex/AGENTS.md`
-- `~/.agents/AGENTS.md` and `~/.agents/skills/` (shared cross-agent copies:
-  `AGENTS.md` mirrors the Codex one; `impeccable` is the Codex-flavored
-  superset, including its `agents/*.toml` + `openai.yaml` agent definitions,
-  while `code-craft` and `stop-slop` match the `.claude/skills/` copies)
+## Backup / restore policy
 
-Not tracked:
-
-- Claude / Codex auth (`~/.claude/.credentials.json`, `~/.codex/auth.json`)
-- sessions, history, logs, sqlite, caches, shell snapshots, telemetry
-- machine-local Claude permissions in `~/.claude/settings.local.json`
-- Codex runtime state: marketplaces, mcp_servers, hook trust hashes,
-  per-project trust paths, the `notify` hook path, runtime-bundled plugins
-
-### Codex `config.toml` curation
-
-The committed `config.toml` keeps durable preferences only. Dropped from the
-live file because they are machine-local or leak private context:
-
-- `notify` — absolute path to the machine's computer-use runtime binary
-- `[marketplaces.*]` — local runtime cache paths
-- `[projects.*]` trust entries — leak private project names and prompt-derived
-  folder names; regenerated as you trust directories
-- `[mcp_servers.*]` — machine-specific runtime paths, SHA pins, pipe names
-- `[hooks.state.*]` — per-project trusted hashes
-- runtime-bundled / primary-runtime `[plugins.*]` — their marketplaces are
-  local caches; only the stable `@openai-curated` plugin enables are kept
-
-## Restore
-
-These files live under `~` on Windows. To restore, copy each tracked path back
-into your home directory, then substitute the home placeholder in
-`settings.json`:
-
-```powershell
-# from the repo root, on the `agents` branch
-Copy-Item -Recurse -Force .claude $HOME\.claude
-Copy-Item -Recurse -Force .codex  $HOME\.codex
-
-# expand __HOME__ in the Claude statusline command
-(Get-Content $HOME\.claude\settings.json) -replace '__HOME__', $HOME |
-  Set-Content $HOME\.claude\settings.json
-```
-
-Auth is never stored here: sign in to Claude and Codex separately after
-restoring.
+See [SYNC.md](SYNC.md). It is the source of truth for what gets backed up, how
+files are sanitized (the Claude `__HOME__` placeholder, the curated Codex
+`config.toml`), and how restore reverses each step. Auth is never stored here:
+sign in to Claude and Codex separately after restoring.

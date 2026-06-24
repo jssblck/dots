@@ -1,57 +1,65 @@
-# Fail closed: never commit auth, secrets, or machine-local agent state.
-# Only files explicitly added under .claude/ and .codex/ are tracked.
+# Each top-level dir mirrors a home agent dir:
+#   dotclaude  <->  ~/.claude
+#   dotcodex   <->  ~/.codex
+#   dotagents  <->  ~/.agents
+# SYNC.md is the source of truth for what gets backed up (the allowlist).
+#
+# This file is only a safety net: it hard-blocks auth, secrets, sessions, logs,
+# sqlite, and other machine state from ever being committed, even if an
+# automated sync step copies more than the allowlist intends.
 
-# Claude: auth, history, caches, sessions, machine-local overrides
-.claude/.credentials.json
-.claude/.last-cleanup
-.claude/settings.local.json
-.claude/history.jsonl
-.claude/mcp-needs-auth-cache.json
-.claude/stats-cache.json
-.claude/backups/
-.claude/cache/
-.claude/chrome/
-.claude/debug/
-.claude/file-history/
-.claude/paste-cache/
-.claude/plans/
-.claude/projects/
-.claude/session-env/
-.claude/sessions/
-.claude/shell-snapshots/
-.claude/tasks/
+# --- Claude (dotclaude <- ~/.claude) ---
+dotclaude/.credentials.json
+dotclaude/.last-cleanup
+dotclaude/settings.local.json
+dotclaude/history.jsonl
+dotclaude/mcp-needs-auth-cache.json
+dotclaude/stats-cache.json
+dotclaude/backups/
+dotclaude/cache/
+dotclaude/chrome/
+dotclaude/debug/
+dotclaude/file-history/
+dotclaude/paste-cache/
+dotclaude/plans/
+dotclaude/projects/
+dotclaude/session-env/
+dotclaude/sessions/
+dotclaude/shell-snapshots/
+dotclaude/tasks/
 
-# Codex: auth, sessions, logs, sqlite, caches, runtime, computer-use state
-.codex/auth.json
-.codex/*.json
-.codex/*.json.bak
-.codex/*.json.tmp-*
-.codex/config.toml.bak-*
-.codex/*.sqlite
-.codex/*.sqlite-*
-.codex/.personality_migration
-.codex/cap_sid
-.codex/installation_id
-.codex/session_index.jsonl
-.codex/.sandbox/
-.codex/.sandbox-bin/
-.codex/.sandbox-secrets/
-.codex/.tmp/
-.codex/archived_sessions/
-.codex/automations/
-.codex/browser/
-.codex/cache/
-.codex/computer-use/
-.codex/computer-use-turn-ended/
-.codex/generated_images/
-.codex/memories/
-.codex/node_repl/
-.codex/pets/
-.codex/plugins/
-.codex/process_manager/
-.codex/sessions/
-.codex/skills/
-.codex/sqlite/
-.codex/tmp/
-.codex/vendor_imports/
-.codex/worktrees/
+# --- Codex (dotcodex <- ~/.codex) ---
+dotcodex/auth.json
+dotcodex/*.json
+dotcodex/*.json.bak
+dotcodex/*.json.tmp-*
+dotcodex/config.toml.bak-*
+dotcodex/*.sqlite
+dotcodex/*.sqlite-*
+dotcodex/.personality_migration
+dotcodex/cap_sid
+dotcodex/installation_id
+dotcodex/session_index.jsonl
+dotcodex/.sandbox/
+dotcodex/.sandbox-bin/
+dotcodex/.sandbox-secrets/
+dotcodex/.tmp/
+dotcodex/archived_sessions/
+dotcodex/automations/
+dotcodex/browser/
+dotcodex/cache/
+dotcodex/computer-use/
+dotcodex/computer-use-turn-ended/
+dotcodex/generated_images/
+dotcodex/memories/
+dotcodex/node_repl/
+dotcodex/pets/
+dotcodex/process_manager/
+dotcodex/sessions/
+dotcodex/sqlite/
+dotcodex/tmp/
+dotcodex/vendor_imports/
+dotcodex/worktrees/
+
+# Repo-local snapshots (if any)
+.backup/
