@@ -25,7 +25,9 @@ Tracked:
 - `~/.codex/AGENTS.md`
 - `~/.codex/rules/default.rules`
 - `~/.agents/AGENTS.md` and `~/.agents/skills/` (shared cross-agent copies:
-  `AGENTS.md` mirrors the Codex one, skills are the Claude-flavored set)
+  `AGENTS.md` mirrors the Codex one; `impeccable` is the Codex-flavored
+  superset, including its `agents/*.toml` + `openai.yaml` agent definitions,
+  while `code-craft` and `stop-slop` match the `.claude/skills/` copies)
 
 Not tracked:
 
