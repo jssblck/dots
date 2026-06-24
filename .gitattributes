@@ -1,0 +1,22 @@
+# Normalize all text to LF, both in the repo and in the working tree, so this
+# branch stays byte-stable whether checked out on Windows, macOS, or Linux.
+# This silences the "LF will be replaced by CRLF" warnings core.autocrlf emits.
+* text=auto eol=lf
+
+# Explicit text types tracked on this branch
+*.md     text eol=lf
+*.json   text eol=lf
+*.toml   text eol=lf
+*.yaml   text eol=lf
+*.yml    text eol=lf
+*.rules  text eol=lf
+*.ps1    text eol=lf
+*.mjs    text eol=lf
+*.js     text eol=lf
+
+# Binary assets: never touch line endings
+*.png    binary
+*.webp   binary
+*.gif    binary
+*.pack   binary
+*.idx    binary
