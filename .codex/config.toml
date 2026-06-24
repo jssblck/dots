@@ -1,0 +1,86 @@
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+background_terminal_max_timeout = 1200000
+
+approvals_reviewer = "user"
+
+service_tier = "default"
+
+# First-party curated-marketplace plugins. Runtime-bundled and primary-runtime
+# plugins (and their local marketplace cache definitions) are intentionally not
+# tracked: their marketplace sources are machine-local caches that get
+# regenerated on each install.
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."openai-developers@openai-curated"]
+enabled = true
+
+[plugins."game-studio@openai-curated"]
+enabled = true
+
+[plugins."build-web-apps@openai-curated"]
+enabled = true
+
+[plugins."nvidia@openai-curated"]
+enabled = true
+
+[windows]
+sandbox = "elevated"
+
+[features]
+memories = false
+js_repl = false
+chronicle = false
+
+[memories]
+generate_memories = false
+use_memories = false
+
+[desktop]
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+git-pull-request-merge-method = "squash"
+git-show-sidebar-pr-icons = true
+git-commit-instructions = """
+Focus on documenting what changed for humans reviewing the list of commits. Be detailed and include the reasoning for changes made.
+
+When Codex materially authors, rewrites, debugs, or verifies the change, append this exact Git trailer after a blank line:
+
+Co-authored-by: Codex <noreply@openai.com>
+
+Do not add that trailer for commits where Codex only inspected state, answered questions, or performed a purely mechanical user-specified command without contributing authorship. Do not add a human co-author trailer unless the user explicitly asks for one.
+"""
+git-pr-instructions = """
+- PRs should be why-first, not just a mechanical list of changed files.
+- Do not prefix PR titles with "[codex]" or any other Codex-specific tag unless the user explicitly asks for that tag.
+- Create normal ready-for-review PRs by default. Create draft PRs only when the user explicitly asks for a draft PR.
+- Before creating a PR, infer and confirm the core reason the PR exists unless the user explicitly says to proceed without confirmation.
+- PR descriptions must be self-contained for reviewers with no prior context.
+- Default PR body should include:
+     1. Why this change
+     2. Testing steps performed
+     3. Configuration changes after merge, only when setup/runtime config changed
+     4. Optional Surprising changes / Notes, only for risky or non-obvious changes
+
+Testing evidence should be concrete:
+- Prefer exact commands with verbatim output.
+- Or provide runnable scripts, screenshots, or video.
+- If testing was not run, say so clearly and explain why.
+
+For configuration changes, include step-by-step migration instructions with exact variable names, commands, secret sources, and cleanup/removal notes.
+
+When Codex materially authors, rewrites, debugs, or verifies the PR's change, add this exact attribution footer at the end of the PR body after a blank line:
+
+Co-authored-by: Codex <noreply@openai.com>
+
+Do not add that footer when Codex only inspected state or drafted text without contributing to the implementation. Do not add a human co-author footer unless the user explicitly asks for one."""
+selected-avatar-id = "custom:sandi"
+followUpQueueMode = "steer"
+show-context-window-usage = true
+reviewDelivery = "detached"
+
+[desktop.open-in-target-preferences]
+global = "zed"

@@ -1,0 +1,61 @@
+# Fail closed: never commit auth, secrets, or machine-local agent state.
+# Only files explicitly added under .claude/ and .codex/ are tracked.
+
+# Claude: auth, history, caches, sessions, machine-local overrides
+.claude/.credentials.json
+.claude/.last-cleanup
+.claude/settings.local.json
+.claude/history.jsonl
+.claude/mcp-needs-auth-cache.json
+.claude/stats-cache.json
+.claude/backups/
+.claude/cache/
+.claude/chrome/
+.claude/debug/
+.claude/file-history/
+.claude/paste-cache/
+.claude/plans/
+.claude/projects/
+.claude/session-env/
+.claude/sessions/
+.claude/shell-snapshots/
+.claude/tasks/
+
+# Claude plugins: all install state and fetched caches (incl. the remote-fetched
+# blocklist.json), nothing here is durable hand-authored config
+.claude/plugins/
+
+# Codex: auth, sessions, logs, sqlite, caches, runtime, computer-use state
+.codex/auth.json
+.codex/*.json
+.codex/*.json.bak
+.codex/*.json.tmp-*
+.codex/config.toml.bak-*
+.codex/*.sqlite
+.codex/*.sqlite-*
+.codex/.personality_migration
+.codex/cap_sid
+.codex/installation_id
+.codex/session_index.jsonl
+.codex/.sandbox/
+.codex/.sandbox-bin/
+.codex/.sandbox-secrets/
+.codex/.tmp/
+.codex/archived_sessions/
+.codex/automations/
+.codex/browser/
+.codex/cache/
+.codex/computer-use/
+.codex/computer-use-turn-ended/
+.codex/generated_images/
+.codex/memories/
+.codex/node_repl/
+.codex/pets/
+.codex/plugins/
+.codex/process_manager/
+.codex/sessions/
+.codex/skills/
+.codex/sqlite/
+.codex/tmp/
+.codex/vendor_imports/
+.codex/worktrees/
