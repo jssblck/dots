@@ -24,6 +24,8 @@ Tracked:
 - `~/.codex/config.toml` (curated, see below)
 - `~/.codex/AGENTS.md`
 - `~/.codex/rules/default.rules`
+- `~/.agents/AGENTS.md` and `~/.agents/skills/` (shared cross-agent copies:
+  `AGENTS.md` mirrors the Codex one, skills are the Claude-flavored set)
 
 Not tracked:
 
