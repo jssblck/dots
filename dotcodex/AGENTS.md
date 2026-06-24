@@ -53,6 +53,11 @@ The standard isn't "good enough", it's "holy shit, that's done". Search before b
 - Prefer plain shell commands only for simple one-step operations.
 - When a command continues running in the background after the foreground wait period, do not send a message whose only purpose is to say that the command is still running. Send an update only when there is new information, a decision point, a result, or user-visible risk.
 
+## Codex automations
+
+- When creating or updating Codex automations at Jess's request, default supported execution settings to model `gpt-5.5` and reasoning effort `high` unless Jess explicitly asks for different settings.
+- For cron automations, pass `model: "gpt-5.5"` and `reasoningEffort: "high"` by default.
+
 ## Git attribution
 
 - When Codex materially authors, rewrites, debugs, or verifies a commit, append this exact Git trailer after a blank line in the commit body:
