@@ -124,7 +124,14 @@ For each tool dir:
 2. Copy the instruction file (`CLAUDE.md` / `AGENTS.md`) verbatim.
 3. Copy `settings.json` (with `__HOME__` sanitization) and
    `statusline-command.mjs` for Claude; copy `config.toml` (curated) for Codex.
-4. Stage and commit. The `.gitignore` blocks anything sensitive that slipped in;
+4. Reconcile `claude-cloud-restore.sh` (see "Cloud restore" below). Whenever this
+   backup changes `dotclaude/settings.json`, review the keys against the script's
+   keep-list and env allow-list and update them so the cloud profile stays
+   current: add a new durable preference to the keep-list, leave a cloud-hostile
+   key out (and note why in the drop list here). The script is part of the
+   tracked config, not a write-once file; a backup that lands new settings keys
+   without this review is incomplete.
+5. Stage and commit. The `.gitignore` blocks anything sensitive that slipped in;
    if a commit would include an ignored-category file, stop and fix the copy
    step rather than force-adding it.
 
@@ -184,8 +191,28 @@ The cloud restore is deliberately narrower than the machine restore above:
     `agentPushNotifEnabled` (the cloud surface manages its own).
 
   The durable keep-list and the env allow-list live in the Node merge block in
-  `claude-cloud-restore.sh`; update them there when a new durable preference is worth
-  carrying into cloud.
+  `claude-cloud-restore.sh`; update them there when a new durable preference is
+  worth carrying into cloud.
 
 This is one-directional (repo -> cloud home). There is no cloud backup: the
 ephemeral container is never a source of truth, so nothing syncs back from it.
+
+### Keeping the script in sync
+
+`claude-cloud-restore.sh` is tracked config that the sync agent owns, not a
+write-once artifact. On every backup that touches the Claude config, keep it
+current:
+
+- **Settings keys.** When `dotclaude/settings.json` gains or loses a key, decide
+  whether it belongs in the cloud profile and update the script's keep-list / env
+  allow-list to match. A new durable preference goes in the keep-list; a
+  machine- or desktop-specific key stays out and gets a one-line entry in the
+  drop list above explaining why. Do not let the keep-list silently drift behind
+  `settings.json`.
+- **Skills and memory.** These are copied wholesale, so new skills and `CLAUDE.md`
+  edits flow through with no script change. Only revisit the copy logic if the
+  layout under `dotclaude/` changes (a new tracked file or directory that should,
+  or should not, reach a cloud session).
+- **Setup-script one-liner.** If the script is renamed or moved, update the
+  clone-and-exec one-liner everywhere it appears (this file and the README) and
+  re-paste it into the cloud environment's Setup-script field in the web UI.
