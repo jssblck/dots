@@ -10,7 +10,7 @@ In `cloud-setup.sh`, fetching a "latest release" tag with
 exits on the first match and closes the pipe while `curl` is still writing the
 (large) JSON body, so `curl` dies on **SIGPIPE with exit 23** ("Failure writing
 output to destination"). `pipefail` propagates that and `set -e` turns it into a
-fatal abort — intermittently, which is the worst kind.
+fatal abort, intermittently, which is the worst kind.
 
 **Fix:** buffer the body into a variable first, then `grep` it.
 
@@ -38,18 +38,18 @@ const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 `"$CLAUDE_PROJECT_DIR"/.claude/bootstrap.mjs` expands under `sh` but **not**
 PowerShell (`$VAR` vs `%VAR%`), so the hook breaks on Windows.
 
-**Fix:** keep the hook command relative — `node .claude/bootstrap.mjs` — and let
+**Fix:** keep the hook command relative (`node .claude/bootstrap.mjs`) and let
 `bootstrap.mjs` re-anchor on `import.meta.url` (gotcha 2). The relative command
 resolves the same way under every shell.
 
 ## 4. Cloud `node` is on PATH, not nvm-managed
 
-In the cloud image, `node` lives at `/opt/node22/bin` and is on the image PATH
-— it is **not** nvm-managed. So the relative `node …` hook command resolves
+In the cloud image, `node` lives at `/opt/node22/bin` and is on the image PATH;
+it is **not** nvm-managed. So the relative `node …` hook command resolves
 without sourcing any shell init. Don't add an `nvm use` or a shell-profile
 dependency to make the hook find Node.
 
-## 5. The cloud setup script re-runs — keep it idempotent
+## 5. The cloud setup script re-runs, so keep it idempotent
 
 `cloud-setup.sh` is not a once-per-machine installer. It re-runs on any fresh
 session: whenever you change the script or the network allowlist, and

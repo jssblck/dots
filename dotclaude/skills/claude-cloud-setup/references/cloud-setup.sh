@@ -28,8 +28,8 @@
 # HOW TO ADAPT
 #   Install ONLY tools the base image is missing AND this repo actually uses.
 #   The base image already ships rust, node, python+uv, go, ruby, a JVM,
-#   docker+compose, the postgres client, redis, and the language registries —
-#   do not reinstall those. Probe a real cloud session first (see the skill's
+#   docker+compose, the postgres client, redis, and the language registries,
+#   so do not reinstall those. Probe a real cloud session first (see the skill's
 #   step 2) to find genuine gaps. `gh` is the most common one and is the worked
 #   example below; the commented stub after it shows how to add another tool.
 #   Prefer download hosts on the default Trusted allowlist (GitHub release
