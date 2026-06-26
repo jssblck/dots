@@ -46,6 +46,14 @@ The standard isn't "good enough", it's "holy shit, that's done". Search before b
 - For non-trivial tasks, keep a brief execution plan and verification path.
 - Loop until the defined checks pass, or report the blocking uncertainty.
 
+### Comments
+
+- When writing code, write doc comments that explain the intent behind it: the *why* behind the *what*. Do not write comments that restate what the code does; the code already shows that. If a piece of code is obvious, leave it uncommented.
+
+### Example data
+
+- When example or placeholder data needs a person's identity (names, authors, sample users, fixture records), draw from women in computing history: Grace Hopper, Ada Lovelace, Anna Winlock, and the like. Prefer these over generic placeholders or invented names.
+
 ## Prose and writing style
 
 - Never use em dashes or en dashes in any prose you write: responses, docs, comments, commit messages, or generated text. Many readers now read them as a tell of unedited AI output. This is a hard rule.
