@@ -140,3 +140,52 @@ For each tool dir:
 4. Codex: **merge** the curated `config.toml` durable keys into the live file
    (see above); do not clobber machine-specific sections.
 5. Never restore auth: sign in to Claude and Codex separately.
+
+## Cloud restore (Claude Code on the web)
+
+The restore above targets a trusted personal machine. [Claude Code on the
+web](https://claude.ai/code) is different: each session boots a fresh, ephemeral
+container that clones only the *target* repository, so the routine never runs
+and none of the tracked `~/.claude/` config is present. `cloud-restore.sh` (at
+the branch root) covers this case. It runs before a web session starts, driven
+by a one-line **Setup script** in the cloud environment (web UI) that clones
+this public branch and execs the script:
+
+```bash
+d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/cloud-restore.sh"
+```
+
+Pair it with the per-repo toolchain half from the `claude-cloud-setup` skill if
+the target repo ships one (the two compose in the same Setup-script field):
+
+```bash
+[ -f .claude/cloud-setup.sh ] && bash .claude/cloud-setup.sh
+```
+
+The cloud restore is deliberately narrower than the machine restore above:
+
+- **Claude only.** It restores `~/.claude` exclusively. `~/.codex` and
+  `~/.agents` are not touched: Codex and the shared cross-agent files have no
+  consumer in a Claude Code web session.
+- **Additive, not a mirror.** It copies skills and memory in but never deletes
+  anything already in the home dir, so cloud-provided config survives. (The
+  machine restore mirrors, including deletes.)
+- **Sanitized settings.** It merges only durable preferences from
+  `dotclaude/settings.json` into the live `~/.claude/settings.json` (preserving
+  keys the harness set) and **drops** the keys that are wrong or harmful in
+  cloud:
+  - `statusLine` (the `bun __HOME__/...` command; `bun` is not guaranteed in the
+    cloud image and the statusline is irrelevant in the web UI),
+  - `enabledPlugins` (a marketplace fetch that is slow and networked; the skills
+    are restored directly instead),
+  - `permissions` / `skipDangerousModePermissionPrompt` /
+    `skipAutoPermissionPrompt` (let the web session's own permission mode win),
+  - `remoteControlAtStartup` / `inputNeededNotifEnabled` /
+    `agentPushNotifEnabled` (the cloud surface manages its own).
+
+  The durable keep-list and the env allow-list live in the Node merge block in
+  `cloud-restore.sh`; update them there when a new durable preference is worth
+  carrying into cloud.
+
+This is one-directional (repo -> cloud home). There is no cloud backup: the
+ephemeral container is never a source of truth, so nothing syncs back from it.
