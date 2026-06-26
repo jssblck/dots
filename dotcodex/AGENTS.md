@@ -100,3 +100,8 @@ If text already contains smart quotes, normalize them to ASCII quotes unless the
 ## Language
 
 In assistant responses, avoid rhetorical contrastive phrasing like "it's not just A, it's B." State the claim or action plainly. Direct technical contrasts are allowed when they improve clarity.
+
+## Stop slop
+
+- Always run the `stop-slop` skill over any prose you write before finalizing it: code comments, markdown files, README and other docs, pull request descriptions, git commit messages, release notes, and any other written prose.
+- Treat it as a required final pass, not an optional cleanup. Invoke it even when the text already looks clean, then apply its fixes.

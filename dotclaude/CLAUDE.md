@@ -53,6 +53,11 @@ The standard isn't "good enough", it's "holy shit, that's done". Search before b
 - Do not swap one dash for another (an en dash or a spaced hyphen "-" is not an acceptable substitute). Avoid the construction entirely.
 - Prefer to rewrite em and en dashes out of existing files when I touch them: I do not use these characters, so any in the codebase were inserted by an agent and should be cleaned up. Recast them with the same parenthesis/colon/comma fixes. The exception is genuinely external or quoted material (third-party content, cited text), where the original punctuation must stand.
 
+## Stop slop
+
+- Always run the `stop-slop` skill over any prose you write before finalizing it: code comments, markdown files, README and other docs, pull request descriptions, git commit messages, release notes, and any other written prose.
+- Treat it as a required final pass, not an optional cleanup. Invoke it even when the text already looks clean, then apply its fixes.
+
 ## Command workflows
 
 - For multi-step inspections or changes, prefer a single small Bun script over several back-to-back shell commands.
