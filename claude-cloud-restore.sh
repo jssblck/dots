@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# cloud-restore.sh: lay this branch's Claude Code user-level config into a
+# claude-cloud-restore.sh: lay this branch's Claude Code user-level config into a
 # Claude Code on the web (cloud) session.
 #
 # WHAT THIS IS
@@ -22,7 +22,7 @@
 #   Wire it into the cloud environment's "Setup script" field (web UI) with a
 #   one-liner that clones this public branch and runs this file:
 #
-#     d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/cloud-restore.sh"
+#     d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/claude-cloud-restore.sh"
 #
 #   Pair it with the per-repo toolchain half if the target repo ships one:
 #

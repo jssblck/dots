@@ -146,13 +146,13 @@ For each tool dir:
 The restore above targets a trusted personal machine. [Claude Code on the
 web](https://claude.ai/code) is different: each session boots a fresh, ephemeral
 container that clones only the *target* repository, so the routine never runs
-and none of the tracked `~/.claude/` config is present. `cloud-restore.sh` (at
+and none of the tracked `~/.claude/` config is present. `claude-cloud-restore.sh` (at
 the branch root) covers this case. It runs before a web session starts, driven
 by a one-line **Setup script** in the cloud environment (web UI) that clones
 this public branch and execs the script:
 
 ```bash
-d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/cloud-restore.sh"
+d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/claude-cloud-restore.sh"
 ```
 
 Pair it with the per-repo toolchain half from the `claude-cloud-setup` skill if
@@ -184,7 +184,7 @@ The cloud restore is deliberately narrower than the machine restore above:
     `agentPushNotifEnabled` (the cloud surface manages its own).
 
   The durable keep-list and the env allow-list live in the Node merge block in
-  `cloud-restore.sh`; update them there when a new durable preference is worth
+  `claude-cloud-restore.sh`; update them there when a new durable preference is worth
   carrying into cloud.
 
 This is one-directional (repo -> cloud home). There is no cloud backup: the

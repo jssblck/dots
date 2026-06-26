@@ -29,12 +29,12 @@ files are sanitized (the Claude `__HOME__` placeholder, the curated Codex
 sign in to Claude and Codex separately after restoring.
 
 For [Claude Code on the web](https://claude.ai/code), a fresh cloud session
-clones only the target repo and never runs that routine, so `cloud-restore.sh`
+clones only the target repo and never runs that routine, so `claude-cloud-restore.sh`
 lays the Claude config (skills, `CLAUDE.md`, sanitized `settings.json`) into
 `~/.claude/` instead. Wire it into the cloud environment's Setup script:
 
 ```bash
-d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/cloud-restore.sh"
+d=$(mktemp -d); git clone --depth 1 --branch agents https://github.com/jssblck/dots "$d" && bash "$d/claude-cloud-restore.sh"
 ```
 
 See [SYNC.md](SYNC.md#cloud-restore-claude-code-on-the-web) for what the cloud
