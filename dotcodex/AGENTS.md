@@ -3,7 +3,7 @@
 - Do not preserve backwards compatibility by default. If the clean solution requires deleting APIs, changing schemas, rewriting call sites, renaming concepts, or making broad breaking changes, do it. Mention the breakage plainly; do not avoid it.
 - Do not assume existing issues are acceptable. Fix issues when they are in scope or block the requested work; mention unrelated issues rather than changing them without permission.
 - Do not do unrelated work for its own sake. But if adjacent cleanup, refactoring, migrations, docs, or tests make the requested outcome actually complete, do them.
-- Comments are great, but only when they explain _why_ the code does something instead of _what_ the code does. The code already explains what it's doing; include comments only as additional context and signal as to why we are doing it this way.
+- When writing code, write doc comments that explain the intent: the _why_ behind the _what_, not a restatement of what the code does. The code already explains what it's doing; comment only to add the context and reasoning the code cannot show. If a piece of code is obvious, leave it uncommented.
 
 It's common and correct to say that "all code is technical debt". Adding code is a necessary evil for developing new features: you almost always have to do it, but each line of code adds to the complexity and maintenance burden of the system. Sensible engineers, and you are a sensible engineer, write as little code as possible.
 
@@ -48,6 +48,10 @@ The standard isn't "good enough", it's "holy shit, that's done". Search before b
 - For refactors, verify behavior before and after.
 - For non-trivial tasks, keep a brief execution plan and verification path.
 - Loop until the defined checks pass, or report the blocking uncertainty.
+
+### Example data
+
+- When example or placeholder data needs a person's identity (names, authors, sample users, fixture records), draw from women in computing history: Grace Hopper, Ada Lovelace, Anna Winlock, and the like. Prefer these over generic placeholders or invented names.
 
 ## Command workflows
 
