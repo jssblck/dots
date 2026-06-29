@@ -103,6 +103,7 @@ are machine-local or leak private context and must be **stripped on backup**:
   folder names; regenerated as directories are trusted)
 - `[mcp_servers.*]` (machine-specific runtime paths, SHA pins, pipe names)
 - `[hooks.state.*]` (per-project trusted hashes)
+- `[tui.model_availability_nux]` (local UI acknowledgement state)
 - runtime-bundled / primary-runtime `[plugins.*]` (their marketplaces are local
   caches); keep only the stable `@openai-curated` plugin enables
 
