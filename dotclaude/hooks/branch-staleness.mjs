@@ -122,14 +122,21 @@ const plural = behind === 1 ? "commit" : "commits";
 let context;
 if (event === "PreToolUse") {
   context =
-    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref} ` +
-    `and is about to open a PR. Before running \`gh pr create\`, tell the user the branch is stale ` +
-    `and offer to rebase onto ${ref} (or merge it in) so the PR diff is clean and mergeable.`;
+    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref} and is ` +
+    `about to open a PR. By default, rebase onto ${ref} first (prefer \`git rebase\` with autostash; use a ` +
+    `merge only if a rebase would be inappropriate) so the PR diff is clean and mergeable, then open the PR. ` +
+    `Do this proactively rather than only offering. Skip the rebase and ask the user first only if there is a ` +
+    `concrete reason: conflicts you cannot resolve cleanly, history shared with others, or an in-progress git ` +
+    `operation. If the branch is already pushed, force-push with \`--force-with-lease\` before creating the PR.`;
 } else {
   context =
-    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref}. ` +
-    `Surface this to the user early and offer to rebase onto ${ref} (or merge it in) before building ` +
-    `further or opening a PR, so work is not stacked on a stale base.`;
+    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref}. By default, ` +
+    `rebase this branch onto ${ref} now (prefer \`git rebase\` with autostash; use a merge only if a rebase ` +
+    `would be inappropriate), then continue the work on top of the updated base. Do this proactively rather ` +
+    `than only offering. Pause and ask the user first only if there is a concrete reason not to: a dirty or ` +
+    `conflicting working tree you cannot safely autostash, an in-progress merge or rebase, or history shared ` +
+    `with others where rewriting it would disrupt them. If the branch is already pushed, force-push with ` +
+    `\`--force-with-lease\` after rebasing. Tell the user briefly that you rebased.`;
 }
 
 process.stdout.write(
