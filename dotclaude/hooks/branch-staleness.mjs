@@ -82,6 +82,21 @@ function git(args, { timeout = 8000 } = {}) {
 // Only operate inside a work tree.
 if (git(["rev-parse", "--is-inside-work-tree"]) !== "true") process.exit(0);
 
+// Per-repo opt-out. Some repos don't derive their branches from a single base:
+// a dotfiles repo with a branch per machine (macos, arch, agents), for example,
+// where "N commits behind main" is meaningless and the rebase prompt is wrong.
+// Disable the check there with:
+//   git config claude.branchStaleness.disabled true
+const optOut = git(["config", "--get", "claude.branchStaleness.disabled"]);
+if (optOut && /^(1|true|yes|on)$/i.test(optOut)) process.exit(0);
+
+// This dotfiles repo is one such case (a branch per machine: macos, arch,
+// agents), so opt it out by origin too. That way every clone is covered without
+// the per-clone git config. Matches SSH and HTTPS remote URLs, with or without
+// the trailing `.git`.
+const origin = git(["remote", "get-url", "origin"]) ?? "";
+if (/[:/]jssblck\/dots(?:\.git)?\/?$/i.test(origin)) process.exit(0);
+
 // Resolve the base branch: prefer origin/HEAD (the remote's default branch),
 // then fall back to main, then master. This is the branch we measure drift from.
 function resolveBase() {
