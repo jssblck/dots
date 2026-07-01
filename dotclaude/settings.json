@@ -56,6 +56,13 @@
           { "type": "command", "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs" }
         ]
       }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bun __HOME__/.claude/hooks/eph-clean.mjs" }
+        ]
+      }
     ]
   },
   "skipWorkflowUsageWarning": true
