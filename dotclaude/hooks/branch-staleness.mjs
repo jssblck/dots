@@ -51,9 +51,16 @@ const cwd = payload.cwd || process.cwd();
 
 // A PreToolUse check is only relevant right before a PR is opened. Bail fast on
 // every other Bash command so we never add latency to unrelated work.
+//
+// Match `gh pr create` only at a command position: the start of the string or
+// right after a shell separator (`;`, `|`, `&`, newline) or an opening subshell.
+// A bare substring match also fires on the phrase inside a quoted argument, e.g.
+// a `git commit -m "...gh pr create..."`, which is a false positive. Anchoring
+// to a command boundary (note: backtick and quote are deliberately not
+// boundaries) drops that noise while still catching every real invocation.
 if (event === "PreToolUse") {
   const command = payload.tool_input?.command ?? "";
-  if (!/\bgh\s+pr\s+create\b/.test(command)) process.exit(0);
+  if (!/(?:^|[\n;|&(])\s*gh\s+pr\s+create\b/.test(command)) process.exit(0);
 }
 
 // ── Git helpers (all silent-on-failure) ──────────────────────────────────────
