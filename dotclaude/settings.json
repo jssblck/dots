@@ -41,5 +41,22 @@
     "type": "command",
     "command": "bun __HOME__/.claude/statusline-command.mjs"
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs" }
+        ]
+      }
+    ]
+  },
   "skipWorkflowUsageWarning": true
 }

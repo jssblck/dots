@@ -58,6 +58,7 @@ Copied verbatim in both directions.
 
 - `~/.claude/settings.json`           -> `dotclaude/settings.json` (sanitized, see below)
 - `~/.claude/statusline-command.mjs`  -> `dotclaude/statusline-command.mjs` (verbatim; cross-platform Bun statusline, referenced by settings.json)
+- `~/.claude/hooks/`                   -> `dotclaude/hooks/` (verbatim; cross-platform Bun hook scripts, referenced by settings.json)
 - `~/.codex/config.toml`              -> `dotcodex/config.toml` (curated, see below)
 
 ## What is never synced
@@ -79,14 +80,17 @@ Sanitization is applied on **backup** and reversed on **restore**.
 
 ### `settings.json` (Claude)
 
-The statusline runs `statusline-command.mjs` under Bun, which is cross-platform
-(macOS and Windows), so a single command works on every machine. `bun` is
-invoked from `PATH` (its installer adds `~/.bun/bin` on both OSes), so the only
-machine-specific value is the script's absolute path.
+`settings.json` invokes Bun scripts by absolute path in two places: the
+`statusLine` command and the `hooks` block (`statusline-command.mjs` and
+`hooks/branch-staleness.mjs`). Bun is cross-platform (macOS and Windows) and
+invoked from `PATH` (its installer adds `~/.bun/bin` on both OSes), so a single
+command works on every machine and the only machine-specific value is each
+script's absolute path.
 
-- **Backup:** replace the literal home directory in the script path with the
-  token `__HOME__`.
-  Result: `bun __HOME__/.claude/statusline-command.mjs`
+- **Backup:** in every `bun .../` command, replace the literal home directory in
+  the script path with the token `__HOME__`.
+  Results: `bun __HOME__/.claude/statusline-command.mjs` and
+  `bun __HOME__/.claude/hooks/branch-staleness.mjs`.
 - **Restore:** expand `__HOME__` back to the machine's real home directory. Bun
   accepts the forward-slash path on Windows too, so no per-OS variant is needed.
 
@@ -123,8 +127,9 @@ For each tool dir:
 1. Mirror `~/.<tool>/skills/` into `dot<tool>/skills/` (add new, update changed,
    delete removed; strip nested `.git/`; skip `.system/`).
 2. Copy the instruction file (`CLAUDE.md` / `AGENTS.md`) verbatim.
-3. Copy `settings.json` (with `__HOME__` sanitization) and
-   `statusline-command.mjs` for Claude; copy `config.toml` (curated) for Codex.
+3. Copy `settings.json` (with `__HOME__` sanitization), `statusline-command.mjs`,
+   and everything under `hooks/` for Claude; copy `config.toml` (curated) for
+   Codex.
 4. Reconcile `claude-cloud-restore.sh` (see "Cloud restore" below). Whenever this
    backup changes `dotclaude/settings.json`, review the keys against the script's
    keep-list and env allow-list and update them so the cloud profile stays
@@ -143,8 +148,8 @@ For each tool dir:
 1. Mirror `dot<tool>/skills/` back into `~/.<tool>/skills/` (preserving
    `~/.codex/skills/.system/`, which the repo never tracks).
 2. Copy the instruction file back verbatim.
-3. Claude: write `statusline-command.mjs`, then write `settings.json` with
-   `__HOME__` expanded to the real home path.
+3. Claude: write `statusline-command.mjs` and the `hooks/` scripts, then write
+   `settings.json` with `__HOME__` expanded to the real home path.
 4. Codex: **merge** the curated `config.toml` durable keys into the live file
    (see above); do not clobber machine-specific sections.
 5. Never restore auth: sign in to Claude and Codex separately.
@@ -184,6 +189,9 @@ The cloud restore is deliberately narrower than the machine restore above:
   cloud:
   - `statusLine` (the `bun __HOME__/...` command; `bun` is not guaranteed in the
     cloud image and the statusline is irrelevant in the web UI),
+  - `hooks` (the `bun __HOME__/...` SessionStart and PreToolUse branch-staleness
+    hook; same `bun`-not-guaranteed reason as `statusLine`, and drift is noise in
+    an ephemeral single-branch clone that never opens its own PRs),
   - `enabledPlugins` (a marketplace fetch that is slow and networked; the skills
     are restored directly instead),
   - `permissions` / `skipDangerousModePermissionPrompt` /

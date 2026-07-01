@@ -117,6 +117,7 @@ const ENV_KEEP = new Set(['CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT']);
 
 // Explicitly dropped for cloud (here only as documentation of intent):
 //   statusLine            -> `bun __HOME__/...`, bun not guaranteed; irrelevant in web UI
+//   hooks                 -> `bun __HOME__/...` staleness hook; bun not guaranteed, and drift is noise in an ephemeral single-branch clone
 //   enabledPlugins        -> marketplace fetch, slow/networked; skills restored directly
 //   permissions, skipDangerousModePermissionPrompt, skipAutoPermissionPrompt,
 //   skipDangerousModePermissionPrompt -> let the web session's permission mode win

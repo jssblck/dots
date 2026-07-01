@@ -1,0 +1,135 @@
+#!/usr/bin/env bun
+// branch-staleness.mjs: surface "this branch has drifted from its base" into
+// Claude's context, the same way a failing CI check surfaces: by injecting text
+// the model actually reads.
+//
+// The problem this solves: Claude notices CI failures because they land in the
+// context as tool output. Branch staleness (feature branch is N commits behind
+// main) is invisible state that nothing reports, so Claude happily builds on
+// drifted code and opens stale PRs. This hook does the outside-the-model check
+// and hands the result back as `additionalContext`.
+//
+// Wired to two events in settings.json (both invoke this one script; it
+// dispatches on the hook event name from stdin):
+//   - SessionStart: check once at the top of every session / resume / clear.
+//   - PreToolUse(Bash): re-check at the exact moment a PR is opened, since a
+//                        long session can drift after it started. Fast-exits for
+//                        every Bash command that is not `gh pr create`, so the
+//                        git fetch cost is only paid when it matters.
+//
+// Cross-platform: pure Bun + git. Invoked as `bun .../branch-staleness.mjs`, so
+// the shebang is decorative; the forward-slash path works on Windows too.
+//
+// Failure policy: this is advisory. Any error (not a repo, offline, no base ref,
+// git missing) exits 0 with no output. A staleness hook must never break a
+// session or block a command on its own malfunction.
+
+import { execFileSync } from "node:child_process";
+
+// ── Read the hook payload from stdin ─────────────────────────────────────────
+
+const stdin = await new Promise((resolve) => {
+  let data = "";
+  process.stdin.setEncoding("utf8");
+  process.stdin.on("data", (c) => (data += c));
+  process.stdin.on("end", () => resolve(data));
+  // If nothing is piped in (manual run), don't hang.
+  if (process.stdin.isTTY) resolve("");
+});
+
+let payload = {};
+try {
+  payload = JSON.parse(stdin || "{}");
+} catch {
+  // Malformed payload: nothing actionable, stay silent.
+  process.exit(0);
+}
+
+const event = payload.hook_event_name ?? "";
+// Run git in the session's project directory, not wherever the hook launched.
+const cwd = payload.cwd || process.cwd();
+
+// A PreToolUse check is only relevant right before a PR is opened. Bail fast on
+// every other Bash command so we never add latency to unrelated work.
+if (event === "PreToolUse") {
+  const command = payload.tool_input?.command ?? "";
+  if (!/\bgh\s+pr\s+create\b/.test(command)) process.exit(0);
+}
+
+// ── Git helpers (all silent-on-failure) ──────────────────────────────────────
+
+/** Run a git command in `cwd`; return trimmed stdout, or null on any failure. */
+function git(args, { timeout = 8000 } = {}) {
+  try {
+    return execFileSync("git", args, {
+      cwd,
+      timeout,
+      stdio: ["ignore", "pipe", "ignore"],
+      encoding: "utf8",
+    }).trim();
+  } catch {
+    return null;
+  }
+}
+
+// Only operate inside a work tree.
+if (git(["rev-parse", "--is-inside-work-tree"]) !== "true") process.exit(0);
+
+// Resolve the base branch: prefer origin/HEAD (the remote's default branch),
+// then fall back to main, then master. This is the branch we measure drift from.
+function resolveBase() {
+  const head = git(["symbolic-ref", "--quiet", "refs/remotes/origin/HEAD"]);
+  if (head) return head.replace("refs/remotes/origin/", "");
+  for (const candidate of ["main", "master"]) {
+    if (git(["rev-parse", "--verify", "--quiet", `refs/remotes/origin/${candidate}`]) !== null) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+const base = resolveBase();
+if (!base) process.exit(0);
+
+// Don't nag when the checked-out branch *is* the base: this feature is about
+// feature/worktree branches drifting, not about the base trailing its remote.
+const current = git(["rev-parse", "--abbrev-ref", "HEAD"]);
+if (!current || current === base) process.exit(0);
+
+// Refresh just the base ref so the count reflects the real remote. Best-effort:
+// offline or slow networks fall through to the last-fetched ref rather than
+// blocking the session.
+git(["fetch", "--quiet", "origin", base], { timeout: 6000 });
+
+const ref = `origin/${base}`;
+if (git(["rev-parse", "--verify", "--quiet", ref]) === null) process.exit(0);
+
+// Commits on the base that this branch does not have = how far behind we are.
+const behindRaw = git(["rev-list", "--count", `HEAD..${ref}`]);
+const behind = Number(behindRaw);
+if (!Number.isFinite(behind) || behind <= 0) process.exit(0);
+
+// ── Emit context ─────────────────────────────────────────────────────────────
+
+const plural = behind === 1 ? "commit" : "commits";
+let context;
+if (event === "PreToolUse") {
+  context =
+    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref} ` +
+    `and is about to open a PR. Before running \`gh pr create\`, tell the user the branch is stale ` +
+    `and offer to rebase onto ${ref} (or merge it in) so the PR diff is clean and mergeable.`;
+} else {
+  context =
+    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref}. ` +
+    `Surface this to the user early and offer to rebase onto ${ref} (or merge it in) before building ` +
+    `further or opening a PR, so work is not stacked on a stale base.`;
+}
+
+process.stdout.write(
+  JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: event || "SessionStart",
+      additionalContext: context,
+    },
+  }),
+);
