@@ -41,11 +41,15 @@
     "type": "command",
     "command": "bun __HOME__/.claude/statusline-command.mjs"
   },
+  "skipWorkflowUsageWarning": true,
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs" }
+          {
+            "type": "command",
+            "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs"
+          }
         ]
       }
     ],
@@ -53,17 +57,22 @@
       {
         "matcher": "Bash",
         "hooks": [
-          { "type": "command", "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs" }
+          {
+            "type": "command",
+            "command": "bun __HOME__/.claude/hooks/branch-staleness.mjs"
+          }
         ]
       }
     ],
     "WorktreeRemove": [
       {
         "hooks": [
-          { "type": "command", "command": "bun __HOME__/.claude/hooks/eph-clean.mjs" }
+          {
+            "type": "command",
+            "command": "bun __HOME__/.claude/hooks/eph-clean.mjs"
+          }
         ]
       }
     ]
-  },
-  "skipWorkflowUsageWarning": true
+  }
 }
