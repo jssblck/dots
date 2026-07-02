@@ -1,6 +1,6 @@
 ---
 name: delegate-coding
-description: Use whenever a coding task is about to produce file edits and the session model is Fable (claude-fable-5). Fable stays on orchestration, architecture, and review; implementation goes to a subagent by default, sonnet for simple changes and opus for complex ones. Read BEFORE writing or editing code yourself. Also use when deciding how to split a larger piece of work across subagents. Invoke with /delegate-coding.
+description: Use whenever a coding task is about to produce file edits and the session model is Fable (claude-fable-5). Fable stays on orchestration, architecture, and review; implementation goes to an Opus subagent by default. Read BEFORE writing or editing code yourself. Also use when deciding how to split a larger piece of work across subagents. Invoke with /delegate-coding.
 user-invocable: true
 ---
 
@@ -15,24 +15,10 @@ Sonnet or Opus, none of this applies; just do the work directly.
 ## The default
 
 When a task calls for writing or modifying code, do not open the editor.
-Spawn a subagent with the Agent tool and route by difficulty:
+Spawn a subagent with the Agent tool and route it to Opus: `model: "opus"`.
 
-- **Simple changes** go to Sonnet: `model: "sonnet"`.
-- **Complex changes** go to Opus: `model: "opus"`.
-
-The aliases resolve to the latest version of each model, which is what you
-want; do not pin dated model IDs.
-
-Simple means the change is mechanical or well-bounded: a rename across files, a
-config or dependency bump, a straightforward bug fix with a known cause, a new
-test mirroring existing ones, boilerplate, a small feature that follows an
-established pattern in the codebase.
-
-Complex means the change requires judgment while writing it: new subsystems or
-abstractions, tricky concurrency or state, cross-cutting refactors, subtle bug
-hunts where the cause is still unknown, performance work, anything where a
-wrong turn midway is expensive. When unsure which bucket a task is in, pick
-Opus.
+The alias resolves to the latest version of Opus, which is what you want; do
+not pin dated model IDs.
 
 ## When to write code yourself
 
