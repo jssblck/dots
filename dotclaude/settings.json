@@ -10,38 +10,6 @@
     "arbitrage": "off",
     "fewer-permission-prompts": "off"
   },
-  "enabledPlugins": {
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "feature-dev@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "slack@claude-plugins-official": true
-  },
-  "effortLevel": "high",
-  "autoCompactWindow": 400000,
-  "promptSuggestionEnabled": false,
-  "awaySummaryEnabled": false,
-  "autoMemoryEnabled": false,
-  "autoDreamEnabled": false,
-  "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
-  "editorMode": "normal",
-  "fileCheckpointingEnabled": false,
-  "remoteControlAtStartup": true,
-  "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "useAutoModeDuringPlan": false,
-  "statusLine": {
-    "type": "command",
-    "command": "bun __HOME__/.claude/statusline-command.mjs"
-  },
-  "skipWorkflowUsageWarning": true,
   "hooks": {
     "SessionStart": [
       {
@@ -74,5 +42,38 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun __HOME__/.claude/statusline-command.mjs"
+  },
+  "enabledPlugins": {
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "slack@claude-plugins-official": true
+  },
+  "effortLevel": "high",
+  "autoCompactWindow": 400000,
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "autoMemoryEnabled": false,
+  "autoDreamEnabled": false,
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark",
+  "editorMode": "normal",
+  "fileCheckpointingEnabled": false,
+  "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "useAutoModeDuringPlan": false,
+  "model": "claude-fable-5[1m]"
 }

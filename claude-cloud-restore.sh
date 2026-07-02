@@ -110,6 +110,7 @@ const KEEP = new Set([
   'skipWorkflowUsageWarning',
   'fileCheckpointingEnabled',
   'useAutoModeDuringPlan',
+  'model',
 ]);
 
 // Non-secret env defaults to deep-merge (never the whole `env` block blindly).
