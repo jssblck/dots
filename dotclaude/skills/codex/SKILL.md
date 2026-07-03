@@ -10,12 +10,21 @@ Codex is OpenAI's coding agent, reachable in this session through the
 `mcp__codex__codex` MCP tool (start a thread) and `mcp__codex__codex-reply`
 (continue one). Treat it as a second set of eyes, not an oracle.
 
-## Always run it this way
+## Pick the thinking level
 
-Every Codex call uses **gpt-5.5** at **high** thinking:
+Every Codex call uses **gpt-5.5**. Default to **high** thinking:
 
 - `model: "gpt-5.5"`
 - `config: { model_reasoning_effort: "high" }`
+
+Use **xhigh** thinking when asking Codex about approaches or complex problems:
+
+- `config: { model_reasoning_effort: "xhigh" }`
+
+Use xhigh for architecture or design tradeoffs, implementation strategy,
+root-cause analysis, hard debugging, and any problem where the useful answer is
+the reasoning path. Keep high for routine code review, sanity checks, and
+focused second opinions.
 
 Continue an existing thread with `mcp__codex__codex-reply`, passing the
 `threadId` from the first response, so Codex keeps its context instead of
