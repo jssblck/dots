@@ -114,7 +114,10 @@ const KEEP = new Set([
 ]);
 
 // Non-secret env defaults to deep-merge (never the whole `env` block blindly).
-const ENV_KEEP = new Set(['CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT']);
+const ENV_KEEP = new Set([
+  'CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT',
+  'CLAUDE_CODE_SUBAGENT_MODEL',
+]);
 
 // Explicitly dropped for cloud (here only as documentation of intent):
 //   statusLine            -> `bun __HOME__/...`, bun not guaranteed; irrelevant in web UI

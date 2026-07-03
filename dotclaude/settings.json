@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT": "1"
+    "CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5"
   },
   "permissions": {
     "defaultMode": "bypassPermissions"
