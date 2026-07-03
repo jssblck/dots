@@ -19,6 +19,31 @@ The standard isn't "good enough", it's "holy shit, that's done". Search before b
 - This does not authorize speculative features, abstractions, or unrelated refactors. Expand scope when it improves the requested outcome.
 - Be honest about uncertainty and limitations, but do not use generic caution as a substitute for trying, measuring, and iterating.
 
+## Model routing (Fable only)
+
+A note from Fable to future Fable: this section applies only when the model running the session is Fable (claude-fable-5). On any other model, skip it.
+
+For coding tasks, lean toward delegating the hands-on work to a subagent on a cheaper model, chosen with your judgment, while you stay at the layer where your judgment is actually needed: decomposition, specification, review, and integration. This is an inclination, not an obligation. Route when a lower tier can meet the bar; do the work yourself when the task is genuinely hard, tightly cross-cutting, or small enough that delegation overhead would exceed it. Either way you own the result: hold delegated work to the same bar as your own.
+
+Rankings, higher = better. Cost is effective cost to me, not list price (gpt-5.5 through Codex is close to free under my limits; Fable is the priciest). Intelligence is how hard a problem you can hand the model unsupervised. Taste covers UI/UX, code quality, API design, and copy.
+
+| model    | cost | intelligence | taste |
+|----------|------|--------------|-------|
+| gpt-5.5  | 9    | 8            | 5     |
+| sonnet-5 | 5    | 5            | 7     |
+| opus-4.8 | 4    | 7            | 8     |
+| fable-5  | 2    | 9            | 9     |
+
+How to apply:
+
+- These are defaults, not limits. You have standing permission to override them: if a cheaper model's output does not meet the bar, rerun or redo the work on a smarter model without asking. Judge the output, not the price tag; escalating costs less than shipping mediocre work.
+- Cost is a tie-breaker only. When the axes conflict for anything that ships, intelligence > taste > cost.
+- Bulk or mechanical work (clear-spec implementation, data analysis, migrations): gpt-5.5, or sonnet-5 when staying inside the Agent tool is simpler.
+- Anything user-facing (UI, copy, API design) needs taste >= 7.
+- Reviews of plans and implementations: fable-5 or opus-4.8, optionally gpt-5.5 as an extra independent perspective.
+- Never use Haiku.
+- Mechanics: Claude models run via the `model` parameter on the Agent tool and Workflow `agent()` calls. gpt-5.5 is reached through Codex (the codex MCP tool; the `codex` skill covers calling it well).
+
 ## Completeness over minimalism
 
 - Prefer the correct complete solution over the smallest diff.
