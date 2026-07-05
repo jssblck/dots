@@ -6,6 +6,7 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
+  "model": "claude-fable-5[1m]",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "arbitrage": "off",
@@ -75,6 +76,5 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "useAutoModeDuringPlan": false,
-  "model": "claude-fable-5[1m]"
+  "useAutoModeDuringPlan": false
 }
