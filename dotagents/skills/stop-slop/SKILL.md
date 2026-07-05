@@ -1,9 +1,14 @@
 ---
 name: stop-slop
-description: Use when writing or reviewing any user-facing prose (marketing copy, docs, README, blog posts, release notes, UI text, commit messages) to strip AI-register "slop". Catches the structural tells (manufactured antithesis, aphorism openers and closers, virtue and character framing, uniform clipped-fragment headers, triadic parallelism, the dramatic colon, the "every sentence does rhetorical work" cadence), not just buzzwords. Also use when prose feels vaguely machine-written and you need to find and fix why.
+description: Use for durable prose artifacts: docs, README, release notes, UI copy, comments, commit messages, PR/issue text. Skip ordinary chat replies.
 ---
 
 # Stop slop
+
+Use this skill only for durable prose: text that will be saved, shipped,
+published, committed, or pasted outside chat. Do not use it for ordinary
+assistant replies, progress updates, or final answers unless that response
+contains a durable artifact; then apply it only to the artifact.
 
 "Slop" is prose that reads as machine-written. The giveaway is almost never a
 single word. A banned-word list catches "delve", "tapestry", and "in today's

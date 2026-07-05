@@ -88,8 +88,12 @@ How to apply:
 
 ## Stop slop
 
-- Always run the `stop-slop` skill over any prose you write before finalizing it: code comments, markdown files, README and other docs, pull request descriptions, git commit messages, release notes, and any other written prose.
-- Treat it as a required final pass, not an optional cleanup. Invoke it even when the text already looks clean, then apply its fixes.
+- Run the `stop-slop` skill as a required final pass for durable prose: code
+  comments, markdown docs, UI text, pull request descriptions, git commit
+  messages, release notes, issue comments, and user-requested copy intended to
+  leave chat.
+- Do not run it for ordinary chat responses, progress updates, or final answers.
+  If a chat response includes a durable artifact, apply it only to that artifact.
 
 ## Command workflows
 
