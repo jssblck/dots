@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export HOME="__AGENT_HOME__"
+export XDG_CONFIG_HOME="__AGENT_HOME__/.config"
+export PATH="__AGENT_HOME__/.local/bin:__AGENT_HOME__/.local/share/npm/bin:__AGENT_HOME__/.cargo/bin:__AGENT_HOME__/.bun/bin:__AGENT_HOME__/go/bin:__AGENT_HOME__/.config/varlock/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+if [ ! -s "$HOME/.config/akari/config.toml" ]; then
+	echo "akari config missing; run akari login on this machine" >&2
+	exit 0
+fi
+
+mkdir -p "$HOME/.cache/akari"
+exec 9>"$HOME/.cache/akari/sync.lock"
+flock -n 9 || exit 0
+
+akari update
+akari sync

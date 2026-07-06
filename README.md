@@ -6,10 +6,12 @@ sharing in case anyone finds it useful.
 branches are for different systems.
 - macOS: `macos`; https://github.com/jssblck/dots/tree/macos
 - Arch Linux: `arch`; https://github.com/jssblck/dots/tree/arch
+- WSL agent host: `wsl`; https://github.com/jssblck/dots/tree/wsl
 
-This branch (`agents`) backs up my Windows user-level agent config (Claude Code,
-Codex, and shared cross-agent files). It is kept in sync by an agent routine
-that runs both directions: home to repo (backup) and repo to home (restore).
+This branch (`wsl`) keeps the user-level agent config backup from `agents`
+and adds reproducible setup for the Ubuntu WSL agent host under `wsl/`. The
+agent config is still kept in sync by an agent routine that runs both
+directions: home to repo (backup) and repo to home (restore).
 
 ## Layout
 

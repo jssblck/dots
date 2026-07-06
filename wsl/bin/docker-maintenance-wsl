@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! docker info >/dev/null 2>&1; then
+	exit 0
+fi
+
+docker container prune --force --filter until=168h
+docker image prune --force --filter until=168h
+docker network prune --force --filter until=168h
+docker builder prune --force --filter until=168h --reserved-space 50GB

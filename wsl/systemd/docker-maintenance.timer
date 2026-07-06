@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Docker maintenance weekly
+
+[Timer]
+OnCalendar=Sun *-*-* 03:30:00
+RandomizedDelaySec=30min
+Persistent=true
+Unit=docker-maintenance.service
+
+[Install]
+WantedBy=timers.target

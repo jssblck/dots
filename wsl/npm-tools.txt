@@ -1,0 +1,7 @@
+@openai/codex
+@anthropic-ai/claude-code
+@earendil-works/pi-coding-agent
+impeccable
+skills
+pnpm
+yarn

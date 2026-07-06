@@ -1,0 +1,13 @@
+[Unit]
+Description=Update and sync Akari client sessions
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=__AGENT_USER__
+Group=__AGENT_USER__
+WorkingDirectory=__AGENT_HOME__
+Environment=HOME=__AGENT_HOME__
+Environment=XDG_CONFIG_HOME=__AGENT_HOME__/.config
+ExecStart=/usr/local/bin/akari-sync-wsl

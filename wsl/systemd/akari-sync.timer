@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Akari update and sync every 10 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=10min
+AccuracySec=1min
+RandomizedDelaySec=30s
+Persistent=true
+Unit=akari-sync.service
+
+[Install]
+WantedBy=timers.target

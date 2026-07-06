@@ -63,3 +63,22 @@ dotcodex/worktrees/
 
 # Repo-local snapshots (if any)
 .backup/
+
+# --- WSL bootstrap safety net ---
+wsl/secrets/
+wsl/private/
+wsl/**/*.env
+wsl/**/config.toml
+!wsl/templates/**/config.toml.example
+wsl/**/*.key
+wsl/**/*.pem
+wsl/**/*.p12
+wsl/**/*.pfx
+wsl/**/id_*
+wsl/**/*token*
+wsl/**/*auth*
+wsl/**/*state*
+wsl/**/*.log
+wsl/**/*.pid
+wsl/**/*.vhd
+wsl/**/*.vhdx

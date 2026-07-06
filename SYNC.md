@@ -61,6 +61,13 @@ Copied verbatim in both directions.
 - `~/.claude/hooks/`                   -> `dotclaude/hooks/` (verbatim; cross-platform Bun hook scripts, referenced by settings.json)
 - `~/.codex/config.toml`              -> `dotcodex/config.toml` (curated, see below)
 
+## WSL bootstrap files
+
+The `wsl/` directory is provisioning code, not a home-directory mirror. Edit
+it intentionally in this repo. Do not populate it by copying live machine state
+from `/etc`, `~/.ssh`, Tailscale, Akari, Docker, or WSL VHD files. Keep secrets
+and runtime state machine-local.
+
 ## What is never synced
 
 Auth, sessions, history, logs, sqlite, caches, telemetry, runtime state, and

@@ -1,0 +1,8 @@
+[Unit]
+Description=Prune old Docker containers, dangling images, networks, and build cache
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/docker-maintenance-wsl

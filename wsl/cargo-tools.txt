@@ -1,0 +1,7 @@
+jaq
+jless
+riffdiff
+tokei
+xh
+cargo-nextest
+bottom

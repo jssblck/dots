@@ -11,8 +11,10 @@
 *.yml    text eol=lf
 *.rules  text eol=lf
 *.ps1    text eol=lf
+*.sh     text eol=lf
 *.mjs    text eol=lf
 *.js     text eol=lf
+*.txt    text eol=lf
 
 # Binary assets: never touch line endings
 *.png    binary
