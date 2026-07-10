@@ -1,0 +1,4 @@
+interface:
+  display_name: "Merge Open PRs"
+  short_description: "Order, resolve, verify, and merge open PRs"
+  default_prompt: "Use $merge-open-prs to merge the open pull requests in the safest order and verify the final branch."
