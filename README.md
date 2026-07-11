@@ -6,6 +6,7 @@ sharing in case anyone finds it useful.
 branches are for different systems.
 - macOS: `macos`; https://github.com/jssblck/dots/tree/macos
 - Arch Linux: `arch`; https://github.com/jssblck/dots/tree/arch
+- agents: https://github.com/jssblck/dots/tree/agents
 
 This branch (`agents`) backs up my Windows user-level agent config (Claude Code,
 Codex, and shared cross-agent files). It is kept in sync by an agent routine
