@@ -46,7 +46,23 @@ When a fix breaks a test, do not just patch the one failure: scan for other call
 sites or fixtures that relied on the old behavior, so the next CI run does not
 surface a sibling break.
 
-## 2. Commit
+## 2. Run a fresh eyes review
+
+Before committing or creating the PR, start a new sub-agent to conduct an
+adversarial **fresh eyes** review of the complete change. Give the reviewer the
+diff, the relevant source and tests, and the intended outcome, but do not pass
+along the implementation discussion or your conclusions. Ask it to look for
+correctness bugs, missed edge cases, regressions, unsafe assumptions, and gaps in
+tests or documentation.
+
+Evaluate every finding on its merits and fix each actionable issue at its root.
+After a fix, run the relevant local checks again and send the revised change
+through another fresh eyes review. Continue for as many rounds as needed until
+you and the reviewer agree that no actionable findings remain. Do not create the
+PR before reaching that state. If sub-agents are unavailable, perform a separate
+review pass from the diff and state that limitation in the final report.
+
+## 3. Commit
 
 Inspect the complete diff and the working tree before staging. Preserve unrelated
 user changes. Group related files into logical commits and stage explicit paths.
@@ -76,7 +92,7 @@ Rules that always hold:
 - **No em-dashes** anywhere in the message. Run the `stop-slop` skill over the
   message (and the PR body) before finalizing.
 
-## 3. Open the PR
+## 4. Open the PR
 
 Infer the PR's core reason from the workstream and confirm it with the user unless
 the reason was already confirmed or the user explicitly asked Codex to proceed
@@ -129,7 +145,7 @@ Notes:
 - Before watching CI, verify the final PR's base, head, readiness, title, body,
   and URL with `gh pr view`.
 
-## 4. Get CI green
+## 5. Get CI green
 
 CI is not green until **every** check passes: the build (across whatever matrix it
 runs), the test job, the formatter and linter checks, and any review gate.
@@ -145,13 +161,14 @@ failed-job log, then search within it as needed:
 gh run view <run-id> --log-failed
 ```
 
-Then loop: **diagnose the failure, fix it, re-run the local gates from step 1,
+Then loop: **diagnose the failure, fix it, re-run the local gates from steps 1
+and 2,
 commit the fix, push, and re-poll.** A first red run is normal and useful (it
 catches hidden dependencies like a fixture that relied on old behavior); keep
 going until it is all green. Do not declare done on a partial pass. Fix a
 review-gate finding at its root, never by working around the gate.
 
-## 5. Report
+## 6. Report
 
 Close with the PR link and the concrete green state: which check groups passed,
 what shipped as a short list of commits, and any first-run failure fixed along
@@ -165,6 +182,8 @@ directives only after each action has succeeded.
 - Verify locally before pushing. Run the full or integration suite when the
   change reaches that layer and the required environment is available. The
   complete CI result is the final authority for the PR.
+- Complete an adversarial fresh eyes review in a new sub-agent before creating
+  the PR. Fix actionable findings and repeat until both agents are satisfied.
 - Imperative commit subject, why-focused body, conditional Codex co-author
   trailer, no em-dashes, and `stop-slop` over durable prose.
 - PR body leads with the problem, states what changed and how it was checked,
