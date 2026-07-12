@@ -1,6 +1,5 @@
 model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
-model_context_window = 250000
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 background_terminal_max_timeout = 1200000
