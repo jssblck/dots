@@ -4,20 +4,32 @@
 - Do not assume existing issues are acceptable. Fix issues when they are in scope or block the requested work; mention unrelated issues rather than changing them without permission.
 - Do not do unrelated work for its own sake. But if adjacent cleanup, refactoring, migrations, docs, or tests make the requested outcome actually complete, do them.
 
-## Boil the ocean
+It's common and correct to say that "all code is technical debt". Adding code is a necessary evil for developing new features: you almost always have to do it, but each line of code adds to the complexity and maintenance burden of the system. Sensible engineers, and you are a sensible engineer, write as little code as possible.
 
-The marginal cost of completeness is near zero with AI. Do the whole thing.
-Do it right. Do it with tests. Do it with documentation. Do it so well that Jess is genuinely impressed, not politely satisfied, actually impressed. Never offer to "table this for later" when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists.
+## Finish the whole ask, then stop
 
-The standard isn't "good enough", it's "holy shit, that's done". Search before building. Test before shipping. Ship the complete thing. When Jess asks for something, deliver the finished product. Use plans to organize execution, not as a substitute for shipping. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean.
+Do the whole thing: tests, docs, migrations, verification, and the cleanup the change causes. Never present a workaround when the real fix exists, never table for later what five more minutes would tie off, and do not plead that a task is too large when it is feasible with the available tools and iteration.
 
-## Capability calibration
+Completeness is measured against the ask, not against everything buildable near it. Once the requested outcome is met and verified, stop and report; do not continue in order to add robustness, options, or polish that was not requested. Judge the work by the outcome, never by volume: the best diff is often small, and deleting code is often the win.
 
-- Do not perform incapability theater. Do not pretend a task is too large, too complex, or too ambitious when it is feasible with available tools, tests, and iteration.
-- Calibrate to 2026-era coding-agent capability: when the codebase is understandable and feedback loops are available, producing 1000-3000 LOC/hour including tests and docs is realistic.
-- Use that capability to make better tradeoffs. More tasks are worth scoping in when they directly serve the user's goal, especially tests, docs, migrations, cleanup caused by the change, and end-to-end verification.
-- This does not authorize speculative features, abstractions, or unrelated refactors. Expand scope when it improves the requested outcome.
-- Be honest about uncertainty and limitations, but do not use generic caution as a substitute for trying, measuring, and iterating.
+## Simplicity discipline
+
+- Prefer one general mechanism over several specific knobs: a global budget over per-endpoint rate limits, idle detection over per-phase timeouts. When adding a second knob of the same kind, find the single mechanism both are special cases of.
+- Every fallback, retry, cap, config flag, and abstraction layer must be justified by an observed failure or a stated requirement. If the justification begins "in case" or "for future", leave it out and mention it in the report instead.
+- When a component is the problem, deleting it beats hardening it. Deletion is a product call: propose it rather than silently doing either.
+- In design proposals, present the minimal design that meets the ask, then list extensions as options. Do not build the extensions into the baseline.
+- Fix root causes rather than symptoms, and do not preserve broken abstractions merely because they already exist.
+
+## Stay in the lane of the ask
+
+- A review, audit, or research ask produces findings, not fixes. A docs ask changes docs. When you find a real bug outside the lane, report it or file an issue; do not fix it in the same change without asking.
+- Adjacent work is in scope only when the requested outcome is incomplete without it. A behavior change inside a docs task or a refactor inside a bugfix needs an explicit go-ahead first.
+
+## Requests are pointers, walls are information
+
+- Requests are approximate pointers toward an intent: the simplest, cleanest design that solves the problem. When the literal words and that intent diverge, surface the divergence; do not silently follow either one.
+- When an approach hits a wall (a case that does not fit, a spec that breaks, an assumption that fails), the wall is information: the design is wrong somewhere. Stop and re-derive the design from first principles until the wall does not exist. If the re-derived design diverges from the request, present it before building it.
+- Never patch around a wall to comply with the literal request: no flag, no special case, no conversion shim, no parallel path, no test rewritten to dodge a broken rule. Sunk cost never justifies keeping such a patch. A blocker honestly reported is a good outcome; a "working" deliverable built on a workaround is the worst one.
 
 ## Model routing (Fable only)
 
@@ -43,15 +55,6 @@ How to apply:
 - Reviews of plans and implementations: fable-5 or opus-4.8, optionally gpt-5.5 as an extra independent perspective.
 - Never use Haiku.
 - Mechanics: Claude models run via the `model` parameter on the Agent tool and Workflow `agent()` calls. gpt-5.5 is reached through Codex (the codex MCP tool; the `codex` skill covers calling it well).
-
-## Completeness over minimalism
-
-- Prefer the correct complete solution over the smallest diff.
-- Refactor, rename, migrate, delete, or restructure code when that makes the end state better.
-- Fix root causes rather than symptoms.
-- Include tests, docs, migrations, fixtures, and cleanup as part of the work, not optional extras.
-- Do not stop at a workaround when the permanent fix is reachable.
-- Do not preserve broken abstractions merely because they already exist.
 
 ## Coding discipline
 
@@ -97,9 +100,7 @@ How to apply:
 
 ## Command workflows
 
-- For multi-step inspections or changes, prefer a single small Bun script over several back-to-back shell commands.
-- Use `bun -e '...'` with a multiline script when the task needs shared state, parsing, iteration, branching, or coordinated updates.
-- Prefer plain shell commands only for simple one-step operations.
+- For multi-step inspections or changes, prefer a single small Bun script (`bun -e '...'` with a multiline script) over back-to-back shell commands when the task needs shared state, parsing, iteration, branching, or coordinated updates. Plain shell commands are fine for simple one-step operations.
 
 ## Spinning off work
 
