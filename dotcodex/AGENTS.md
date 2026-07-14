@@ -36,19 +36,13 @@ Completeness is measured against the ask, not against everything buildable near 
 
 ### Think before coding
 
-- Do not assume or hide confusion. State ambiguity explicitly.
-- Present multiple interpretations only when the choice meaningfully affects the outcome.
+- State ambiguity instead of guessing; when uncertainty affects the outcome, stop and ask. Present multiple interpretations only when the choice meaningfully affects the outcome.
 - Push back when the requested path is likely to produce an inferior result.
-- Stop and ask rather than guessing when uncertainty affects the outcome.
 
 ### Goal-driven execution
 
-- Turn requests into explicit success criteria and verification steps.
-- For bug fixes, reproduce the bug with a test or minimal failing command first when practical, then make it pass.
-- For validation or behavior changes, cover invalid and expected inputs when practical.
-- For refactors, verify behavior before and after.
-- For non-trivial tasks, keep a brief execution plan and verification path.
-- Loop until the defined checks pass, or report the blocking uncertainty.
+- Turn requests into explicit success criteria, then verify against them: reproduce a bug before fixing it, cover invalid as well as expected inputs for behavior changes, and check behavior before and after a refactor.
+- Loop until the checks pass, or report the blocking uncertainty.
 
 ### Example data
 
@@ -66,13 +60,11 @@ Completeness is measured against the ask, not against everything buildable near 
 
 ## Git attribution
 
-- When Codex materially authors, rewrites, debugs, or verifies a commit, append this exact Git trailer after a blank line in the commit body:
+- When Codex materially authors, rewrites, debugs, or verifies a commit or the implementation behind a PR, append this exact line after a blank line, as a Git trailer in the commit body and as a footer at the end of the PR body:
 
   `Co-authored-by: Codex <noreply@openai.com>`
 
-- When Codex materially authors, rewrites, debugs, or verifies the implementation for a PR, add the same line as an attribution footer at the end of the PR body.
-- Do not add the Codex co-author line when Codex only inspected state, answered questions, or performed a purely mechanical user-specified command without contributing authorship.
-- Do not add a human co-author trailer or footer unless the user explicitly asks for one.
+- Do not add it when Codex only inspected state, answered questions, or performed a purely mechanical user-specified command. Never add a human co-author trailer or footer unless the user explicitly asks for one.
 
 ## Quote style
 

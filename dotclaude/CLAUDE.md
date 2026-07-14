@@ -60,19 +60,13 @@ How to apply:
 
 ### Think before coding
 
-- Do not assume or hide confusion. State ambiguity explicitly.
-- Present multiple interpretations only when the choice meaningfully affects the outcome.
+- State ambiguity instead of guessing; when uncertainty affects the outcome, stop and ask. Present multiple interpretations only when the choice meaningfully affects the outcome.
 - Push back when the requested path is likely to produce an inferior result.
-- Stop and ask rather than guessing when uncertainty affects the outcome.
 
 ### Goal-driven execution
 
-- Turn requests into explicit success criteria and verification steps.
-- For bug fixes, reproduce the bug with a test or minimal failing command first when practical, then make it pass.
-- For validation or behavior changes, cover invalid and expected inputs when practical.
-- For refactors, verify behavior before and after.
-- For non-trivial tasks, keep a brief execution plan and verification path.
-- Loop until the defined checks pass, or report the blocking uncertainty.
+- Turn requests into explicit success criteria, then verify against them: reproduce a bug before fixing it, cover invalid as well as expected inputs for behavior changes, and check behavior before and after a refactor.
+- Loop until the checks pass, or report the blocking uncertainty.
 
 ### Comments
 
