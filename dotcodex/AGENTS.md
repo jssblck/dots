@@ -61,8 +61,8 @@ Completeness is measured against the ask, not against everything buildable near 
 
 ## Codex automations
 
-- When creating or updating Codex automations at Jess's request, default supported execution settings to model `gpt-5.5` and reasoning effort `high` unless Jess explicitly asks for different settings.
-- For cron automations, pass `model: "gpt-5.5"` and `reasoningEffort: "high"` by default.
+- When creating or updating Codex automations at Jess's request, default supported execution settings to model `gpt-5.6-sol` and reasoning effort `medium` unless Jess explicitly asks for different settings.
+- For cron automations, pass `model: "gpt-5.6-sol"` and `reasoningEffort: "medium"` by default.
 
 ## Git attribution
 
