@@ -36,33 +36,16 @@ a toolchain.
   that need services or extra setup: those often skip silently when unconfigured,
   so a green run can be hollow. Make sure the relevant ones actually ran. A change
   that does not reach that layer may not need it.
-- **Pre-empt the review gate.** If the repo has a code-review gate (an agentic
-  reviewer or any required review check), run it locally before you push so its
-  findings are not a surprise. If it is slow, run it in the background and push /
-  open the PR while it works, then address findings after. Fix a finding at its
-  root, never by working around the gate.
+- **Follow the Bastion workflow when configured.** If the repository uses
+  Bastion, follow its `using-bastion` skill to decide whether the gate runs
+  locally or in CI. Fix blocking findings at their root, and never weaken the
+  reviewer registry to make the gate pass.
 
 When a fix breaks a test, do not just patch the one failure: scan for other call
 sites or fixtures that relied on the old behavior, so the next CI run does not
 surface a sibling break.
 
-## 2. Run a fresh eyes review
-
-Before committing or creating the PR, start a new sub-agent to conduct an
-adversarial **fresh eyes** review of the complete change. Give the reviewer the
-diff, the relevant source and tests, and the intended outcome, but do not pass
-along the implementation discussion or your conclusions. Ask it to look for
-correctness bugs, missed edge cases, regressions, unsafe assumptions, and gaps in
-tests or documentation.
-
-Evaluate every finding on its merits and fix each actionable issue at its root.
-After a fix, run the relevant local checks again and send the revised change
-through another fresh eyes review. Continue for as many rounds as needed until
-you and the reviewer agree that no actionable findings remain. Do not create the
-PR before reaching that state. If sub-agents are unavailable, perform a separate
-review pass from the diff and state that limitation in the final report.
-
-## 3. Commit
+## 2. Commit
 
 Inspect the complete diff and the working tree before staging. Preserve unrelated
 user changes. Group related files into logical commits and stage explicit paths.
@@ -92,7 +75,7 @@ Rules that always hold:
 - **No em-dashes** anywhere in the message. Run the `stop-slop` skill over the
   message (and the PR body) before finalizing.
 
-## 4. Open the PR
+## 3. Open the PR
 
 Infer the PR's core reason from the workstream and confirm it with the user unless
 the reason was already confirmed or the user explicitly asked Codex to proceed
@@ -145,10 +128,10 @@ Notes:
 - Before watching CI, verify the final PR's base, head, readiness, title, body,
   and URL with `gh pr view`.
 
-## 5. Get CI green
+## 4. Get CI green
 
 CI is not green until **every** check passes: the build (across whatever matrix it
-runs), the test job, the formatter and linter checks, and any review gate.
+runs), the test job, the formatter and linter checks, and Bastion when configured.
 
 Prefer `gh pr checks <n> --watch --interval 20` (it blocks until the run resolves)
 or run that watch in the background and act on its completion notification. This
@@ -161,14 +144,13 @@ failed-job log, then search within it as needed:
 gh run view <run-id> --log-failed
 ```
 
-Then loop: **diagnose the failure, fix it, re-run the local gates from steps 1
-and 2,
+Then loop: **diagnose the failure, fix it, re-run the local gates from step 1,
 commit the fix, push, and re-poll.** A first red run is normal and useful (it
 catches hidden dependencies like a fixture that relied on old behavior); keep
 going until it is all green. Do not declare done on a partial pass. Fix a
-review-gate finding at its root, never by working around the gate.
+Bastion finding at its root, never by working around the gate.
 
-## 6. Report
+## 5. Report
 
 Close with the PR link and the concrete green state: which check groups passed,
 what shipped as a short list of commits, and any first-run failure fixed along
@@ -182,8 +164,8 @@ directives only after each action has succeeded.
 - Verify locally before pushing. Run the full or integration suite when the
   change reaches that layer and the required environment is available. The
   complete CI result is the final authority for the PR.
-- Complete an adversarial fresh eyes review in a new sub-agent before creating
-  the PR. Fix actionable findings and repeat until both agents are satisfied.
+- Follow the repository's Bastion workflow when configured. Fix blocking
+  findings at their root without weakening the reviewer registry.
 - Imperative commit subject, why-focused body, conditional Codex co-author
   trailer, no em-dashes, and `stop-slop` over durable prose.
 - PR body leads with the problem, states what changed and how it was checked,
