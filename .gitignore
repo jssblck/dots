@@ -2,6 +2,7 @@
 #   dotclaude  <->  ~/.claude
 #   dotcodex   <->  ~/.codex
 #   dotagents  <->  ~/.agents
+#   dotbastion <->  Bastion platform config directory
 # SYNC.md is the source of truth for what gets backed up (the allowlist).
 #
 # This file is only a safety net: it hard-blocks auth, secrets, sessions, logs,
@@ -60,6 +61,11 @@ dotcodex/sqlite/
 dotcodex/tmp/
 dotcodex/vendor_imports/
 dotcodex/worktrees/
+
+# --- Bastion (dotbastion <- platform config directory) ---
+# Only the user-level reviewer registry is durable config.
+dotbastion/*
+!dotbastion/.bastion.yaml
 
 # Repo-local snapshots (if any)
 .backup/

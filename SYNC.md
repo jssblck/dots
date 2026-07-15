@@ -12,15 +12,20 @@ the allowlist, mapping, and sanitization rules below exactly.
 
 ## Directory mapping
 
-Each top-level repo directory mirrors one home directory. The repo uses
+Each top-level repo directory mirrors one user config directory. The repo uses
 `dot`-prefixed names (not real dotfiles) so the directories are easy to see and
 operate on.
 
-| Repo dir     | Home dir      | Tool                   |
-| ------------ | ------------- | ---------------------- |
-| `dotclaude/` | `~/.claude/`  | Claude Code            |
-| `dotcodex/`  | `~/.codex/`   | Codex                  |
-| `dotagents/` | `~/.agents/`  | Shared cross-agent     |
+| Repo dir      | User config dir              | Tool               |
+| ------------- | ---------------------------- | ------------------ |
+| `dotclaude/`  | `~/.claude/`                 | Claude Code        |
+| `dotcodex/`   | `~/.codex/`                  | Codex              |
+| `dotagents/`  | `~/.agents/`                 | Shared cross-agent |
+| `dotbastion/` | Bastion platform config dir  | Bastion            |
+
+Bastion's platform config directory is `$XDG_CONFIG_HOME/bastion` on Linux
+(defaulting to `~/.config/bastion`), `~/Library/Application Support/bastion` on
+macOS, and `%APPDATA%\bastion` on Windows.
 
 ## What is backed up (allowlist)
 
@@ -60,6 +65,10 @@ Copied verbatim in both directions.
 - `~/.claude/statusline-command.mjs`  -> `dotclaude/statusline-command.mjs` (verbatim; cross-platform Bun statusline, referenced by settings.json)
 - `~/.claude/hooks/`                   -> `dotclaude/hooks/` (verbatim; cross-platform Bun hook scripts, referenced by settings.json)
 - `~/.codex/config.toml`              -> `dotcodex/config.toml` (curated, see below)
+- `<Bastion platform config dir>/.bastion.yaml` -> `dotbastion/.bastion.yaml` (verbatim)
+
+Use `.bastion.yaml` as the canonical user-registry spelling even though Bastion
+also accepts `.bastion.yml`; do not keep or sync both spellings.
 
 ## What is never synced
 
@@ -73,6 +82,8 @@ paths above. Notable never-sync items:
 - `~/.claude/plugins/` (install state + the remote-fetched `blocklist.json` cache)
 - Codex runtime state: `auth.json`, `*.sqlite`, sessions, marketplaces,
   computer-use, node_repl, worktrees, sandbox secrets, etc.
+- Bastion's data directory and run history. Only the user-level reviewer
+  registry is synced.
 
 ## Sanitization
 
@@ -122,7 +133,7 @@ config, the curated file can be written as-is.
 
 ### Backup (home -> repo)
 
-For each tool dir:
+Back up the three agent config directories, then Bastion:
 
 1. Mirror `~/.<tool>/skills/` into `dot<tool>/skills/` (add new, update changed,
    delete removed; strip nested `.git/`; skip `.system/`).
@@ -130,20 +141,22 @@ For each tool dir:
 3. Copy `settings.json` (with `__HOME__` sanitization), `statusline-command.mjs`,
    and everything under `hooks/` for Claude; copy `config.toml` (curated) for
    Codex.
-4. Reconcile `claude-cloud-restore.sh` (see "Cloud restore" below). Whenever this
+4. Copy the Bastion platform config directory's `.bastion.yaml` verbatim to
+   `dotbastion/.bastion.yaml`.
+5. Reconcile `claude-cloud-restore.sh` (see "Cloud restore" below). Whenever this
    backup changes `dotclaude/settings.json`, review the keys against the script's
    keep-list and env allow-list and update them so the cloud profile stays
    current: add a new durable preference to the keep-list, leave a cloud-hostile
    key out (and note why in the drop list here). The script is part of the
    tracked config, not a write-once file; a backup that lands new settings keys
    without this review is incomplete.
-5. Stage and commit. The `.gitignore` blocks anything sensitive that slipped in;
+6. Stage and commit. The `.gitignore` blocks anything sensitive that slipped in;
    if a commit would include an ignored-category file, stop and fix the copy
    step rather than force-adding it.
 
 ### Restore (repo -> home)
 
-For each tool dir:
+Restore the three agent config directories, then Bastion:
 
 1. Mirror `dot<tool>/skills/` back into `~/.<tool>/skills/` (preserving
    `~/.codex/skills/.system/`, which the repo never tracks).
@@ -152,7 +165,9 @@ For each tool dir:
    `settings.json` with `__HOME__` expanded to the real home path.
 4. Codex: **merge** the curated `config.toml` durable keys into the live file
    (see above); do not clobber machine-specific sections.
-5. Never restore auth: sign in to Claude and Codex separately.
+5. Bastion: create the platform config directory when needed, then copy
+   `dotbastion/.bastion.yaml` to `.bastion.yaml` there verbatim.
+6. Never restore auth: sign in to Claude and Codex separately.
 
 ## Cloud restore (Claude Code on the web)
 
@@ -177,9 +192,9 @@ the target repo ships one (the two compose in the same Setup-script field):
 
 The cloud restore is deliberately narrower than the machine restore above:
 
-- **Claude only.** It restores `~/.claude` exclusively. `~/.codex` and
-  `~/.agents` are not touched: Codex and the shared cross-agent files have no
-  consumer in a Claude Code web session.
+- **Claude only.** It restores `~/.claude` exclusively. Codex, shared cross-agent,
+  and Bastion config are not touched because they have no consumer in a Claude
+  Code web session.
 - **Additive, not a mirror.** It copies skills and memory in but never deletes
   anything already in the home dir, so cloud-provided config survives. (The
   machine restore mirrors, including deletes.)

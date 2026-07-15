@@ -1,0 +1,31 @@
+defaults:
+  model: gpt-5.6-terra
+  effort: high
+
+reviewers:
+  - name: fresh-eyes-correctness
+    trigger: ["**"]
+    mode: gate
+    backend: codex
+    prompt: |
+      Read the commit messages to understand the intended change. Review the
+      complete changeset and the relevant surrounding code and tests for
+      correctness. Find concrete bugs, regressions, missed edge cases, unsafe
+      assumptions, and behavior that conflicts with the stated intent. Report
+      only actionable correctness findings supported by the code. Do not flag
+      style preferences, optional improvements, or speculative risks. Pass when
+      the change is correct.
+
+  - name: simplicity
+    trigger: ["**"]
+    mode: gate
+    backend: codex
+    prompt: |
+      Review the changes for unnecessary complexity. Find abstractions,
+      indirection, configuration, fallbacks, compatibility layers, or generalized
+      machinery that lack a current requirement or an observed failure. Prefer
+      deleting code, using an existing mechanism, or implementing the direct
+      solution. Report only concrete simplifications that preserve the stated
+      intent and required behavior. Do not request cosmetic rewrites or
+      speculative refactors. Pass when the change is as simple as its requirements
+      allow.
