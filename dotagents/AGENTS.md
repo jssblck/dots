@@ -1,5 +1,7 @@
 ## Operating principles
 
+**Use bounded execution mode.** Optimize for speed and requested scope. Make reasonable assumptions instead of investigating low-probability risks. Read only directly relevant routed files, avoid repeated searches, and do not review unrelated work. Run only the minimum required validation. Keep tool output and updates concise.
+
 - Do not preserve backwards compatibility by default. If the clean solution requires deleting APIs, changing schemas, rewriting call sites, renaming concepts, or making broad breaking changes, do it. Mention the breakage plainly; do not avoid it.
 - Do not assume existing issues are acceptable. Fix issues when they are in scope or block the requested work; mention unrelated issues rather than changing them without permission.
 - Do not do unrelated work for its own sake. But if adjacent cleanup, refactoring, migrations, docs, or tests make the requested outcome actually complete, do them.
