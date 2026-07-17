@@ -1,6 +1,6 @@
 ---
 name: tag-release
-description: Use when asked to cut a release by tagging the default branch: "tag a release", "tag a patch release", "cut a minor release", "tag a new major version", "cut a release". Covers syncing to origin's default branch first, reading the prior release to compute the next version, tagging the exact origin HEAD in the repo's convention, pushing, and watching the release to green. Invoke with /tag-release.
+description: 'Use when asked to cut a release by tagging the default branch: "tag a release", "tag a patch release", "cut a minor release", "tag a new major version", "cut a release". Covers syncing to origin''s default branch first, reading the prior release to compute the next version, tagging the exact origin HEAD in the repo''s convention, pushing, and watching the release to green. Invoke with /tag-release.'
 user-invocable: true
 ---
 
@@ -13,6 +13,11 @@ repo's existing convention**. Given "tag a patch / minor / major release", sync,
 read the prior release, compute the next version, tag, push, and watch the
 release to green.
 
+An explicit request to tag or cut a release authorizes creating and pushing the
+tag. It also authorizes the repository's established forge Release workflow.
+Proceed without a second confirmation. Ask a question only when a required
+value cannot be derived or the repository state makes the release ambiguous.
+
 ## 1. Sync to the origin default branch first
 
 The tag must point at what is actually on the remote, not whatever your local
@@ -22,12 +27,12 @@ checkout happens to be at.
 git fetch origin --tags --prune
 ```
 
-- Confirm the working tree is clean and the local default branch matches
+- Verify the working tree is clean and the local default branch matches
   `origin`. If it has diverged, is dirty, or is behind, resolve that first (fast
   forward it, or tag `origin/<default-branch>` directly so local-only commits can
   never leak into the release).
 - The commit you tag is `origin/<default-branch>`'s HEAD. Do not cut a release
-  from a red default branch: if the repo gates releases on CI, confirm the checks
+  from a red default branch: if the repo gates releases on CI, verify the checks
   are green on that exact commit before tagging.
 
 ## 2. Read the prior release and the repo's convention
@@ -89,11 +94,11 @@ git push origin <version>
 
 If the convention is an explicit forge release rather than a bare tag, create it
 that way instead (`gh release create <version> ...`, matching how prior releases
-set their title, notes, and assets). Then confirm the outcome:
+set their title, notes, and assets). Then verify the outcome:
 
 ```sh
 gh run watch <run-id> --exit-status --interval 20   # if a pipeline runs on the tag
-gh release view <version>                            # confirm it published, with assets
+gh release view <version>                            # verify it published, with assets
 ```
 
 Do not call it done until the release pipeline is green and the release (and any
@@ -110,9 +115,6 @@ State the version you cut, the commit SHA it points at, how it was tagged
   or dirty commit. Fetch first, every time.
 - Follow the repo's version format, tag kind, and release mechanism exactly; read
   the prior release, do not assume.
-- Confirm before pushing when anything is ambiguous: no prior release, an
-  inconsistent tag history, a dirty or diverged local checkout, or a default
-  branch that is not green. Otherwise proceed; you were invoked to cut it.
 - A pushed release tag is outward and hard to reverse. Get the version and target
   commit right before pushing, not after.
 - No em-dashes in the tag message or the summary.

@@ -7,7 +7,12 @@ description: Cut a release by tagging the current remote default branch in the r
 
 Tag the current `origin` default-branch HEAD in the repository's established
 version format and tag kind. Inspect the release convention, compute the next
-version, confirm the exact target, push the tag, and watch the release to green.
+version, verify the exact target, push the tag, and watch the release to green.
+
+An explicit request to tag or cut a release authorizes creating and pushing the
+tag. It also authorizes the repository's established forge Release workflow.
+Proceed without a second confirmation. Ask a question only when a required
+value cannot be derived or the repository state makes the release ambiguous.
 
 ## 1. Sync to the origin default branch first
 
@@ -30,7 +35,7 @@ git fetch origin --tags --prune
   ref.
 - Record `git rev-parse origin/<default-branch>` as the candidate release commit.
   Do not cut a release from a red default branch. If the repository gates
-  releases on CI, confirm the checks are green on that exact commit.
+  releases on CI, verify the checks are green on that exact commit.
 
 ## 2. Read the prior release and the repo's convention
 
@@ -74,12 +79,11 @@ Follow the repository's established transition from prerelease to stable tags.
 If history does not establish whether to advance, retain, or drop a prerelease
 suffix, ask the user.
 
-State the computed tag, candidate commit SHA, tag kind, and release mechanism.
-Ask the user to confirm these values immediately before the first outward action.
+Record the computed tag, candidate commit SHA, tag kind, and release mechanism.
 
 ## 4. Create the tag, matching convention
 
-After confirmation, fetch again before creating the tag:
+Fetch again immediately before creating the tag:
 
 ```sh
 git ls-remote --symref origin HEAD
@@ -88,17 +92,18 @@ git rev-parse origin/<default-branch>
 git ls-remote --tags --refs origin 'refs/tags/<relevant-prefix>*'
 ```
 
-Confirm that the remote default branch is unchanged, the branch SHA still matches
-the confirmed SHA, the latest relevant remote tag is unchanged, and the proposed
+Verify that the remote default branch is unchanged, the branch SHA still matches
+the candidate SHA, the latest relevant remote tag is unchanged, and the proposed
 tag does not already exist. If any of these checks changed, recompute the release,
-and obtain renewed confirmation. Re-query the required checks on the confirmed
-SHA immediately before tagging or pushing, even when the SHA is unchanged. Stop
-if a required check is pending, failing, or no longer green. Then tag the fetched
-remote HEAD explicitly, matching the kind of the prior tags:
+then repeat the validation and proceed when the requested release remains
+unambiguous. Re-query the required checks on the release SHA immediately before
+tagging or pushing, even when the SHA is unchanged. Stop if a required check is
+pending, failing, or no longer green. Then tag the fetched remote HEAD explicitly,
+matching the kind of the prior tags:
 
 ```sh
-gh api 'repos/<owner>/<repository>/commits/<confirmed-sha>/check-runs'
-gh api 'repos/<owner>/<repository>/commits/<confirmed-sha>/status'
+gh api 'repos/<owner>/<repository>/commits/<release-sha>/check-runs'
+gh api 'repos/<owner>/<repository>/commits/<release-sha>/status'
 ```
 
 ```sh
@@ -122,7 +127,7 @@ git push origin <version>
 If the convention includes a forge release, create it only after pushing the
 verified local tag. Use `gh release create <version> --verify-tag ...`, matching
 how prior releases set their title, notes, and assets, and pass
-`--repo <owner/repository>`. Then confirm the outcome:
+`--repo <owner/repository>`. Then verify the outcome:
 
 ```sh
 git ls-remote origin 'refs/tags/<version>' 'refs/tags/<version>^{}'
@@ -131,8 +136,8 @@ gh release view <version> -R <owner/repository>
 ```
 
 For an annotated or signed tag, compare the peeled `^{}` result with the
-confirmed commit SHA. For a lightweight tag, compare the direct tag result.
-Do not call it done until the remote tag resolves to the confirmed commit, the
+release commit SHA. For a lightweight tag, compare the direct tag result.
+Do not call it done until the remote tag resolves to the release commit, the
 release pipeline is green, and the expected release artifacts exist.
 
 ## 6. Report
@@ -146,9 +151,6 @@ State the version you cut, the commit SHA it points at, how it was tagged
   and again immediately before creating the tag.
 - Follow the repo's version format, tag kind, and release mechanism exactly; read
   the prior release, do not assume.
-- Confirm the version, commit SHA, tag kind, and release mechanism immediately
-  before creating or pushing the tag. Renew confirmation if the remote branch
-  advances.
 - Push the verified tag before creating a forge Release, and require
   `gh release create --verify-tag`.
 - Run `stop-slop` over release notes or other durable prose created during the
