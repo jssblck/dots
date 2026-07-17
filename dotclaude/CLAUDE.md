@@ -35,26 +35,24 @@ Completeness is measured against the ask, not against everything buildable near 
 
 A note from Fable to future Fable: this section applies only when the model running the session is Fable (claude-fable-5). On any other model, skip it.
 
-For coding tasks, lean toward delegating the hands-on work to a subagent on a cheaper model, chosen with your judgment, while you stay at the layer where your judgment is actually needed: decomposition, specification, review, and integration. This is an inclination, not an obligation. Route when a lower tier can meet the bar; do the work yourself when the task is genuinely hard, tightly cross-cutting, or small enough that delegation overhead would exceed it. Either way you own the result: hold delegated work to the same bar as your own.
+For coding tasks, delegate hands-on implementation to gpt-5.6-sol at medium reasoning by default, while you handle decomposition, specification, review, and integration. Use gpt-5.6-terra at medium reasoning when the work should be cheap and fast. Do the work yourself when it is tightly cross-cutting or small enough that delegation overhead would exceed it. Either way, you own the result and hold delegated work to the same bar as your own.
 
-Rankings, higher = better. Cost is effective cost to me, not list price (gpt-5.5 through Codex is close to free under my limits; Fable is the priciest). Intelligence is how hard a problem you can hand the model unsupervised. Taste covers UI/UX, code quality, API design, and copy.
+Rankings, higher = better. Cost is effective cost to me, not list price. Intelligence is how hard a problem you can hand the model unsupervised. Taste covers UI/UX, code quality, API design, and copy.
 
-| model    | cost | intelligence | taste |
-|----------|------|--------------|-------|
-| gpt-5.5  | 9    | 8            | 5     |
-| sonnet-5 | 5    | 5            | 7     |
-| opus-4.8 | 4    | 7            | 8     |
-| fable-5  | 2    | 9            | 9     |
+| model           | cost | intelligence | taste |
+|-----------------|------|--------------|-------|
+| gpt-5.6-sol     | 7    | 9            | 6     |
+| gpt-5.6-terra   | 9    | 7            | 5     |
+| fable-5         | 2    | 9            | 9     |
 
 How to apply:
 
-- These are defaults, not limits. You have standing permission to override them: if a cheaper model's output does not meet the bar, rerun or redo the work on a smarter model without asking. Judge the output, not the price tag; escalating costs less than shipping mediocre work.
+- These are defaults, not limits. If a model's output does not meet the bar, rerun or redo the work on a stronger model without asking.
 - Cost is a tie-breaker only. When the axes conflict for anything that ships, intelligence > taste > cost.
-- Bulk or mechanical work (clear-spec implementation, data analysis, migrations): gpt-5.5, or sonnet-5 when staying inside the Agent tool is simpler.
-- Anything user-facing (UI, copy, API design) needs taste >= 7.
-- Reviews of plans and implementations: fable-5 or opus-4.8, optionally gpt-5.5 as an extra independent perspective.
-- Never use Haiku.
-- Mechanics: Claude models run via the `model` parameter on the Agent tool and Workflow `agent()` calls. gpt-5.5 is reached through Codex (the codex MCP tool; the `codex` skill covers calling it well).
+- Use gpt-5.6-sol at medium reasoning for implementation by default.
+- Use gpt-5.6-terra at medium reasoning for cheap, fast work that fits its capability.
+- Only consider lower-tier Claude models (Haiku, Sonnet, or Opus) for exploration work.
+- Mechanics: GPT models are reached through Codex. The `codex` skill covers calling it well.
 
 ## Coding discipline
 
