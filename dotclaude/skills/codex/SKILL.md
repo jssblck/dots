@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Use when consulting Codex (OpenAI's coding agent) from Claude Code: getting a second opinion on a complex design or approach, when you are stuck on a hard problem, or for an independent code review. Covers how to call the codex MCP tool with the right model and thinking level, and how to weigh Codex's nitpicky, paranoid feedback. Invoke with /codex.
+description: Use when working with Codex (OpenAI's coding agent) from Claude Code for hands-on implementation, debugging, design consultation, or independent review. Covers how to call the Codex MCP tool, shape a useful handoff, and verify the result. Invoke with /codex.
 user-invocable: true
 ---
 
@@ -8,59 +8,69 @@ user-invocable: true
 
 Codex is OpenAI's coding agent, reachable in this session through the
 `mcp__codex__codex` MCP tool (start a thread) and `mcp__codex__codex-reply`
-(continue one). Treat it as a second set of eyes, not an oracle.
+(continue one). You retain responsibility for scope, review, and integration.
+
+Treat gpt-5.6-sol as Fable's peer. Share decision context and invite it to
+challenge weak assumptions. Delegation assigns hands-on work while both models
+contribute judgment and review each other's conclusions.
 
 ## Pick the thinking level
 
-Every Codex call uses **gpt-5.5**. Default to **high** thinking:
+Every Codex call uses **gpt-5.6-sol**. Default to **medium** thinking:
 
-- `model: "gpt-5.5"`
+- `model: "gpt-5.6-sol"`
+- `config: { model_reasoning_effort: "medium" }`
+
+Scale up to **high** thinking for harder tasks:
+
 - `config: { model_reasoning_effort: "high" }`
 
-Use **xhigh** thinking when asking Codex about approaches or complex problems:
+Use high for architecture or design tradeoffs, implementation strategy,
+root-cause analysis, hard debugging, and tasks that require sustained reasoning
+across several files or constraints. Keep medium for routine implementation,
+code review, sanity checks, and focused second opinions.
 
-- `config: { model_reasoning_effort: "xhigh" }`
+## Shape the handoff
 
-Use xhigh for architecture or design tradeoffs, implementation strategy,
-root-cause analysis, hard debugging, and any problem where the useful answer is
-the reasoning path. Keep high for routine code review, sanity checks, and
-focused second opinions.
+Keep the prompt lean. State the outcome, relevant context, constraints,
+required evidence, success criteria, and expected output. State each instruction
+once, and do not repeat durable rules Codex can read from the repository's
+instruction files.
 
-Continue an existing thread with `mcp__codex__codex-reply`, passing the
-`threadId` from the first response, so Codex keeps its context instead of
-starting cold.
+Set the authorization boundary explicitly:
 
-For advice and review, start Codex in `sandbox: "read-only"`: it only needs to
-read the code to weigh in. Reach for `workspace-write` only when you actually
-want Codex to edit files.
+- For explanation, review, diagnosis, or planning, use `sandbox: "read-only"`
+  and ask Codex to inspect the relevant material and report its findings without
+  editing files.
+- For changes, builds, or fixes, use `sandbox: "workspace-write"` and authorize
+  the requested in-scope edits and relevant non-destructive validation.
+- Require confirmation before external writes, destructive actions, or a
+  material expansion of scope.
+
+Point Codex to relevant files, diffs, and prior attempts when they narrow the
+search. Let it inspect the codebase and choose implementation details unless a
+specific approach is part of the requirement.
 
 ## When to reach for it
 
-Consider a Codex pass on your own initiative, without waiting to be asked, when:
+Reach for Codex on your own initiative when:
 
-- **A complex idea needs a second opinion.** Non-trivial design or architecture
-  calls, tricky tradeoffs, anything where an independent take is worth the round
-  trip.
+- **A change needs implementation.** Give Codex a bounded outcome and success
+  criteria, then let it make the in-scope changes and run the relevant checks.
+- **A complex idea needs a second opinion.** Ask it to evaluate the design,
+  tradeoffs, and failure modes against explicit criteria.
 - **You are stuck.** A bug you cannot pin down, a test that will not pass,
   behavior you cannot explain. Hand Codex the problem along with your current
   thinking.
-- **A change wants review.** Before finalizing meaningful work, ask Codex to
+- **A meaningful change needs review.** Before finalizing it, ask Codex to
   review the diff for bugs, edge cases, and anything you missed.
 
-Give it enough to be useful: the goal, the relevant files or diff, what you
-already tried, and the specific question.
+## Close the loop
 
-## How to weigh what it says
+For implementation, inspect the resulting diff and test evidence against the
+success criteria. When corrections are needed, call
+`mcp__codex__codex-reply` with the original `threadId` so Codex retains the
+implementation context.
 
-Codex is nitpicky and paranoid by nature. That is the point (it surfaces things
-a friendlier reviewer glosses over), but it also means:
-
-- **Do not take its output as truth.** It flags plenty that is wrong, out of
-  scope, or not worth fixing.
-- **Do genuinely consider every point.** Read each suggestion on its merits and
-  decide deliberately. Waving feedback off because it is inconvenient defeats the
-  purpose of asking.
-- **Verify before acting.** Confirm a flagged bug is real and a proposed fix is
-  correct before you change anything.
-
-You own the final call. Use Codex to pressure-test it, not to make it for you.
+For advice and review, verify each finding's evidence and decide whether it is
+correct and in scope before acting.
