@@ -1,6 +1,6 @@
 ---
 name: merge-open-prs
-description: Use when asked to merge all (or several) open pull requests at once: "merge all open PRs", "identify the open PRs and merge them in the best order", "merge these PRs resolving conflicts". Covers enumerating the open PRs, choosing a merge order that minimizes conflicts, resolving Git-level and semantic conflicts, verifying between merges, and reporting the result. Optionally chains a release. Invoke with /merge-open-prs.
+description: Use when asked to merge all (or several) open pull requests at once: "merge all open PRs", "identify the open PRs and merge them in the best order", "merge these PRs resolving conflicts". Covers enumerating the open PRs, choosing a merge order that minimizes conflicts, resolving Git-level and semantic conflicts, verifying between merges, and reporting the result. Optionally chains a release.
 user-invocable: true
 ---
 
@@ -283,20 +283,3 @@ release mechanism first (a tag-triggered pipeline, a release command, a manual
 workflow), do not assume. Match the existing tag and version convention, including
 whether tags are signed or lightweight. Then trigger it and watch the release job
 to green before calling it done.
-
-## Standing rules
-
-- **Land every PR through `gh pr merge`.** Never rewrite the local default branch
-  and never push commits straight to it. Local git work stays on a PR's own branch.
-- **Never delete a branch that is another open PR's base.** For a stack, collapse
-  top-down into the lowest PR and merge that once, rather than laddering rung by
-  rung (see "Stacked PRs").
-- Match the repo's merge convention and gate; confirm the method and the ruleset,
-  do not assume them.
-- Prepare a conflicting PR on its own branch, verify it there, push it, then merge.
-- Reserve `--admin` for PRs you hold admin over and have verified locally, and
-  disclose it in the report.
-- Go one PR at a time in the chosen order, fetching between merges so each PR
-  merges onto the freshly advanced base.
-- Halt and ask on any sign of concurrent edits.
-- No em-dashes in any commit message, PR text, or summary.

@@ -49,8 +49,6 @@ How to apply:
 
 - These are defaults, not limits. If a model's output does not meet the bar, rerun or redo the work on a stronger model without asking.
 - Cost is a tie-breaker only. When the axes conflict for anything that ships, intelligence > taste > cost.
-- Use gpt-5.6-sol at medium reasoning for implementation by default.
-- Use gpt-5.6-terra at medium reasoning for cheap, fast work that fits its capability.
 - Only consider lower-tier Claude models (Haiku, Sonnet, or Opus) for exploration work.
 - Mechanics: GPT models are reached through Codex. The `codex` skill covers calling it well.
 
@@ -73,13 +71,6 @@ How to apply:
 ### Example data
 
 - When example or placeholder data needs a person's identity (names, authors, sample users, fixture records), draw from women in computing history: Grace Hopper, Ada Lovelace, Anna Winlock, and the like. Prefer these over generic placeholders or invented names.
-
-## Prose and writing style
-
-- Never use em dashes or en dashes in any prose you write: responses, docs, comments, commit messages, or generated text. Many readers now read them as a tell of unedited AI output. This is a hard rule.
-- Rewrite what would have been a dash with the punctuation that fits the join: parentheses for an aside, a colon to introduce or expand, or a comma for a loose pause. Splitting into two sentences is also fine.
-- Do not swap one dash for another (an en dash or a spaced hyphen "-" is not an acceptable substitute). Avoid the construction entirely.
-- Prefer to rewrite em and en dashes out of existing files when I touch them: I do not use these characters, so any in the codebase were inserted by an agent and should be cleaned up. Recast them with the same parenthesis/colon/comma fixes. The exception is genuinely external or quoted material (third-party content, cited text), where the original punctuation must stand.
 
 ## Stop slop
 
@@ -122,3 +113,10 @@ Rules:
    - No contrastive "not just X, but Y" structure or its variants ("it's not just X, it's Y", "not only X but also Y"). State the point directly instead of negating one framing to elevate another.
 7. **No compression.** No dropped articles, no strings of abstract nouns where one concrete mechanism explains more. Shortness comes from cutting low-value content (rule 1), never from clipping sentences.
 8. **End with a bottom line only when the answer weighed a real decision.** One plain-prose sentence: the call plus the condition that would flip it. Short factual or confirmation answers just end - no formulaic closer.
+
+### Punctuation
+
+- Never use em dashes or en dashes in any prose you write: responses, docs, comments, commit messages, or generated text. Many readers now read them as a tell of unedited AI output. This is a hard rule.
+- Rewrite what would have been a dash with the punctuation that fits the join: parentheses for an aside, a colon to introduce or expand, or a comma for a loose pause. Splitting into two sentences is also fine.
+- Do not swap one dash for another (an en dash or a spaced hyphen "-" is not an acceptable substitute). Avoid the construction entirely.
+- Prefer to rewrite em and en dashes out of existing files when I touch them: I do not use these characters, so any in the codebase were inserted by an agent and should be cleaned up. Recast them with the same parenthesis/colon/comma fixes. The exception is genuinely external or quoted material (third-party content, cited text), where the original punctuation must stand.

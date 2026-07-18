@@ -20,7 +20,6 @@ operate on.
 | ------------- | ---------------------------- | ------------------ |
 | `dotclaude/`  | `~/.claude/`                 | Claude Code        |
 | `dotcodex/`   | `~/.codex/`                  | Codex              |
-| `dotagents/`  | `~/.agents/`                 | Shared cross-agent |
 | `dotbastion/` | Bastion platform config dir  | Bastion            |
 
 Bastion's platform config directory is `$XDG_CONFIG_HOME/bastion` on Linux
@@ -35,7 +34,6 @@ Only these paths are synced. Everything else under the home dirs is ignored.
 
 - Every skill directory under `~/.claude/skills/`  -> `dotclaude/skills/`
 - Every skill directory under `~/.codex/skills/`   -> `dotcodex/skills/`
-- Every skill directory under `~/.agents/skills/`  -> `dotagents/skills/`
 
 Rules for skills:
 
@@ -43,9 +41,9 @@ Rules for skills:
   locally is removed from the repo (and vice versa on restore). The repo
   `skills/` set should equal the home `skills/` set for that tool.
 - **Each tool keeps its own flavor.** The same-named skill can legitimately
-  differ between tools (for example `impeccable` is Claude-flavored under
-  `dotclaude/` and Codex-flavored, with `agents/*.toml` + `openai.yaml`, under
-  `dotagents/`). Do not converge them; mirror each source independently.
+  differ between tools (for example `ship-it` is Claude-flavored under
+  `dotclaude/` and Codex-flavored, with `agents/openai.yaml`, under
+  `dotcodex/`). Do not converge them; mirror each source independently.
 - **Strip nested git.** If a skill was installed as a git clone, do not commit
   its `.git/` directory. Back it up as plain files only.
 - **Skip app-managed skills.** Do not back up Codex's `~/.codex/skills/.system/`
@@ -55,7 +53,6 @@ Rules for skills:
 
 - `~/.claude/CLAUDE.md`  -> `dotclaude/CLAUDE.md`
 - `~/.codex/AGENTS.md`   -> `dotcodex/AGENTS.md`
-- `~/.agents/AGENTS.md`  -> `dotagents/AGENTS.md`
 
 Copied verbatim in both directions.
 
@@ -65,6 +62,7 @@ Copied verbatim in both directions.
 - `~/.claude/statusline-command.mjs`  -> `dotclaude/statusline-command.mjs` (verbatim; cross-platform Bun statusline, referenced by settings.json)
 - `~/.claude/hooks/`                   -> `dotclaude/hooks/` (verbatim; cross-platform Bun hook scripts, referenced by settings.json)
 - `~/.codex/config.toml`              -> `dotcodex/config.toml` (curated, see below)
+- `~/.codex/model-instructions.md`    -> `dotcodex/model-instructions.md` (verbatim)
 - `<Bastion platform config dir>/.bastion.yaml` -> `dotbastion/.bastion.yaml` (verbatim)
 
 Use `.bastion.yaml` as the canonical user-registry spelling even though Bastion
@@ -122,6 +120,9 @@ are machine-local or leak private context and must be **stripped on backup**:
 - runtime-bundled / primary-runtime `[plugins.*]` (their marketplaces are local
   caches); keep only the stable `@openai-curated` plugin enables
 
+The tracked `model_instructions_file` points to `model-instructions.md` beside
+the live config. Copy that file verbatim so the configured path always exists.
+
 **Restore is not a blind overwrite for this file.** Copying the curated
 `config.toml` over a live `~/.codex/config.toml` would wipe the machine's real
 `[projects.*]`, `[mcp_servers.*]`, and `[hooks.state.*]` sections. On restore,
@@ -133,14 +134,14 @@ config, the curated file can be written as-is.
 
 ### Backup (home -> repo)
 
-Back up the three agent config directories, then Bastion:
+Back up the two agent config directories, then Bastion:
 
 1. Mirror `~/.<tool>/skills/` into `dot<tool>/skills/` (add new, update changed,
    delete removed; strip nested `.git/`; skip `.system/`).
 2. Copy the instruction file (`CLAUDE.md` / `AGENTS.md`) verbatim.
 3. Copy `settings.json` (with `__HOME__` sanitization), `statusline-command.mjs`,
-   and everything under `hooks/` for Claude; copy `config.toml` (curated) for
-   Codex.
+   and everything under `hooks/` for Claude; copy `config.toml` (curated) and
+   `model-instructions.md` (verbatim) for Codex.
 4. Copy the Bastion platform config directory's `.bastion.yaml` verbatim to
    `dotbastion/.bastion.yaml`.
 5. Reconcile `claude-cloud-restore.sh` (see "Cloud restore" below). Whenever this
@@ -156,15 +157,16 @@ Back up the three agent config directories, then Bastion:
 
 ### Restore (repo -> home)
 
-Restore the three agent config directories, then Bastion:
+Restore the two agent config directories, then Bastion:
 
 1. Mirror `dot<tool>/skills/` back into `~/.<tool>/skills/` (preserving
    `~/.codex/skills/.system/`, which the repo never tracks).
 2. Copy the instruction file back verbatim.
 3. Claude: write `statusline-command.mjs` and the `hooks/` scripts, then write
    `settings.json` with `__HOME__` expanded to the real home path.
-4. Codex: **merge** the curated `config.toml` durable keys into the live file
-   (see above); do not clobber machine-specific sections.
+4. Codex: copy `model-instructions.md` verbatim, then **merge** the curated
+   `config.toml` durable keys into the live file (see above); do not clobber
+   machine-specific sections.
 5. Bastion: create the platform config directory when needed, then copy
    `dotbastion/.bastion.yaml` to `.bastion.yaml` there verbatim.
 6. Never restore auth: sign in to Claude and Codex separately.
@@ -192,9 +194,8 @@ the target repo ships one (the two compose in the same Setup-script field):
 
 The cloud restore is deliberately narrower than the machine restore above:
 
-- **Claude only.** It restores `~/.claude` exclusively. Codex, shared cross-agent,
-  and Bastion config are not touched because they have no consumer in a Claude
-  Code web session.
+- **Claude only.** It restores `~/.claude` exclusively. Codex and Bastion config
+  are not touched because they have no consumer in a Claude Code web session.
 - **Additive, not a mirror.** It copies skills and memory in but never deletes
   anything already in the home dir, so cloud-provided config survives. (The
   machine restore mirrors, including deletes.)

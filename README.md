@@ -8,9 +8,9 @@ branches are for different systems.
 - Arch Linux: `arch`; https://github.com/jssblck/dots/tree/arch
 - agents: https://github.com/jssblck/dots/tree/agents
 
-This branch (`agents`) backs up my user-level Claude Code, Codex, shared-agent,
-and Bastion config. An agent routine keeps it synchronized in both directions:
-user config to repo for backup, and repo to user config for restore.
+This branch (`agents`) backs up my user-level Claude Code, Codex, and Bastion
+config. An agent routine keeps it synchronized in both directions: user config
+to repo for backup, and repo to user config for restore.
 
 ## Layout
 
@@ -20,7 +20,6 @@ Each top-level directory mirrors a user config directory:
 | ------------- | --------------------------- | ------------------ |
 | `dotclaude/`  | `~/.claude/`                | Claude Code        |
 | `dotcodex/`   | `~/.codex/`                 | Codex              |
-| `dotagents/`  | `~/.agents/`                | Shared cross-agent |
 | `dotbastion/` | Platform-specific; see sync | Bastion            |
 
 ## Backup / restore policy

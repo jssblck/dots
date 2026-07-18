@@ -1,6 +1,6 @@
 ---
 name: ship-it
-description: 'Use at the end of a workstream to land the change: commit it, open the pull request, and drive CI to fully green. Triggers on "ship it", "commit, PR, get CI green", "open a PR and get it green", "commit and push this and watch CI". Covers local verification, commit and PR conventions, and the fix-until-green CI loop. Invoke with /ship-it.'
+description: 'Use at the end of a workstream to land the change: commit it, open the pull request, and drive CI to fully green. Triggers on "ship it", "commit, PR, get CI green", "open a PR and get it green", "commit and push this and watch CI". Covers local verification, commit and PR conventions, and the fix-until-green CI loop.'
 user-invocable: true
 ---
 
@@ -68,9 +68,8 @@ Rules that always hold:
 - Imperative subject ("Fix the stale cache read...", "Reject empty payloads...").
 - The body carries the reasoning. Bump any shared version or sequence constants
   the change requires and say so.
-- Keep your standard `Co-Authored-By` trailer.
-- **No em-dashes** anywhere in the message. Run the `stop-slop` skill over the
-  message (and the PR body) before finalizing.
+- Keep your standard `Co-Authored-By` trailer, and apply the standing
+  punctuation and `stop-slop` rules to the message and the PR body.
 
 ## 3. Open the PR
 
@@ -139,18 +138,3 @@ Bastion finding at its root, never by working around the gate.
 Close with the PR link and the concrete green state: which check groups passed,
 what shipped as a short list of commits, and any first-run failure you fixed along
 the way and why it happened. State plainly that CI is fully green.
-
-## Standing rules
-
-- Feature branch (worktree if that is the repo's flow), never the default branch.
-- Verify locally before pushing; the full or integration suite is the
-  authoritative check.
-- Follow the repository's Bastion workflow when configured. Fix blocking
-  findings at their root without weakening the reviewer registry.
-- Imperative commit subject, why-focused body, `Co-Authored-By` trailer, no
-  em-dashes, `stop-slop` over all prose.
-- PR body leads with the problem, states what changed and how it was checked,
-  references the issue (`Fixes #<n>`), and ends with your generated-by trailer;
-  the exact section headings flex.
-- Loop until every CI check is green; diagnose failures from the logs, do not
-  guess; fix review findings at the root.

@@ -15,9 +15,9 @@
 #     dotclaude/CLAUDE.md -> ~/.claude/CLAUDE.md  (user memory)
 #     dotclaude/settings.json -> ~/.claude/settings.json (sanitized cloud profile, merged)
 #
-#   Claude Code config only: ~/.agents and ~/.codex are intentionally NOT
-#   restored here. This is the Claude Code cloud (claude.ai/code), so Codex and
-#   the shared cross-agent files have no consumer in the session.
+#   Claude Code config only: ~/.codex is intentionally NOT restored here. This
+#   is the Claude Code cloud (claude.ai/code), so Codex config has no consumer
+#   in the session.
 #
 #   Wire it into the cloud environment's "Setup script" field (web UI) with a
 #   one-liner that clones this public branch and runs this file:
@@ -40,9 +40,8 @@
 #       keys that are wrong or harmful in cloud (statusline -> bun path that may
 #       not exist; enabledPlugins -> slow marketplace fetch; the permission /
 #       dangerous-mode skips -> let the web session's own permission mode win).
-#     - Claude only. It restores ~/.claude exclusively. ~/.agents and ~/.codex
-#       are not touched: Codex and the shared cross-agent files have no consumer
-#       in a Claude Code web session.
+#     - Claude only. It restores ~/.claude exclusively. ~/.codex is not
+#       touched: Codex config has no consumer in a Claude Code web session.
 #
 #   See SYNC.md ("Cloud restore") for the policy this implements.
 

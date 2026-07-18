@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Use when working with Codex (OpenAI's coding agent) from Claude Code for hands-on implementation, debugging, design consultation, or independent review. Covers how to call the Codex MCP tool, shape a useful handoff, and verify the result. Invoke with /codex.
+description: Use when working with Codex (OpenAI's coding agent) from Claude Code for hands-on implementation, debugging, design consultation, or independent review. Covers how to call the Codex MCP tool, shape a useful handoff, and verify the result.
 user-invocable: true
 ---
 

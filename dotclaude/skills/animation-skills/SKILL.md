@@ -1,6 +1,6 @@
 ---
 name: animation-skills
-description: Use for any web animation or motion work. Covers designing and building animations (easing, duration, springs, gestures, drag, clip-path, @starting-style, performance, reduced motion), reviewing animation code in a diff against a high craft bar, auditing a whole codebase's motion and writing executor-ready improvement plans, Apple-style fluid interfaces (interruptibility, velocity handoff, momentum projection, rubber-banding, translucent materials), and naming a motion effect the user can only describe ("what's it called when..."). Distilled from Emil Kowalski's design engineering philosophy (animations.dev) and Apple's WWDC design talks. Invoke with /animation-skills.
+description: Use for any web animation or motion work. Covers designing and building animations (easing, duration, springs, gestures, drag, clip-path, @starting-style, performance, reduced motion), reviewing animation code in a diff against a high craft bar, auditing a whole codebase's motion and writing executor-ready improvement plans, Apple-style fluid interfaces (interruptibility, velocity handoff, momentum projection, rubber-banding, translucent materials), and naming a motion effect the user can only describe ("what's it called when..."). Distilled from Emil Kowalski's design engineering philosophy (animations.dev) and Apple's WWDC design talks.
 user-invocable: true
 argument-hint: "[build|review|improve|apple|vocab] [target]"
 license: MIT

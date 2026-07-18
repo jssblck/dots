@@ -1,6 +1,6 @@
 ---
 name: tag-release
-description: 'Use when asked to cut a release by tagging the default branch: "tag a release", "tag a patch release", "cut a minor release", "tag a new major version", "cut a release". Covers syncing to origin''s default branch first, reading the prior release to compute the next version, tagging the exact origin HEAD in the repo''s convention, pushing, and watching the release to green. Invoke with /tag-release.'
+description: 'Use when asked to cut a release by tagging the default branch: "tag a release", "tag a patch release", "cut a minor release", "tag a new major version", "cut a release". Covers syncing to origin''s default branch first, reading the prior release to compute the next version, tagging the exact origin HEAD in the repo''s convention, pushing, and watching the release to green.'
 user-invocable: true
 ---
 
@@ -108,13 +108,3 @@ artifacts it should produce) actually exists.
 
 State the version you cut, the commit SHA it points at, how it was tagged
 (lightweight / annotated / signed), and the release or pipeline result.
-
-## Standing rules
-
-- Always tag the current `origin` default-branch HEAD; never a stale, local-only,
-  or dirty commit. Fetch first, every time.
-- Follow the repo's version format, tag kind, and release mechanism exactly; read
-  the prior release, do not assume.
-- A pushed release tag is outward and hard to reverse. Get the version and target
-  commit right before pushing, not after.
-- No em-dashes in the tag message or the summary.

@@ -1,6 +1,6 @@
 ---
 name: code-craft
-description: Use when writing, reviewing, or refactoring code in any language for correctness, type-safety, and idiomatic style, or when scaffolding a new project. Covers making illegal states unrepresentable, parse-don't-validate boundaries, errors-as-values and fail-closed gates, newtypes over stringly-typed data, ownership and copy discipline, testing without mocks, architecture docs, avoiding premature abstraction, and new-project defaults (formatters, linters, an agent-rules layer, an agentic review gate, CLI release and community files). Routes language-agnostic principles to per-language dialects for Rust, TypeScript, Go, and Python. Invoke with /code-craft.
+description: Use when writing, reviewing, or refactoring code in any language for correctness, type-safety, and idiomatic style, or when scaffolding a new project. Covers making illegal states unrepresentable, parse-don't-validate boundaries, errors-as-values and fail-closed gates, newtypes over stringly-typed data, ownership and copy discipline, testing without mocks, architecture docs, avoiding premature abstraction, and new-project defaults (formatters, linters, an agent-rules layer, an agentic review gate, CLI release and community files). Routes language-agnostic principles to per-language dialects for Rust, TypeScript, Go, and Python.
 user-invocable: true
 argument-hint: "[rust|typescript|go|python] [target]"
 license: MIT

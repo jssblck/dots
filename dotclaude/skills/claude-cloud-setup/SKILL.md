@@ -1,6 +1,6 @@
 ---
 name: claude-cloud-setup
-description: Use when setting up a repository to run in Claude Code on the web (cloud sessions) with zero per-machine manual setup, and to bootstrap local dev from the same files. Installs the three-file `.claude/` pattern (a cloud-only toolchain install script `cloud-setup.sh`, a cross-platform per-session SessionStart hook `bootstrap.mjs`, and the `settings.json` that wires it) and configures the web-UI cloud environment (network allowlist, setup script, secrets policy). Covers probing the base image for genuinely missing tools, idempotent installs, self-gating per-session steps (env vars, services, deps), and the deliberate bash/Node split. Invoke with /claude-cloud-setup.
+description: Use when setting up a repository to run in Claude Code on the web (cloud sessions) with zero per-machine manual setup, and to bootstrap local dev from the same files. Installs the three-file `.claude/` pattern (a cloud-only toolchain install script `cloud-setup.sh`, a cross-platform per-session SessionStart hook `bootstrap.mjs`, and the `settings.json` that wires it) and configures the web-UI cloud environment (network allowlist, setup script, secrets policy). Covers probing the base image for genuinely missing tools, idempotent installs, self-gating per-session steps (env vars, services, deps), and the deliberate bash/Node split.
 user-invocable: true
 argument-hint: "[repo-path]"
 license: MIT

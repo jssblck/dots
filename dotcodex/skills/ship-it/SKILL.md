@@ -69,11 +69,8 @@ Rules that always hold:
 - Imperative subject ("Fix the stale cache read...", "Reject empty payloads...").
 - The body carries the reasoning. Bump any shared version or sequence constants
   the change requires and say so.
-- Add `Co-authored-by: Codex <noreply@openai.com>` when Codex materially authored,
-  rewrote, debugged, or verified the change. Omit it for inspection-only or purely
-  mechanical commits. Never add a human co-author unless the user asks.
-- **No em-dashes** anywhere in the message. Run the `stop-slop` skill over the
-  message (and the PR body) before finalizing.
+- Apply the standing attribution, punctuation, and `stop-slop` rules to the
+  message and the PR body.
 
 ## 3. Open the PR
 
@@ -157,19 +154,3 @@ what shipped as a short list of commits, and any first-run failure fixed along
 the way. State plainly that CI is fully green. When the Codex app supports Git
 action directives, emit the applicable branch, stage, commit, push, and PR
 directives only after each action has succeeded.
-
-## Standing rules
-
-- Feature branch (worktree if that is the repo's flow), never the default branch.
-- Verify locally before pushing. Run the full or integration suite when the
-  change reaches that layer and the required environment is available. The
-  complete CI result is the final authority for the PR.
-- Follow the repository's Bastion workflow when configured. Fix blocking
-  findings at their root without weakening the reviewer registry.
-- Imperative commit subject, why-focused body, conditional Codex co-author
-  trailer, no em-dashes, and `stop-slop` over durable prose.
-- PR body leads with the problem, states what changed and how it was checked,
-  references the issue (`Fixes #<n>`), includes configuration steps when needed,
-  and ends with the Codex footer when applicable.
-- Loop until every CI check is green; diagnose failures from the logs, do not
-  guess; fix review findings at the root.

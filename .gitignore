@@ -1,7 +1,6 @@
 # Each top-level dir mirrors a home agent dir:
 #   dotclaude  <->  ~/.claude
 #   dotcodex   <->  ~/.codex
-#   dotagents  <->  ~/.agents
 #   dotbastion <->  Bastion platform config directory
 # SYNC.md is the source of truth for what gets backed up (the allowlist).
 #

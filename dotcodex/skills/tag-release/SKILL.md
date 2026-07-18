@@ -144,14 +144,3 @@ release pipeline is green, and the expected release artifacts exist.
 
 State the version you cut, the commit SHA it points at, how it was tagged
 (lightweight / annotated / signed), and the release or pipeline result.
-
-## Standing rules
-
-- Always tag the current `origin` default-branch HEAD. Fetch during inspection
-  and again immediately before creating the tag.
-- Follow the repo's version format, tag kind, and release mechanism exactly; read
-  the prior release, do not assume.
-- Push the verified tag before creating a forge Release, and require
-  `gh release create --verify-tag`.
-- Run `stop-slop` over release notes or other durable prose created during the
-  workflow. Use plain ASCII punctuation and no em-dashes.
