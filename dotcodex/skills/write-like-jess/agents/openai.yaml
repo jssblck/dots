@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Like Jess"
+  short_description: "Draft and revise text in Jess's voice"
+  default_prompt: "Use $write-like-jess to rewrite this draft in Jess's voice."
