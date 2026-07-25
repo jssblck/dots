@@ -60,6 +60,11 @@ Completeness is measured against the ask, not against everything buildable near 
 - Do not run it for ordinary chat responses, progress updates, or final answers.
   If a chat response includes a durable artifact, apply it only to that artifact.
 
+## Subagents
+
+- Reach for a subagent for context isolation, not for cheaper tokens: a broad sweep burns its file reads in the subagent's context and returns a short conclusion to yours. Run them on Opus and skip Haiku and Sonnet, because a weaker searcher's report is unfalsifiable: you cannot tell from the summary what it missed, so you either trust it or redo the search and pay twice.
+- When a search is narrow enough to pin down with a couple of greps, do it inline. Delegating that costs more than it saves.
+
 ## Command workflows
 
 - For multi-step inspections or changes, prefer a single small Bun script (`bun -e '...'` with a multiline script) over back-to-back shell commands when the task needs shared state, parsing, iteration, branching, or coordinated updates. Plain shell commands are fine for simple one-step operations.

@@ -27,8 +27,6 @@ either can take hands-on coding work unsupervised.
   the task rewards grit over taste, when it needs computer use, or when a
   meaningful change wants an independent review.
 
-Haiku and Sonnet subagents are for exploration, not for work that ships.
-
 Either way you own the result, and delegated work is held to the same bar as
 your own.
 
