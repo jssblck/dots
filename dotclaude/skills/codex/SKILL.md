@@ -18,16 +18,14 @@ models contribute judgment and review each other's conclusions.
 
 Fable is the big-picture model: decomposition, specification, design judgment,
 review, integration. Opus 5 and gpt-5.6-sol are its implementation peers, and
-either can take hands-on coding work unsupervised. Opus 5 has somewhat more
-taste; sol has somewhat more grit and is the better choice for computer use.
+either can take hands-on coding work unsupervised.
 
 - **Fable is running the session.** Delegate implementation to sol by default and
   keep the big-picture work. Do it yourself when the change is tightly
   cross-cutting, or small enough that the handoff costs more than the work.
 - **Opus 5 is running the session.** Implement it yourself. Reach for sol when
-  the task rewards grit over taste (long mechanical grinds, stubborn debugging,
-  anything needing many iterations to converge), when it needs computer use, or
-  when a meaningful change wants an independent review.
+  the task rewards grit over taste, when it needs computer use, or when a
+  meaningful change wants an independent review.
 
 Haiku and Sonnet subagents are for exploration, not for work that ships.
 
@@ -41,23 +39,25 @@ should be cheap and fast and a weaker model can still clear the bar.
 
 Rankings, higher is better. Cost is effective cost to Jess, not list price.
 Intelligence is how hard a problem the model takes unsupervised. Taste covers
-UI/UX, code quality, API design, and copy.
+UI/UX, code quality, API design, and copy. Grit is how far the model grinds a
+long or stubborn problem before it loses the thread or settles for close enough.
 
-| model         | cost | intelligence | taste |
-|---------------|------|--------------|-------|
-| opus-5        | 7    | 9            | 7     |
-| gpt-5.6-sol   | 7    | 9            | 6     |
-| gpt-5.6-terra | 9    | 7            | 5     |
-| fable-5       | 2    | 9            | 9     |
+| model         | cost | intelligence | taste | grit |
+|---------------|------|--------------|-------|------|
+| opus-5        | 7    | 9            | 7     | 7    |
+| gpt-5.6-sol   | 7    | 9            | 6     | 9    |
+| gpt-5.6-terra | 9    | 7            | 5     | 7    |
+| fable-5       | 2    | 9            | 9     | 3    |
 
-Cost is a tie-breaker only: when the axes conflict on anything that ships,
-intelligence beats taste beats cost. These are defaults rather than limits, so
+Intelligence comes first, and cost is a tie-breaker only. Between taste and grit,
+let the task decide rather than a fixed order: a UI surface, an API, or copy
+rewards taste, while a long migration, a flaky test, or a bug that resists the
+first three theories rewards grit. These are defaults rather than limits, so
 rerun or redo the work on a stronger model without asking when the output misses
 the bar.
 
-Opus 5 and sol tie on every axis here except taste, so the table on its own
-would always pick Opus. It does not rank grit or computer use, and those are
-what actually separate the two; route on the division of labor above instead.
+Computer use is the one axis the table leaves out, because it is a capability
+rather than a ranking: sol has it and the others do not.
 
 ## Pick the thinking level
 
