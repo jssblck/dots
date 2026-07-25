@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Use when working with Codex (OpenAI's coding agent) from Claude Code for hands-on implementation, debugging, design consultation, or independent review. Covers how to call the Codex MCP tool, shape a useful handoff, and verify the result.
+description: Use when working with Codex (OpenAI's coding agent) from Claude Code for hands-on implementation, debugging, design consultation, or independent review, or when deciding whether to delegate coding work and to which model. Covers the model routing policy (gpt-5.6-sol vs gpt-5.6-terra, and what to keep in-session), how to call the Codex MCP tool, shape a useful handoff, and verify the result.
 user-invocable: true
 ---
 
@@ -14,11 +14,43 @@ Treat gpt-5.6-sol as Fable's peer. Share decision context and invite it to
 challenge weak assumptions. Delegation assigns hands-on work while both models
 contribute judgment and review each other's conclusions.
 
+## Division of labor (Fable only)
+
+When the model running the session is Fable (claude-fable-5), Codex is the
+default home for hands-on coding: delegate the implementation and keep
+decomposition, specification, review, and integration. Do the work yourself when
+it is tightly cross-cutting, or small enough that the delegation overhead
+exceeds it. Claude subagents on lower-tier models are for exploration, not for
+work that ships. On any other Claude model, skip this section and treat Codex as
+one option among several.
+
+Either way you own the result, and delegated work is held to the same bar as
+your own.
+
+## Pick the model
+
+Default to **gpt-5.6-sol**. Use **gpt-5.6-terra** when the work should be cheap
+and fast and a weaker model can still clear the bar.
+
+Rankings, higher is better. Cost is effective cost to Jess, not list price.
+Intelligence is how hard a problem the model takes unsupervised. Taste covers
+UI/UX, code quality, API design, and copy.
+
+| model         | cost | intelligence | taste |
+|---------------|------|--------------|-------|
+| gpt-5.6-sol   | 7    | 9            | 6     |
+| gpt-5.6-terra | 9    | 7            | 5     |
+| fable-5       | 2    | 9            | 9     |
+
+Cost is a tie-breaker only: when the axes conflict on anything that ships,
+intelligence beats taste beats cost. These are defaults rather than limits, so
+rerun or redo the work on a stronger model without asking when the output misses
+the bar.
+
 ## Pick the thinking level
 
-Every Codex call uses **gpt-5.6-sol**. Default to **medium** thinking:
+Default to **medium** thinking:
 
-- `model: "gpt-5.6-sol"`
 - `config: { model_reasoning_effort: "medium" }`
 
 Scale up to **high** thinking for harder tasks:

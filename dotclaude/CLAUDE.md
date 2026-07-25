@@ -31,27 +31,6 @@ Completeness is measured against the ask, not against everything buildable near 
 - When an approach hits a wall (a case that does not fit, a spec that breaks, an assumption that fails), the wall is information: the design is wrong somewhere. Stop and re-derive the design from first principles until the wall does not exist. If the re-derived design diverges from the request, present it before building it.
 - Never patch around a wall to comply with the literal request: no flag, no special case, no conversion shim, no parallel path, no test rewritten to dodge a broken rule. Sunk cost never justifies keeping such a patch. A blocker honestly reported is a good outcome; a "working" deliverable built on a workaround is the worst one.
 
-## Model routing (Fable only)
-
-A note from Fable to future Fable: this section applies only when the model running the session is Fable (claude-fable-5). On any other model, skip it.
-
-For coding tasks, delegate hands-on implementation to gpt-5.6-sol at medium reasoning by default, while you handle decomposition, specification, review, and integration. Use gpt-5.6-terra at medium reasoning when the work should be cheap and fast. Do the work yourself when it is tightly cross-cutting or small enough that delegation overhead would exceed it. Either way, you own the result and hold delegated work to the same bar as your own.
-
-Rankings, higher = better. Cost is effective cost to me, not list price. Intelligence is how hard a problem you can hand the model unsupervised. Taste covers UI/UX, code quality, API design, and copy.
-
-| model           | cost | intelligence | taste |
-|-----------------|------|--------------|-------|
-| gpt-5.6-sol     | 7    | 9            | 6     |
-| gpt-5.6-terra   | 9    | 7            | 5     |
-| fable-5         | 2    | 9            | 9     |
-
-How to apply:
-
-- These are defaults, not limits. If a model's output does not meet the bar, rerun or redo the work on a stronger model without asking.
-- Cost is a tie-breaker only. When the axes conflict for anything that ships, intelligence > taste > cost.
-- Only consider lower-tier Claude models (Haiku, Sonnet, or Opus) for exploration work.
-- Mechanics: GPT models are reached through Codex. The `codex` skill covers calling it well.
-
 ## Coding discipline
 
 ### Think before coding
@@ -84,12 +63,6 @@ How to apply:
 ## Command workflows
 
 - For multi-step inspections or changes, prefer a single small Bun script (`bun -e '...'` with a multiline script) over back-to-back shell commands when the task needs shared state, parsing, iteration, branching, or coordinated updates. Plain shell commands are fine for simple one-step operations.
-
-## Spinning off work
-
-- When I ask you to "spin off", "split out", or run something as "its own thread", "its own session", "its own task", or "a separate Claude thread", create it with the spawn_task chip: a separate Claude desktop session with its own worktree that I drive independently. Do not reach for a subagent for these requests.
-- Reserve subagents (the Agent tool) for work that should report back within the current session, not for standing up a new session I own.
-- When you create a spinoff, write a self-contained prompt: the spawned session has none of this conversation's context, so include the repo, the goal, the scope boundaries, file paths, and the verification and PR steps.
 
 ## Writing style
 
