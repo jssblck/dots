@@ -9,7 +9,10 @@ description: Create, repair, validate, preview, and package Codex-compatible ani
 
 Create a Codex-compatible animated pet from a concept, one or more reference images, or both. This skill owns pet-specific prompt planning, animation rows, frame extraction, atlas geometry, QA, previews, and packaging. It delegates visual generation to `$imagegen`.
 
-User-facing inputs are optional. If the user omits a pet name, infer one from the concept or reference filenames; if that is not possible, choose a short appropriate name. If the user omits a description, infer one from the concept or references. If the user omits reference images, generate the base pet from text first, then use that base as the canonical reference for every animation row.
+User-facing inputs are optional. Infer a missing name from the concept or
+reference filenames. Choose a short appropriate name if they provide no useful
+clue. Infer a missing description from the same sources. For text-only
+requests, generate a base pet and use it as the canonical row reference.
 
 ## Generation Delegation
 
@@ -23,21 +26,46 @@ ${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/SKILL.md
 
 Do not call the Image API directly for the normal path. Let `$imagegen` choose its own built-in-first path and its own CLI fallback rules. If `$imagegen` says a fallback requires confirmation, ask the user before continuing.
 
-When invoking `$imagegen` from this skill, pass the generated pet prompt as the authoritative visual spec. Do not wrap it in the generic `$imagegen` shared prompt schema and do not add extra polish, hero-art, photo, product, or illustration-style augmentation. Pet prompts should stay terse, sprite-specific, and digital-pet oriented; only add role labels for input images and any essential user constraint.
+Pass the generated pet prompt to `$imagegen` as the authoritative visual
+specification. Do not wrap it in the generic shared prompt schema. Do not add
+hero art, photography, product imagery, illustration styling, or extra polish.
+Keep pet prompts terse and sprite-specific. Add only input-image roles and
+essential user constraints.
 
 Use this skill's scripts for deterministic work only: preparing prompts and manifests, ingesting selected `$imagegen` outputs, extracting frames, validating rows, composing the final atlas, creating QA media, and packaging.
 
-Hard boundary: do not create, draw, tile, warp, mirror, or synthesize pet visuals with local Python/Pillow scripts, SVG, canvas, HTML/CSS, or other code-native art as a substitute for `$imagegen`. For a normal pet run, expect up to 10 visual generation jobs: 1 base pet plus 9 row-strip jobs. The only exception is `running-left`, which may be derived by mirroring `running-right` only after `running-right` has been generated, visually inspected, and explicitly approved as safe to mirror. If mirroring is not appropriate, generate `running-left` as a normal grounded `$imagegen` row. If those calls are too expensive, blocked, or unavailable, stop and explain the blocker instead of fabricating row strips locally.
+Do not replace `$imagegen` with code that creates, draws, tiles, warps, mirrors,
+or synthesizes pet visuals. This includes Python, Pillow, SVG, canvas, and
+HTML/CSS.
 
-Do not mark visual jobs complete by editing `imagegen-jobs.json`, copying files into `decoded/`, or writing helper scripts that populate row outputs. Use `record_imagegen_result.py` for selected built-in `$imagegen` outputs, or `generate_pet_images.py` only for the documented secondary fallback. The deterministic scripts may only process already-generated visual outputs.
+A normal run can require 10 visual jobs: one base image and nine row strips.
+You may mirror `running-right` to create `running-left` only after visual
+inspection confirms that mirroring is safe. Otherwise, generate `running-left`
+as a grounded `$imagegen` row. If generation is blocked or too expensive, stop
+and explain the blocker. Never fabricate the missing rows locally.
 
-Only the base job may be prompt-only. Every row-strip job generated through `$imagegen` must use the input images listed in `imagegen-jobs.json`, including the canonical base reference created after the base job is recorded. Treat any row generation without attached grounding images as invalid.
+Do not mark jobs complete by editing `imagegen-jobs.json`, copying files into
+`decoded/`, or writing output-population scripts. Record selected built-in
+outputs with `record_imagegen_result.py`. Use `generate_pet_images.py` only for
+the documented secondary fallback. Deterministic scripts may process only
+visuals that `$imagegen` already generated.
+
+Only the base job may omit reference images. Attach every input listed in
+`imagegen-jobs.json` to each row job. This includes the canonical base created
+after recording the base job. Reject any row generated without its grounding
+images.
 
 ## Codex Digital Pet Style
 
-Default pet art should match the Codex app's built-in digital pets: small pixel-art-adjacent mascots with compact chibi proportions, chunky readable silhouettes, thick dark 1-2 px outlines, visible stepped/pixel edges, limited palettes, flat cel shading, simple expressive faces, and tiny limbs. Even if the reference art is more detailed, complex or realistic, the generated pet should be simplified into this style.
+Match the Codex app's built-in pets by default. Use small pixel-adjacent mascots
+with compact chibi proportions and readable silhouettes. Use dark 1-2 px
+outlines, stepped edges, limited palettes, flat cel shading, expressive faces,
+and small limbs. Simplify detailed or realistic references to this style.
 
-Do NOT generate polished illustration, painterly rendering, anime key art, 3D rendering, glossy app-icon treatment, realistic fur or material texture, soft gradients, high-detail antialiasing, and complex tiny accessories. References that are more detailed than this should be simplified into the house style before row generation.
+Do not generate polished illustrations, painterly rendering, anime key art, 3D
+rendering, or glossy app icons. Avoid realistic textures, soft gradients,
+high-detail antialiasing, and complex small accessories. Simplify detailed
+references before generating rows.
 
 ## Transparency And Effects
 
@@ -64,7 +92,10 @@ Avoid these by default because they usually break transparent-background cleanup
 
 State-specific guidance:
 
-- `idle`: keep this calm and low-distraction. Use only subtle breathing, a tiny blink, a slight head/body bob, a very small material sway, or another quiet persona-preserving motion. Do not show waving, walking, running, jumping, talking, working, reviewing, emotional reactions, large gestures, item interactions, or new props.
+- `idle`: Keep the animation calm and low-distraction. Use subtle breathing,
+  blinking, a small head or body bob, or slight material movement. Do not show
+  other actions, emotional reactions, large gestures, item interactions, or new
+  props.
 - `waving`: show the wave through paw pose only. Do not draw wave marks, motion arcs, lines, sparkles, or symbols around the paw.
 - `jumping`: show vertical motion through body position only. Do not draw shadows, dust, landing marks, impact bursts, bounce pads, or floor cues.
 - `failed`: tears, attached smoke puffs, or attached stars are allowed if they obey the allowed-effects rules; do not use red X marks, floating symbols, detached smoke, detached stars, or separate tear droplets.
@@ -74,24 +105,29 @@ State-specific guidance:
 
 ## Pet Naming
 
-Ask the user for a pet name when they have not provided one and only if the conversation naturally allows it. If asking would slow down a direct execution request, choose a short appropriate name from the pet concept, reference image, or personality, then use that name consistently as the display name and as the source for the package folder slug.
+Ask for a missing pet name only when the conversation allows it. For direct
+execution requests, choose a short name from the concept, reference, or
+personality. Use that name for both the display name and package folder slug.
 
 Good built-in style examples:
 
-- Codex - The original Codex companion.
-- Dewey - A tidy duck for calm workspace days.
-- Fireball - Hot path energy for fast iteration.
-- Rocky - A steady rock when the diff gets large.
-- Seedy - Small green shoots for new ideas.
-- Stacky - A balanced stack for deep work.
-- BSOD - A tiny blue-screen gremlin.
-- Null Signal - Quiet signal from the void.
+- Codex: The original Codex companion.
+- Dewey: A tidy duck for calm workspace days.
+- Fireball: Hot path energy for fast iteration.
+- Rocky: A steady rock when the diff gets large.
+- Seedy: Small green shoots for new ideas.
+- Stacky: A balanced stack for deep work.
+- BSOD: A tiny blue-screen gremlin.
+- Null Signal: Quiet signal from the void.
 
 ## Visible Progress Plan
 
-For every pet run, keep a visible checklist so the user can see where the work is up to. Create the checklist before starting, keep one step active at a time, and update it as each step finishes.
+Create a visible checklist before every pet run. Keep one step active and update
+the checklist after each step.
 
-Before creating the checklist, establish the pet name when possible. Use the user-provided name when available; otherwise infer a short appropriate name from the concept or references. If the name is too long, not settled, or not appropriate for a friendly checklist, use `your pet` instead.
+Establish the pet name before creating the checklist when possible. Prefer the
+user's name, then infer a short name from the concept or references. Use `your
+pet` when no friendly short name is available.
 
 Use this checklist for a normal pet run, replacing `<Pet>` with the pet's name or `your pet`:
 
@@ -105,7 +141,9 @@ What each step means:
 - `Getting <Pet> ready.` Choose or confirm the pet name, description, source images, and working folder.
 - `Imagining <Pet>'s main look.` Generate the pet's main reference image. This is required for new pets, even when the user does not provide an image, because it becomes the visual source of truth.
 - `Picturing <Pet>'s poses.` Create the pose rows, starting with `idle` and `running-right` to confirm the pet still looks consistent. Only mirror `running-left` if `running-right` clearly works when flipped.
-- `Hatching <Pet>.` Turn the approved poses into the final pet files, review the contact sheet, previews, and validation results, fix any broken parts, save `pet.json` and `spritesheet.webp` into the pet folder, then tell the user where the pet and QA files were saved.
+- `Hatching <Pet>.` Build the final pet files from approved poses. Review the
+  contact sheet, previews, and validation results. Repair failures, save
+  `pet.json` and `spritesheet.webp`, and report the pet and QA paths.
 
 Only mark a step complete when the real file, image, or decision exists. If this is just a repair run, start from the first relevant step instead of restarting the whole checklist.
 
@@ -125,7 +163,9 @@ python "$SKILL_DIR/scripts/prepare_pet_run.py" \
   --force
 ```
 
-All arguments above are optional except any flags needed to express user constraints. For text-only requests, pass the concept through `--pet-notes` and omit `--reference`; `prepare_pet_run.py` will infer a name, description, chroma key, and output directory as needed.
+All arguments are optional unless they express user constraints. For text-only
+requests, pass the concept through `--pet-notes` and omit `--reference`.
+`prepare_pet_run.py` will infer the remaining values.
 
 2. Inspect the next ready `$imagegen` jobs:
 
@@ -139,13 +179,25 @@ python "$SKILL_DIR/scripts/pet_job_status.py" --run-dir /absolute/path/to/run
 - every input image listed for the job, with its role label
 - the default built-in `image_gen` path unless `$imagegen` itself routes otherwise
 
-The base job must complete first. If user references exist, the base job uses them. If no references exist, the base job may be prompt-only. After recording the base, `record_imagegen_result.py` writes `decoded/base.png` and `references/canonical-base.png`; all row jobs use the original references if present plus those canonical base images.
+Complete the base job first. Attach user references when they exist. The base
+job may be prompt-only when no references exist. Recording the base writes
+`decoded/base.png` and `references/canonical-base.png`. Attach the original and
+canonical references to every row job.
 
-`prepare_pet_run.py` also creates 9 row-specific layout guide images under `references/layout-guides/`, one per animation state. Row jobs attach the matching guide as a layout-only input so the model can follow the correct frame count, spacing, centering, and safe padding. Treat these guides as invisible construction references: the generated row strip must not include visible boxes, borders, center marks, labels, guide colors, or the guide background.
+`prepare_pet_run.py` creates one layout guide for each animation state under
+`references/layout-guides/`. Attach the matching guide to each row job as a
+layout-only input. The guide controls frame count, spacing, centering, and safe
+padding. Reject outputs that reproduce its boxes, borders, marks, labels,
+colors, or background.
 
-When generating row strips, keep the identity lock in the row prompt authoritative: do not redesign the pet, and preserve the same head shape, face, markings, palette, prop, outline weight, body proportions, and silhouette. A row that looks like a related but different pet is failed even if the deterministic geometry QA passes.
+Treat the row prompt's identity lock as authoritative. Preserve the head, face,
+markings, palette, prop, outline, proportions, and silhouette. Reject a row that
+depicts a different pet, even when geometry checks pass.
 
-Generate and record `running-right` before deciding how to complete `running-left`. Inspect `running-right` against the base and references. If the pet is visually symmetric enough that a horizontal mirror preserves identity, prop placement, handedness, markings, lighting, text-free details, and direction semantics, derive `running-left` with:
+Generate and record `running-right` before choosing the `running-left` method.
+Compare it with the base and references. Mirror it only when the result
+preserves identity, props, handedness, markings, lighting, details, and
+direction. Derive the approved mirror with:
 
 ```bash
 python "$SKILL_DIR/scripts/derive_running_left_from_running_right.py" \
@@ -154,7 +206,10 @@ python "$SKILL_DIR/scripts/derive_running_left_from_running_right.py" \
   --decision-note "<why mirroring preserves this pet's identity>"
 ```
 
-If there is any asymmetric side-specific marking, readable text, non-mirrored logo, handed prop, one-sided accessory, lighting cue, or direction-specific pose that would become wrong when flipped, do not mirror. Generate `running-left` with `$imagegen` using its row prompt and all listed grounding images, including `decoded/running-right.png` as a gait reference.
+Do not mirror asymmetric markings, readable text, logos, handed props,
+one-sided accessories, lighting, or direction-specific poses. Generate
+`running-left` with `$imagegen` instead. Attach its row prompt, all listed
+grounding images, and `decoded/running-right.png` as a gait reference.
 
 For the built-in path, record the selected source image from `$CODEX_HOME/generated_images/.../ig_*.png`. Do not record files from the run directory, `tmp/`, hand-made fixtures, deterministic row folders, or post-processed copies as visual job sources.
 
@@ -204,11 +259,16 @@ ${CODEX_HOME:-$HOME/.codex}/pets/<pet-name>/
 
 Review `qa/contact-sheet.png`, `qa/review.json`, `final/validation.json`, and `qa/videos/` before accepting the pet.
 
-Deterministic validation is necessary but not sufficient. Before calling the pet done, visually inspect the contact sheet for identity consistency. Block acceptance if any row changes species/body type, face, markings, palette, prop design, prop side unexpectedly, or overall silhouette.
+Visually inspect the contact sheet after deterministic validation. Reject any
+row that unexpectedly changes the body type, face, markings, palette, prop,
+prop side, or silhouette.
 
 ## Subagent Row Generation
 
-After the base job has been recorded and `references/canonical-base.png` exists, row-strip visual generation must use subagents unless the user explicitly says not to use subagents for this session. Before row generation, state that subagents are being used and which row jobs are being delegated. If subagents cannot be spawned because the current environment or tool policy blocks them, stop before row-strip generation, explain the blocker, and ask for explicit user direction before continuing sequentially.
+Use subagents for row generation after recording the base image, unless the
+user opts out for this session. Before generation, name the delegated row jobs.
+If the environment blocks subagents, stop before generating rows. Explain the
+blocker and ask whether to continue sequentially.
 
 The parent agent must own the manifest and package writes.
 
@@ -230,7 +290,10 @@ Subagent handoff contract:
 
 - Give each subagent exactly one row job unless you are intentionally batching adjacent simple rows.
 - Include the row id, the absolute prompt file path, the full prompt text or an instruction to read that exact prompt file, and every input image path with its role label from `imagegen-jobs.json`.
-- Explicitly remind the subagent that the prompt's transparency and effects rules are mandatory: no detached effects, no wave marks for `waving`, no speed lines or dust for directional running rows, no literal foot-running for the non-directional `running` row, and only attached opaque sprite-like tears/smoke/stars when allowed by the state prompt.
+- Remind the subagent that transparency and effects rules are mandatory. Ban
+  detached effects, wave marks, speed lines, and dust. Ban literal foot-running
+  in the non-directional `running` row. Allow only attached opaque sprite
+  effects that the state prompt permits.
 - Tell the subagent to inspect the generated candidate for frame count, identity consistency, clean flat chroma-key background, safe spacing, and forbidden detached effects before returning it.
 - Tell the subagent to return only the selected original `$CODEX_HOME/generated_images/.../ig_*.png` source path plus a one-sentence QA note. The parent decides whether to record or repair it.
 
@@ -242,8 +305,8 @@ Generate the `<row-id>` row for this hatch-pet run.
 Run dir: <absolute run dir>
 Prompt file: <absolute prompt file>
 Input images:
-- <absolute path> — <role>
-- <absolute path> — <role>
+- <absolute path>: <role>
+- <absolute path>: <role>
 
 Read and follow the row prompt exactly, including the Transparency and artifact rules. Use `$imagegen` only; do not use local scripts to draw, tile, edit, or synthesize sprites.
 
@@ -259,7 +322,10 @@ selected_source=/absolute/path/to/$CODEX_HOME/generated_images/.../ig_*.png
 qa_note=<one sentence>
 ```
 
-No silent sequential fallback: if subagents cannot be used for row-strip visual generation, stop and ask for explicit user direction before continuing without them. Only an explicit user instruction such as "do not use subagents" or "run this sequentially" authorizes a normal sequential row-generation path. The final answer must report which row jobs were delegated to subagents and which, if any, were mirrored or repaired by the parent.
+Do not fall back to sequential row generation without approval. Continue only
+after an explicit instruction such as "do not use subagents" or "run this
+sequentially." In the final answer, identify delegated, mirrored, and
+parent-repaired rows.
 
 ## Repair Workflow
 
@@ -278,7 +344,9 @@ For identity repairs, use the canonical base image, original references, contact
 
 `scripts/generate_pet_images.py` is a secondary fallback for this skill.
 
-Use it only when the installed `$imagegen` system skill is unavailable or cannot be invoked in the current environment. Normal pet creation should delegate visual generation to `$imagegen`, because `$imagegen` owns the built-in-first image generation policy and its own CLI fallback behavior.
+Use it only when the environment cannot invoke the installed `$imagegen` skill.
+Normal pet creation delegates visuals to `$imagegen`, which owns generation and
+fallback selection.
 
 Run the secondary fallback only after explaining why `$imagegen` cannot be used:
 
@@ -296,7 +364,9 @@ The secondary fallback requires `OPENAI_API_KEY`.
 - Keep `$imagegen` as the primary generation layer.
 - Keep reference images attached/visible for `$imagegen` whenever the chosen path supports references.
 - Attach the row's `references/layout-guides/<state>.png` image to every row-strip job as a layout-only guide, and do not accept outputs that copy guide pixels.
-- Use subagents for row-strip visual generation after the parent records the base image. The parent may generate the base, but row-strip jobs belong to subagents unless the user explicitly says not to use subagents for this session.
+- Use subagents for row strips after the parent records the base image. The
+  parent may generate the base. Delegate row jobs unless the user opts out for
+  this session.
 - Generate every normal visual job with `$imagegen`: base plus all row strips that are not explicitly approved `running-left` mirror derivations.
 - Treat only the base job as eligible for prompt-only generation; every row job must attach its listed grounding images.
 - Delegate `running-right` first, then mirror `running-left` only when visual inspection confirms a mirror preserves identity and semantics; otherwise delegate `running-left` as a normal grounded `$imagegen` row.

@@ -53,7 +53,11 @@ Quote or identify the disputed claim when needed. Correct it directly, explain w
 
 #### Technical writing
 
-Name the mechanism before the recommendation. Distinguish observed behavior from inference. State tradeoffs and failure conditions concretely. Keep technical terms intact and avoid managerial filler.
+Follow ASD-STE100 Simplified Technical English in spirit. Use one term for each
+concept, prefer active voice, and keep procedural steps short. Name the
+mechanism before the recommendation. Separate observed behavior from inference.
+State tradeoffs and failure conditions concretely. Preserve necessary technical
+terms.
 
 #### Professional messages and durable documents
 

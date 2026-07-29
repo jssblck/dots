@@ -147,10 +147,18 @@ override.
 
 ## Principle index
 
-- [`principles/illegal-states.md`](principles/illegal-states.md) - types encode invariants; names are not type safety; newtypes
-- [`principles/parse-dont-validate.md`](principles/parse-dont-validate.md) - boundary parsing into proof-carrying types
-- [`principles/errors-as-values.md`](principles/errors-as-values.md) - explicit errors, context chains, fail closed
-- [`principles/testing.md`](principles/testing.md) - behavior-first tests, no mocks, determinism
-- [`principles/architecture-docs.md`](principles/architecture-docs.md) - short stable architecture map
-- [`principles/simplicity.md`](principles/simplicity.md) - earn abstractions, profile before optimizing
-- [`principles/new-project-defaults.md`](principles/new-project-defaults.md) - formatters, linters, agent-rules layer, agentic review gate, CLI releases, community files
+- [`principles/illegal-states.md`](principles/illegal-states.md): encode
+  invariants in types, avoid relying on names, and use newtypes
+- [`principles/parse-dont-validate.md`](principles/parse-dont-validate.md):
+  parse boundaries into proof-carrying types
+- [`principles/errors-as-values.md`](principles/errors-as-values.md): use
+  explicit errors and context chains, and fail closed
+- [`principles/testing.md`](principles/testing.md): write behavior-first,
+  deterministic tests without mocks
+- [`principles/architecture-docs.md`](principles/architecture-docs.md): maintain
+  a short, stable architecture map
+- [`principles/simplicity.md`](principles/simplicity.md): require abstractions
+  to earn their cost, and profile before optimizing
+- [`principles/new-project-defaults.md`](principles/new-project-defaults.md):
+  configure formatters, linters, agent rules, review gates, CLI releases, and
+  community files

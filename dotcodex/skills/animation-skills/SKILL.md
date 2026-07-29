@@ -79,11 +79,20 @@ those instead of introducing the values here, and say so.
 
 ## Reference index
 
-- [references/design-engineering.md](references/design-engineering.md) - Emil Kowalski's full playbook: the animation decision framework, springs, component principles, transforms, clip-path, gestures, performance, stagger, debugging
-- [references/apple-design.md](references/apple-design.md) - Apple's fluid-interface principles translated to the web: response, direct manipulation, interruptibility, velocity, momentum projection, materials, reduced motion, typography
-- [references/review.md](references/review.md) - the diff-review mode: ten non-negotiable standards, escalation triggers, remedial hierarchy, required output format
-- [references/standards.md](references/standards.md) - the precise values behind every rule: curves, duration tables, spring configs, gesture thresholds, accessibility snippets
-- [references/improve.md](references/improve.md) - the codebase-audit mode: recon, parallel audit, vetting, self-contained plans
-- [references/audit.md](references/audit.md) - the eight audit categories with exact target values
-- [references/plan-template.md](references/plan-template.md) - the plan format for zero-context executors
-- [references/vocabulary.md](references/vocabulary.md) - reverse-lookup glossary from a vague description to the precise motion term
+- [references/design-engineering.md](references/design-engineering.md): Emil
+  Kowalski's playbook for motion decisions, springs, components, transforms,
+  gestures, performance, staggering, and debugging
+- [references/apple-design.md](references/apple-design.md): Apple's
+  fluid-interface principles translated to the web
+- [references/review.md](references/review.md): diff review standards,
+  escalation triggers, corrections, and output format
+- [references/standards.md](references/standards.md): curves, duration tables,
+  spring configurations, gesture thresholds, and accessibility examples
+- [references/improve.md](references/improve.md): repository inspection,
+  parallel audit, review, and self-contained plans
+- [references/audit.md](references/audit.md): eight audit categories with exact
+  target values
+- [references/plan-template.md](references/plan-template.md): plan format for
+  executors without prior context
+- [references/vocabulary.md](references/vocabulary.md): glossary that maps a
+  description to the precise motion term

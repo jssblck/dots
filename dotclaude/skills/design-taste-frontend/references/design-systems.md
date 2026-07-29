@@ -40,11 +40,11 @@ For these directions, there is **no single official package**. Build with native
 
 ---
 
-# APPENDICES - Real Source-Backed Reference Material
+# APPENDICES: Real Source-Backed Reference Material
 
 The sections below are vendored reference content. They give the agent real install commands, real canonical doc links, and real working starter snippets for each design system named in Section 2. Use them to ground decisions in production reality, not training-data fiction.
 
-## Appendix A - Install Commands per Design System
+## Appendix A: Install Commands per Design System
 
 ```bash
 # Material Web (Material 3)
@@ -90,7 +90,7 @@ npm install bootstrap
 #   <script src="https://cdn.shopify.com/shopifycloud/polaris.js"></script>
 ```
 
-## Appendix B - Canonical Sources (read these before reinventing)
+## Appendix B: Canonical Sources (read these before reinventing)
 
 ### Material Web
 - https://github.com/material-components/material-web
@@ -170,7 +170,7 @@ npm install bootstrap
 
 ---
 
-## Appendix C - Apple Liquid Glass: Honest Web Approximation
+## Appendix C: Honest Web Approximation of Apple Liquid Glass
 
 Do **not** treat random CSS snippets as official Apple Liquid Glass.
 

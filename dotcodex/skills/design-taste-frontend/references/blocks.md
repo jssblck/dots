@@ -1,6 +1,6 @@
 # The Block Library
 
-## 12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)
+## 12. THE BLOCK LIBRARY (Contract: Implementations Land Here Iteratively)
 
 The Reference Vocabulary (`vocabulary.md`) names patterns. The Block Library implements them with real props, real motion specs, and real code sketches.
 
@@ -44,14 +44,14 @@ stack: ["react", "next", "tailwind", "motion"]
 ```
 
 ### 12.C Required Body Sections
-1. **Visual sketch** - short ASCII or description of the layout.
-2. **Props API** - the component's interface.
-3. **Code sketch** - minimal working implementation (Server Component default, Client island for motion).
-4. **Mobile fallback** - explicit collapse rules for `< 768px`.
-5. **Motion variants** - one variant per `MOTION_INTENSITY` band (1-3, 4-7, 8-10). Reduced-motion fallback explicit.
-6. **Dark-mode notes** - token strategy specific to this block.
-7. **Anti-patterns** - common ways this block goes wrong.
-8. **References** - links to real examples in production.
+1. **Visual sketch**: short ASCII or description of the layout.
+2. **Props API**: the component's interface.
+3. **Code sketch**: minimal working implementation (Server Component default, Client island for motion).
+4. **Mobile fallback**: explicit collapse rules for `< 768px`.
+5. **Motion variants**: one variant per `MOTION_INTENSITY` band (1-3, 4-7, 8-10). Reduced-motion fallback explicit.
+6. **Dark-mode notes**: token strategy specific to this block.
+7. **Anti-patterns**: common ways this block goes wrong.
+8. **References**: links to real examples in production.
 
 ### 12.D Block-Library Discipline
 * One block per file. No multi-block files.

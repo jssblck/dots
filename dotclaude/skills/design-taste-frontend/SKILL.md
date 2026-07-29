@@ -15,12 +15,22 @@ description: Anti-slop frontend skill for landing pages, portfolios, and redesig
 Before touching code or tweaking dials, **infer what the user actually wants**. Most LLM design output is bad because the model jumps to a default aesthetic instead of reading the room.
 
 ### 0.A Read these signals first
-1. **Page kind** - landing (SaaS / consumer / agency / event), portfolio (dev / designer / creative studio), redesign (preserve vs overhaul), editorial / blog.
-2. **Vibe words** the user used - "minimalist", "calm", "Linear-style", "Awwwards", "brutalist", "premium consumer", "Apple-y", "playful", "serious B2B", "editorial", "agency-y", "glassy", "dark tech".
-3. **Reference signals** - URLs they linked, screenshots they pasted, products they named, brands they're competing with.
-4. **Audience** - B2B procurement panel vs. design-conscious consumer vs. recruiter scanning a portfolio. The audience picks the aesthetic, not your taste.
-5. **Brand assets that already exist** - logo, color, type, photography. For redesigns, these are starting material, not optional input (see [references/redesign.md](references/redesign.md)).
-6. **Quiet constraints** - accessibility-first audiences, public-sector, regulated industries, trust-first commerce, kids' products. These constraints OVERRIDE aesthetic preference.
+1. **Page kind:** landing (SaaS / consumer / agency / event), portfolio (dev /
+   designer / creative studio), redesign (preserve vs overhaul), or editorial /
+   blog.
+2. **Vibe words:** terms such as "minimalist", "calm", "Linear-style",
+   "Awwwards", "brutalist", "premium consumer", "Apple-y", "playful", "serious
+   B2B", "editorial", "agency-y", "glassy", or "dark tech".
+3. **Reference signals:** URLs, screenshots, named products, and competing
+   brands.
+4. **Audience:** a B2B procurement panel, design-conscious consumer, or
+   recruiter scanning a portfolio. The audience determines the aesthetic.
+5. **Existing brand assets:** logo, color, typography, and photography. Treat
+   them as starting material for a redesign. See
+   [references/redesign.md](references/redesign.md).
+6. **Quiet constraints:** accessibility-first audiences, public-sector or
+   regulated industries, trust-first commerce, and products for children.
+   These constraints override aesthetic preference.
 
 ### 0.B Output a one-line "Design Read" before generating
 Before any code, state in one line: **"Reading this as: \<page kind> for \<audience>, with a \<vibe> language, leaning toward \<design system or aesthetic family>."**
@@ -31,7 +41,9 @@ Example reads:
 - *"Reading this as: redesign of a public-sector service site, with a trust-first language, leaning toward GOV.UK Frontend or USWDS."*
 
 ### 0.C If the brief is ambiguous, ask one question, do not guess
-Ask exactly **one** clarifying question - never a multi-question dump - and only when the design read genuinely diverges. Example: *"Should this feel closer to Linear-clean or Awwwards-experimental?"*
+Ask exactly **one** clarifying question only when the design read genuinely
+diverges. Never send a group of questions. Example: *"Should this feel closer
+to Linear-clean or Awwwards-experimental?"*
 
 If you can confidently infer from context, **do not ask**. Just declare the design read and proceed.
 
@@ -44,11 +56,13 @@ Do not default to: AI-purple gradients, centered hero over dark mesh, three equa
 
 After the design read, set three dials. Every layout, motion, and density decision below is gated by these.
 
-* **`DESIGN_VARIANCE: 8`** - 1 = Perfect Symmetry, 10 = Artsy Chaos
-* **`MOTION_INTENSITY: 6`** - 1 = Static, 10 = Cinematic / Physics
-* **`VISUAL_DENSITY: 4`** - 1 = Art Gallery / Airy, 10 = Cockpit / Packed Data
+* **`DESIGN_VARIANCE: 8`:** 1 = Perfect Symmetry, 10 = Artsy Chaos
+* **`MOTION_INTENSITY: 6`:** 1 = Static, 10 = Cinematic / Physics
+* **`VISUAL_DENSITY: 4`:** 1 = Art Gallery / Airy, 10 = Cockpit / Packed Data
 
-**Baseline:** `8 / 6 / 4`. Use these unless the design read overrides them. Do not ask the user to edit this file - overrides happen conversationally.
+**Baseline:** `8 / 6 / 4`. Use these unless the design read overrides them. Ask
+for overrides in the conversation rather than asking the user to edit this
+file.
 
 ### 1.A Dial Inference (design read → dial values)
 | Signal | VARIANCE | MOTION | DENSITY |
@@ -58,8 +72,8 @@ After the design read, set three dials. Every layout, motion, and density decisi
 | "playful / wild / Dribbble / Awwwards / experimental / agency" | 9-10 | 8-10 | 3-4 |
 | "landing page / portfolio / marketing site (default)" | 7-9 | 6-8 | 3-5 |
 | "trust-first / public-sector / regulated / accessibility-critical" | 3-4 | 2-3 | 4-5 |
-| "redesign - preserve" | match existing | +1 | match existing |
-| "redesign - overhaul" | +2 | +2 | match existing |
+| "redesign: preserve" | match existing | +1 | match existing |
+| "redesign: overhaul" | +2 | +2 | match existing |
 
 ### 1.B Use-Case Presets
 | Use case | VARIANCE | MOTION | DENSITY |
@@ -71,11 +85,13 @@ After the design read, set three dials. Every layout, motion, and density decisi
 | Portfolio (Developer) | 6 | 5 | 4 |
 | Editorial / Blog | 6 | 4 | 3 |
 | Public-sector service | 3 | 2 | 5 |
-| Redesign - preserve | match | match+1 | match |
-| Redesign - overhaul | +2 | +2 | match |
+| Redesign: preserve | match | match+1 | match |
+| Redesign: overhaul | +2 | +2 | match |
 
 ### 1.C How the Dials Drive Output
-Use these (or user-overridden values) as global variables. Cross-references throughout this document refer to these exact variable names - never invent aliases like `LAYOUT_VARIANCE` or `ANIM_LEVEL`.
+Use these values as global variables unless the user overrides them. Keep the
+exact variable names throughout the document. Do not create aliases such as
+`LAYOUT_VARIANCE` or `ANIM_LEVEL`.
 
 ---
 
@@ -90,7 +106,11 @@ Use these (or user-overridden values) as global variables. Cross-references thro
 ### MOTION_INTENSITY (Level 1-10)
 * **1-3 (Static):** No automatic animations. CSS `:hover` and `:active` states only. `prefers-reduced-motion` is the default mode anyway.
 * **4-7 (Fluid CSS):** `transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1)`. `animation-delay` cascades for load-ins. Focus on `transform` and `opacity`.
-* **8-10 (Advanced Choreography):** Complex scroll-triggered reveals, parallax, scroll-driven animation (CSS `animation-timeline` or GSAP ScrollTrigger). Use Motion hooks. **NEVER use `window.addEventListener('scroll')`** - it is a hard ban, not a "prefer-not." See 5.D in [references/motion.md](references/motion.md) for the allowed alternatives.
+* **8-10 (Advanced Choreography):** Use complex scroll-triggered reveals,
+  parallax, and scroll-driven animation through CSS `animation-timeline` or
+  GSAP ScrollTrigger. Use Motion hooks. **Never use
+  `window.addEventListener('scroll')`.** See 5.D in
+  [references/motion.md](references/motion.md) for the allowed alternatives.
 
 ### VISUAL_DENSITY (Level 1-10)
 * **1-3 (Art Gallery):** Lots of white space. Huge section gaps (`py-32` to `py-48`). Expensive, clean.
@@ -126,7 +146,8 @@ This skill is NOT for:
 * Multi-step forms / wizards (use Form-specific patterns; this skill won't make them better).
 * Code editors (use Monaco / CodeMirror with their official skinning).
 * Native mobile (use Apple HIG / Material directly).
-* Realtime collab UIs (presence, cursors, OT-aware - different problem class).
+* Realtime collaboration UIs (presence, cursors, and OT-aware state) belong to
+  a different problem class.
 
 If the brief is one of the above, **say so explicitly**, point to the right tool, and only apply this skill's marketing-page / about-page / landing-page parts to the surfaces where they apply.
 
@@ -134,12 +155,22 @@ If the brief is one of the above, **say so explicitly**, point to the right tool
 
 ## Reference index
 
-- [references/design-systems.md](references/design-systems.md) - the brief-to-design-system map, plus vendored install commands and canonical doc links (Appendices A-C)
-- [references/architecture.md](references/architecture.md) - default stack, state, icons, emoji policy, responsiveness, dependency verification
-- [references/directives.md](references/directives.md) - bias-correction directives (typography, color, layout, materiality, states, forms, images, density, quotes, theme lock) and the dark mode protocol
-- [references/motion.md](references/motion.md) - scroll patterns with canonical skeletons, forbidden animation patterns, performance and accessibility guardrails
-- [references/ai-tells.md](references/ai-tells.md) - forbidden AI-tell patterns, including the em-dash ban
-- [references/vocabulary.md](references/vocabulary.md) - pattern-name vocabulary: heroes, navigation, grids, cards, scroll, galleries, typography, micro-interactions
-- [references/redesign.md](references/redesign.md) - redesign protocol: mode detection, audit-first, preservation rules, modernisation levers
-- [references/blocks.md](references/blocks.md) - the block library contract
-- [references/preflight.md](references/preflight.md) - the final pre-flight checklist
+- [references/design-systems.md](references/design-systems.md): the
+  brief-to-design-system map, vendored installation commands, and canonical
+  documentation links (Appendices A-C)
+- [references/architecture.md](references/architecture.md): the default stack,
+  state, icons, emoji policy, responsiveness, and dependency verification
+- [references/directives.md](references/directives.md): bias-correction
+  directives and the dark mode protocol
+- [references/motion.md](references/motion.md): scroll patterns, forbidden
+  animation patterns, and performance and accessibility guardrails
+- [references/ai-tells.md](references/ai-tells.md): forbidden AI patterns,
+  including the em dash ban
+- [references/vocabulary.md](references/vocabulary.md): vocabulary for heroes,
+  navigation, grids, cards, scrolling, galleries, typography, and
+  micro-interactions
+- [references/redesign.md](references/redesign.md): mode detection,
+  audit-first work, preservation rules, and modernization options
+- [references/blocks.md](references/blocks.md): the block library contract
+- [references/preflight.md](references/preflight.md): the final preflight
+  checklist
