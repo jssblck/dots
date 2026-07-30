@@ -1,6 +1,6 @@
 defaults:
   model: gpt-5.6-luna
-  effort: xhigh
+  effort: high
 
 reviewers:
   - name: fresh-eyes-correctness
