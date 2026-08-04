@@ -1,6 +1,6 @@
 defaults:
-  model: gpt-5.6-luna
-  effort: high
+  model: gpt-5.6-sol
+  effort: medium
 
 reviewers:
   - name: fresh-eyes-correctness
