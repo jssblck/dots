@@ -85,26 +85,6 @@ problem.
 - Wait quietly for long-running commands. Use the longest polling interval and
   report only meaningful output or a required decision.
 
-## Codex automations
-
-- For Jess's Codex automations, default to model `gpt-5.6-sol` and reasoning
-  effort `medium` unless she requests other settings.
-- For cron automations, pass `model: "gpt-5.6-sol"` and
-  `reasoningEffort: "medium"` by default.
-
-## Git attribution
-
-- When Codex materially contributes to a commit or pull request, append this
-  exact line after a blank line:
-
-  `Co-authored-by: Codex <noreply@openai.com>`
-
-- Use it as a Git trailer in commit bodies and as the final footer in pull
-  request bodies.
-- Do not add the line after inspection, advice, or a mechanical user-requested
-  command.
-- Do not add a human co-author unless the user requests one.
-
 ## Writing style
 
 Write direct, conversational technical prose. Follow ASD-STE100 Simplified

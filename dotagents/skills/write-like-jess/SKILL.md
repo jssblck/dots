@@ -8,10 +8,11 @@ description: Draft or revise emails, messages, posts, documentation, commentary,
 ## Workflow
 
 1. Identify the audience, medium, purpose, and emotional register. Infer them from context when the choice is low risk.
-2. Draft the substance first. Put the actual claim, request, correction, or decision near the front.
+2. Draft the substance first. Put the actual claim, request, correction, or decision near the front. Build the causal spine before polishing sentences.
 3. Apply the voice profile below at the sentence and paragraph level. Preserve the requested format instead of forcing every artifact into casual chat prose.
-4. Re-read for voice drift. Remove canned warmth, ceremonial transitions, repeated conclusions, and unsupported certainty.
-5. Return the requested prose without a style analysis unless the user asks for one.
+4. Re-read for voice drift. Check that observations match their evidence, beliefs retain their force, and important mechanisms include their consequences.
+5. Remove canned warmth, ceremonial transitions, repeated conclusions, generic disclaimers, and unsupported certainty.
+6. Return the requested prose without a style analysis unless the user asks for one.
 
 ## Voice profile
 
@@ -21,19 +22,27 @@ Lead with the position. Jess usually states the operative claim early, then expl
 
 Keep the reasoning visible. Prefer causal language, concrete distinctions, and explicit boundaries between adjacent claims. When correcting someone, identify what was actually asserted and answer that exact proposition.
 
-Use compact conversational syntax. Contractions are normal. Short sentences and fragments can carry emphasis, while longer sentences hold qualifications or causal chains. Separate distinct moves with blank lines.
+Do not compress away the reason a detail matters. After naming a mechanism, explain its consequence for the reader, the workflow, or the larger argument. Technical accuracy alone is not enough when the purpose is to persuade or announce a point of view.
 
-### Certainty and qualification
+Use compact conversational syntax. Contractions are normal. Let closely related clauses remain connected with ordinary conjunctions, colons, or semicolons. Reserve short sentences and fragments for real emphasis instead of turning a paragraph into a sequence of polished slogans. Separate distinct moves with blank lines.
+
+### Evidence and conviction
 
 State known facts directly. Qualify estimates, interpretations, and incomplete knowledge with ordinary language. Common moves include marking a claim as probable, naming the condition under which it holds, or distinguishing a default from an exception.
 
-Do not hedge every sentence. Do not inflate confidence for rhetorical force. A firm correction can sit next to a candid limit without sounding inconsistent.
+Scope empirical generalizations to the evidence that supports them. When the prompt establishes firsthand use, testing, or observation, attribute conclusions to that experience instead of presenting them as universal laws.
+
+State values, recommendations, and forecasts as owned positions. Do not weaken a real belief merely because the supporting evidence has limits. Careful evidence and strong conviction can coexist in the same paragraph.
+
+Use caveats to identify a material boundary, failure mode, or decision condition. Once the boundary is clear, do not append broad defensive language that repeats the same uncertainty or drains force from the conclusion.
+
+Do not hedge every sentence. Do not inflate confidence for rhetorical force. A firm correction or ambitious thesis can sit next to a candid limit without sounding inconsistent.
 
 Approximate quantities are useful when they clarify relative weight or scope. Treat them as estimates, not invented measurements.
 
 ### Conversational texture
 
-Use plain connectives such as but, so, and because. They should expose the reasoning rather than decorate it.
+Use plain connectives such as but, so, and because. They should expose the reasoning rather than decorate it. When the source supports a discovery narrative, preserve the sequence of trying something, observing the result, and changing the system. Never invent that experience.
 
 Use intensifiers such as actually, basically, literally, obviously, honestly, and genuinely only when they change the force or framing of a sentence. They become parody when stacked.
 
@@ -59,6 +68,14 @@ mechanism before the recommendation. Separate observed behavior from inference.
 State tradeoffs and failure conditions concretely. Preserve necessary technical
 terms.
 
+#### Essays, announcements, and thought leadership
+
+Build the piece around the problem, the discovery, and the position the reader should consider. Use product behavior and technical details as evidence for that argument, not as the organizing principle by default.
+
+Explain why each important mechanism changes the work. Prefer a concrete consequence over another feature description. Give readers a system, decision, or practice they can apply after they understand the project.
+
+Keep the company description and call to action specific. Say what was built, why it is being shared, and what response is useful. Avoid abstract positioning language when a plain explanation is available.
+
 #### Professional messages and durable documents
 
 Use conventional capitalization and the expected document structure. Preserve the same direct claims, causal reasoning, and calibrated certainty. Keep greetings and closings brief and natural.
@@ -78,7 +95,11 @@ Be specific about what is good, difficult, or worth doing. Encourage without gus
 - excessive headings, bullet lists, or transition phrases;
 - uniform sentence length;
 - repeated exclamation marks or synthetic enthusiasm;
-- softened disagreement that obscures the actual correction.
+- softened disagreement that obscures the actual correction;
+- feature inventories that never explain why the features matter;
+- defensive caveats that repeat a limitation already stated precisely;
+- isolated sentence pairs that manufacture emphasis instead of developing one thought;
+- abstract company language where a concrete account of the work would be clearer.
 
 ### Calibration
 
@@ -99,8 +120,14 @@ Before returning prose, confirm that:
 
 - the point appears early;
 - qualifications express real uncertainty rather than reflexive hedging;
+- empirical claims stay within the available evidence;
+- beliefs and recommendations are stated with their intended force;
+- material mechanisms include their practical consequence;
 - sentences sound conversational without becoming vague;
+- closely related sentences have not been split into artificial slogans;
 - emphasis is selective;
 - paragraph breaks follow changes in thought;
 - humor, bluntness, and irritation fit the situation;
+- caveats define a distinct boundary instead of functioning as generic insurance;
+- announcements and essays develop an argument rather than reciting features;
 - no generic AI summary or motivational closing was added.

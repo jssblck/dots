@@ -8,26 +8,28 @@ branches are for different systems.
 - Arch Linux: `arch`; https://github.com/jssblck/dots/tree/arch
 - agents: https://github.com/jssblck/dots/tree/agents
 
-This branch (`agents`) backs up my user-level Claude Code, Codex, and Bastion
-config. An agent routine keeps it synchronized in both directions: user config
-to repo for backup, and repo to user config for restore.
+This branch (`agents`) backs up my user-level shared agent, Claude Code, Codex,
+Pi, and Bastion config. An agent routine keeps it synchronized in both
+directions: user config to repo for backup, and repo to user config for restore.
 
 ## Layout
 
 Each top-level directory mirrors a user config directory:
 
-| Repo dir      | User config dir             | Tool               |
-| ------------- | --------------------------- | ------------------ |
-| `dotclaude/`  | `~/.claude/`                | Claude Code        |
-| `dotcodex/`   | `~/.codex/`                 | Codex              |
-| `dotbastion/` | Platform-specific; see sync | Bastion            |
+| Repo dir      | User config dir             | Tool                         |
+| ------------- | --------------------------- | ---------------------------- |
+| `dotagents/`  | `~/.agents/`                | Shared by Codex and Pi       |
+| `dotclaude/`  | `~/.claude/`                | Claude Code                  |
+| `dotcodex/`   | `~/.codex/`                 | Codex-specific configuration |
+| `dotpi/`      | `~/.pi/agent/`              | Pi-specific configuration    |
+| `dotbastion/` | Platform-specific; see sync | Bastion                      |
 
 ## Backup / restore policy
 
 See [SYNC.md](SYNC.md). It is the source of truth for what gets backed up, how
 files are sanitized (the Claude `__HOME__` placeholder, the curated Codex
-`config.toml`), and how restore reverses each step. Auth is never stored here:
-sign in to Claude and Codex separately after restoring.
+`config.toml`), and how restore reverses each step. Auth is never stored here.
+Sign in to each agent separately after restoring.
 
 For [Claude Code on the web](https://claude.ai/code), a fresh cloud session
 clones only the target repo and never runs that routine, so `claude-cloud-restore.sh`

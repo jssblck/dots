@@ -7,7 +7,8 @@ is kept in sync by an agent routine that runs both directions: home to repo
 **Before you back up or restore anything here, read [SYNC.md](SYNC.md).** It is
 the source of truth for:
 
-- the directory mapping (`dotclaude/` <-> `~/.claude/` and `dotcodex/` <-> `~/.codex/`)
+- the directory mapping (`dotagents/` <-> `~/.agents/` and each
+  product-specific config directory)
 - the allowlist of what is backed up (skills, `CLAUDE.md` / `AGENTS.md`,
   `settings.json`, `config.toml`)
 - the sanitization rules (the `settings.json` `__HOME__` placeholder, the
@@ -20,5 +21,5 @@ Never commit auth, sessions, logs, sqlite, or other machine state. The
 control.
 
 Note: this file is guidance for agents operating on the repo. It is not
-backed-up config. The backed-up instruction files live at `dotclaude/CLAUDE.md`
-and `dotcodex/AGENTS.md`.
+backed-up config. The backed-up instruction files live at
+`dotclaude/CLAUDE.md` and `dotagents/AGENTS.md`.

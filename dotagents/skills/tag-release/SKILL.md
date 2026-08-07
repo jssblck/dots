@@ -1,6 +1,6 @@
 ---
 name: tag-release
-description: Cut a release by tagging the current remote default branch in the repository's established format, pushing it, and verifying the release pipeline and artifacts. Use when the user asks Codex to tag a patch, minor, or major release, cut a release, or publish a version from the default branch.
+description: Cut a release by tagging the current remote default branch in the repository's established format, pushing it, and verifying the release pipeline and artifacts. Use when the user asks the agent to tag a patch, minor, or major release, cut a release, or publish a version from the default branch.
 ---
 
 # Tag a release

@@ -1,6 +1,6 @@
 ---
 name: ship-it
-description: Land a completed workstream by verifying it, committing it, opening a ready pull request, and driving every CI check to green. Use when the user says "ship it", "commit and open a PR", "get CI green", "push this and watch CI", or otherwise asks Codex to finish and publish the current change.
+description: Land a completed workstream by verifying it, committing it, opening a ready pull request, and driving every CI check to green. Use when the user says "ship it", "commit and open a PR", "get CI green", "push this and watch CI", or otherwise asks the agent to finish and publish the current change.
 ---
 
 # Ship it: commit, open the PR, get CI green
@@ -13,7 +13,7 @@ with the available access.
 Work on a feature branch, never the default branch (in a worktree if that is the
 repo's flow). If you are already on a feature branch, stay on it. Follow the
 repo's branch-naming convention. When the repo has none and a branch is needed,
-use the `codex/` prefix.
+use the `agent/` prefix.
 
 ## 1. Verify locally before you commit
 
@@ -59,7 +59,7 @@ git commit -m "$(cat <<'EOF'
 <Body: explain WHY the change is needed and what it does, not a restatement of
 the diff. Wrap at ~80 columns.>
 
-Co-authored-by: Codex <noreply@openai.com>
+<attribution trailer required by the active global instructions, if any>
 EOF
 )"
 ```
@@ -75,7 +75,7 @@ Rules that always hold:
 ## 3. Open the PR
 
 Infer the PR's core reason from the workstream and confirm it with the user unless
-the reason was already confirmed or the user explicitly asked Codex to proceed
+the reason was already confirmed or the user explicitly asked the agent to proceed
 without confirmation. Then push the branch and inspect whether it already has an
 open PR:
 
@@ -105,7 +105,7 @@ Fixes #<issue>.
 
 <Exact commands run and their results. If a check was not run, say why.>
 
-Co-authored-by: Codex <noreply@openai.com>
+<attribution footer required by the active global instructions, if any>
 EOF
 )"
 ```
@@ -118,10 +118,9 @@ Notes:
   concrete verification easy to find. Include configuration instructions only
   when setup or runtime configuration changed. A short fenced code block for a
   key type or signature is useful when it clarifies the change.
-- Add the Codex attribution footer only when Codex materially contributed to the
-  implementation or verification.
+- Add an attribution footer only when the active global instructions require it.
 - Base the default branch. Create a normal ready PR, with no labels or reviewers
-  unless asked. Do not add a Codex-specific title prefix.
+  unless asked. Do not add an agent-specific title prefix.
 - Before watching CI, verify the final PR's base, head, readiness, title, body,
   and URL with `gh pr view`.
 
@@ -151,6 +150,4 @@ Bastion finding at its root, never by working around the gate.
 
 Close with the PR link and the concrete green state: which check groups passed,
 what shipped as a short list of commits, and any first-run failure fixed along
-the way. State plainly that CI is fully green. When the Codex app supports Git
-action directives, emit the applicable branch, stage, commit, push, and PR
-directives only after each action has succeeded.
+the way. State plainly that CI is fully green.

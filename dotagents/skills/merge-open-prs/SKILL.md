@@ -1,6 +1,6 @@
 ---
 name: merge-open-prs
-description: Merge all or several open pull requests through GitHub in the safest order, resolving textual and semantic conflicts and verifying the accumulated result. Use when the user says "merge all open PRs", asks Codex to choose a merge order, requests conflict resolution across PRs, or chains those merges into a release.
+description: Merge all or several open pull requests through GitHub in the safest order, resolving textual and semantic conflicts and verifying the accumulated result. Use when the user says "merge all open PRs", asks the agent to choose a merge order, requests conflict resolution across PRs, or chains those merges into a release.
 ---
 
 # Merge all open PRs
@@ -206,8 +206,8 @@ default branch or by assuming `origin/<headRefName>` identifies the PR head.
 ```sh
 git fetch origin \
   "<default-branch>:refs/remotes/origin/<default-branch>" \
-  "pull/<n>/head:refs/codex/pr-<n>"
-git worktree add --detach <temp-worktree> refs/codex/pr-<n>
+  "pull/<n>/head:refs/agents/pr-<n>"
+git worktree add --detach <temp-worktree> refs/agents/pr-<n>
 git -C <temp-worktree> merge origin/<default-branch>
 # ... resolve conflicts (below), apply any fix needed to keep it building ...
 # ... verify: the repo's build + the tests for this PR's blast radius ...
@@ -223,12 +223,11 @@ the prepared commit to a same-named branch in the base repository by accident.
 If the fork cannot be updated, report the prepared commit or patch and ask the
 contributor to apply it.
 
-When Codex materially authors or verifies a conflict fix, add
-`Co-authored-by: Codex <noreply@openai.com>` after a blank line in the fix commit
-and in the final squash body. Repository squash settings may discard the source
-commit message. Omit the trailer for untouched contributor commits and purely
-mechanical merges. `git rerere` is worth enabling in the temporary worktree when
-the same conflicts recur.
+Apply any attribution rule from the active global instructions when the agent
+materially authors or verifies a conflict fix. Repository squash settings may
+discard the source commit message. Omit attribution for untouched contributor
+commits and purely mechanical merges. `git rerere` is worth enabling in the
+temporary worktree when the same conflicts recur.
 
 **Resolving Git-level conflicts.** Read each hunk and combine intent rather than
 picking a side blindly: prose takes the richer superset, code keeps both sides'

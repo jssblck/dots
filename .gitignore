@@ -1,12 +1,20 @@
 # Each top-level dir mirrors a home agent dir:
+#   dotagents  <->  ~/.agents
 #   dotclaude  <->  ~/.claude
 #   dotcodex   <->  ~/.codex
+#   dotpi      <->  ~/.pi/agent
 #   dotbastion <->  Bastion platform config directory
 # SYNC.md is the source of truth for what gets backed up (the allowlist).
 #
 # This file is only a safety net: it hard-blocks auth, secrets, sessions, logs,
 # sqlite, and other machine state from ever being committed, even if an
 # automated sync step copies more than the allowlist intends.
+
+# --- Shared agents (dotagents <- ~/.agents) ---
+dotagents/*
+!dotagents/AGENTS.md
+!dotagents/skills/
+!dotagents/skills/**
 
 # --- Claude (dotclaude <- ~/.claude) ---
 dotclaude/.credentials.json
@@ -60,6 +68,12 @@ dotcodex/sqlite/
 dotcodex/tmp/
 dotcodex/vendor_imports/
 dotcodex/worktrees/
+
+# --- Pi (dotpi <- ~/.pi/agent) ---
+# Only the translated system prompt is tracked. Pi settings, auth, packages,
+# sessions, extensions, memory, and other local state stay machine-local.
+dotpi/*
+!dotpi/SYSTEM.md
 
 # --- Bastion (dotbastion <- platform config directory) ---
 # Only the user-level reviewer registry is durable config.

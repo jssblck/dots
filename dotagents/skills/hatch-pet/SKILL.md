@@ -18,11 +18,9 @@ requests, generate a base pet and use it as the canonical row reference.
 
 Use `$imagegen` for all normal visual generation.
 
-Before generating base art, row strips, or repair rows, load and follow the installed image generation skill:
-
-```text
-${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/SKILL.md
-```
+Before generating base art, row strips, or repair rows, load and follow the
+installed `$imagegen` skill through the current harness's skill registry. Stop
+and tell the user if that skill is unavailable.
 
 Do not call the Image API directly for the normal path. Let `$imagegen` choose its own built-in-first path and its own CLI fallback rules. If `$imagegen` says a fallback requires confirmation, ask the user before continuing.
 
@@ -152,7 +150,7 @@ Only mark a step complete when the real file, image, or decision exists. If this
 1. Prepare a pet run folder and imagegen job manifest:
 
 ```bash
-SKILL_DIR="${CODEX_HOME:-$HOME/.codex}/skills/hatch-pet"
+SKILL_DIR="$HOME/.agents/skills/hatch-pet"
 python "$SKILL_DIR/scripts/prepare_pet_run.py" \
   --pet-name "<Name>" \
   --description "<one sentence>" \
