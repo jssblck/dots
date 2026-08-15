@@ -16,15 +16,16 @@ repo that has the wrapper.
 
 ## Identities
 
-| Identity   | Where the private key lives                                       | Decrypts             |
-| ---------- | ---------------------------------------------------------------- | -------------------- |
-| `agent`    | `~/.config/sops/age/keys.txt` on every machine agents run on; `SOPS_AGE_KEY` in cloud sandboxes | `dev.env` in every project |
-| `prod`     | the production platform only                                     | `prod.env`           |
-| `personal` | the user's password manager                                      | every file           |
+| Identity   | Scope       | Where the private key lives                                       | Decrypts    |
+| ---------- | ----------- | ---------------------------------------------------------------- | ----------- |
+| `agent`    | user-wide   | `~/.config/sops/age/keys.txt` on every machine agents run on; `SOPS_AGE_KEY` in cloud sandboxes | `dev.env` |
+| `personal` | user-wide   | the user's password manager                                      | every file  |
+| `prod`     | per project | that project's production platform only                          | `prod.env`  |
 
 `.sops.yaml` lists recipients by public key. Encrypting needs no private key; decrypting
-or editing needs one recipient's private key. `agent` is one identity shared by all
-projects on purpose, so nothing is configured per project.
+or editing needs one recipient's private key. `agent` and `personal` are local-development
+keys shared by every project; `prod` is minted per project so one leaked deploy variable
+exposes one project.
 
 ## Agent workflow
 

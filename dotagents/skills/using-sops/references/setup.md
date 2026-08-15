@@ -1,7 +1,6 @@
 # Setup: keys, machines, sandboxes, production
 
-Everything here is done once per person, machine, sandbox, or service. None of it is
-per project except the last section.
+Steps 1 through 4 are once per person, machine, or sandbox. Steps 5 and 6 are per project.
 
 ## 1. Install the tools
 
@@ -18,12 +17,11 @@ mv age/age age/age-keygen ~/.local/bin/ && rm -rf age
 macOS: `brew install sops age`. Confirm with `sops --version --disable-version-check`
 and `age-keygen --version`. `pnpm run doctor` in a starter repo reports both.
 
-## 2. Generate the three identities (once, ever)
+## 2. Generate the shared identities (once, ever)
 
 ```sh
 age-keygen -o personal.txt
 age-keygen -o agent.txt
-age-keygen -o prod.txt
 ```
 
 Each file holds a comment with the public key (`age1...`) and the private key
@@ -34,11 +32,9 @@ Each file holds a comment with the public key (`age1...`) and the private key
   'op://Personal/age-personal/private key'`). Delete the local file.
 - `agent.txt`: keep for step 3, then store a copy in the password manager as
   `age-agent` for future machines. Delete the local file after step 3.
-- `prod.txt`: store in the password manager as `age-prod`. It goes to production
-  platforms only (step 5). Delete the local file.
 
-Record the three public keys somewhere handy (a note in the password manager works).
-Every new project's `.sops.yaml` needs them.
+Record both public keys somewhere handy (a note in the password manager works). Every new
+project's `.sops.yaml` needs them. The `prod` key is per project and is generated in step 6.
 
 ## 3. Install the agent key on a machine
 
@@ -70,7 +66,7 @@ Never put `personal` or `prod` in a sandbox.
 
 ## 5. Production
 
-Only the `prod` identity goes to production. The service starts through
+Only that project's `prod` identity goes to production. The service starts through
 `pnpm secrets exec prod -- <command>` (containers: `node tools/secrets.ts exec prod -- ...`
 as `CMD`), so decryption happens at boot and the app never sees the key.
 
@@ -102,7 +98,10 @@ ExecStart=/usr/bin/node tools/secrets.ts exec prod -- node apps/server/src/main.
 
 Once per new repository (the `bootstrap` skill asks for this):
 
-1. Put the three public keys in `.sops.yaml`, replacing the placeholders:
+1. Generate the project's prod key: `age-keygen -o prod.txt`. Store the file in the
+   password manager as `age-prod-<project>`, note the public key, delete the local file.
+   Set the private key on the deploy target (step 5) when the first deploy happens.
+2. Put the three public keys in `.sops.yaml`, replacing the placeholders:
    ```yaml
    creation_rules:
      - path_regex: secrets/dev\.env$
@@ -110,13 +109,13 @@ Once per new repository (the `bootstrap` skill asks for this):
      - path_regex: secrets/prod\.env$
        age: 'age1PERSONAL,age1PROD'
    ```
-2. `pnpm secrets init dev && pnpm secrets init prod`.
-3. Elevate the checkout so you can write prod values:
+3. `pnpm secrets init dev && pnpm secrets init prod`.
+4. Elevate the checkout so you can write prod values:
    `op read 'op://Personal/age-personal/private key' | pnpm secrets elevate`.
-4. `pnpm secrets set dev KEY value` and `pnpm secrets set prod KEY value` as needed. Commit
+5. `pnpm secrets set dev KEY value` and `pnpm secrets set prod KEY value` as needed. Commit
    `.sops.yaml` and `secrets/`.
 
-Sibling worktrees are unelevated by default; repeat step 3 in a checkout that needs prod.
+Sibling worktrees are unelevated by default; repeat step 4 in a checkout that needs prod.
 Delete `.age/elevated` to drop elevation.
 
 ## 7. Rotation
