@@ -58,6 +58,7 @@
   "autoCompactWindow": 400000,
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
+  "tui": "fullscreen",
   "autoMemoryEnabled": false,
   "autoDreamEnabled": false,
   "skipDangerousModePermissionPrompt": true,
