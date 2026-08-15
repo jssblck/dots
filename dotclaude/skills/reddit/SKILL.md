@@ -1,135 +1,66 @@
 ---
 name: reddit
 description: >
-  Read and act on Reddit through the official OAuth API as Jess's existing
-  account. Use for inbox, mentions, listings, search, and thread reads.
-  Write (comment, post, vote, message) only when she explicitly asks.
-  Official oauth.reddit.com only. No anonymous identity.
+  Read and act on Reddit as Jess's existing account through the signed-in
+  Chrome session on the shared computer. Use for inbox, mentions, listings,
+  search, and thread reads. Write (comment, post, vote, message) only when
+  she explicitly asks. No Reddit app. Do not copy cookies or call unofficial
+  APIs.
 ---
 
-# Reddit (official API)
+# Reddit (signed-in Chrome)
 
-Act as Jess's existing Reddit account through a registered **script** app.
-Read is the default. Write only when she explicitly asks.
+Act as Jess's existing Reddit account by driving the Chrome profile where
+she is already signed in. She cannot create a Reddit script app. There is
+no OAuth client and no credentials file.
 
-Do not create a new Reddit user. Do not use application-only
-(`client_credentials`) or any anonymous fallback.
+Do not create a new Reddit user. Do not copy cookies, tokens, or storage
+out of Chrome. Do not replay a session against reddit.com or any Reddit
+API.
 
-Official hosts only:
+## How to use it
 
-- Token: `https://www.reddit.com/api/v1/access_token`
-- API: `https://oauth.reddit.com`
+1. Open Chrome on the shared computer, using the same profile she uses.
+2. Go to https://www.reddit.com
+3. Confirm the account menu shows her username.
+4. If the page is logged out, stop. Have her sign in on that Chrome.
+5. Do the read or write in the page.
 
-Docs: https://github.com/reddit-archive/reddit/wiki/OAuth2
-API: https://www.reddit.com/dev/api/oauth
-
-## Requirements
-
-- `curl`, `jq`
-- Script app credentials in `~/.reddit/credentials` (chmod 600)
-- Bundled helper: `./scripts/reddit.sh`
-
-Never commit `~/.reddit/credentials`, `~/.reddit/token.json`, or API secrets.
-
-## Auth
-
-Credentials file (KEY=value, no quotes):
-
-```
-client_id=...
-client_secret=...
-username=...
-password=...
-```
-
-Optional: `user_agent=linux:jess-dots-reddit:1.0 (by /u/USERNAME)`
-If omitted, the helper builds that User-Agent from `username`.
-
-Reddit requires a descriptive User-Agent. Generic agents get throttled or
-blocked. Format: `platform:app_id:version (by /u/username)`.
-
-### Check before any call
-
-1. Read `~/.reddit/credentials`.
-2. Request a token with the **password** grant (script apps only):
-
-```bash
-curl -sS -X POST https://www.reddit.com/api/v1/access_token \
-  -u "${client_id}:${client_secret}" \
-  -A "linux:jess-dots-reddit:1.0 (by /u/${username})" \
-  -d "grant_type=password&username=${username}&password=${password}"
-```
-
-3. Call `GET https://oauth.reddit.com/api/v1/me` with
-   `Authorization: bearer <access_token>`.
-4. Proceed only when `name` matches `username` (case-insensitive).
-5. If the file is missing, the token request fails, or `/me` is a different
-   user: stop. Have Jess create a script app at
-   https://www.reddit.com/prefs/apps (type **script**, redirect
-   `http://localhost:8080`). Write the four fields to
-   `~/.reddit/credentials` yourself (`mkdir -p`, `chmod 600`). Do not ask
-   her to write the file. Never print the secret or password.
-
-Prefer `./scripts/reddit.sh`. It loads credentials, caches the bearer token
-in `~/.reddit/token.json` (1 hour), and refuses `client_credentials`.
-
-## Rate limits
-
-OAuth is about 60 requests per minute. Read `x-ratelimit-remaining`,
-`x-ratelimit-used`, and `x-ratelimit-reset` on every response. If remaining
-is 0, wait until reset. On HTTP 429, wait `Retry-After` (or the reset) and
-retry once. Do not tight-loop.
+Use the harness browser or computer-use tools against that live Chrome.
+Do not attach a debugger. Do not launch a second browser that copies her
+profile files.
 
 ## Read (default)
 
-Use `./scripts/reddit.sh <cmd>`. JSON on stdout.
+"Check reddit" is read-only. Navigate and read the page.
 
-| Command | Official endpoint | Scope |
-| --- | --- | --- |
-| `me` | `GET /api/v1/me` | identity |
-| `inbox` | `GET /message/inbox` | privatemessages |
-| `unread` | `GET /message/unread` | privatemessages |
-| `mentions` | `GET /message/mentions` | privatemessages |
-| `listing [sub] [sort]` | `GET /r/{sub}/{sort}` or `GET /{sort}` | read |
-| `search <query> [sub]` | `GET /search` or `GET /r/{sub}/search` | read |
-| `thread <id-or-url>` | `GET /comments/{id}` | read |
+- Inbox: https://www.reddit.com/message/inbox
+- Unread: https://www.reddit.com/message/unread
+- Mentions: https://www.reddit.com/message/mentions
+- Listing: https://www.reddit.com/r/{sub}/{sort} or https://www.reddit.com/{sort}
+- Search: https://www.reddit.com/search/?q=...
+- Thread: the comments URL she gave, or search and then open it
 
-`listing` sort is `hot` (default), `new`, `rising`, `top`, or `controversial`.
-`thread` accepts a fullname (`t3_...`), a 6-7 char id, or a reddit comments URL.
-
-Paginate with `after` from the listing (`--after <fullname>`). Do not fetch
-HTML pages for more results.
+Report titles, permalinks, authors, and the specific ask. Do not dump the
+whole page unless she wants it.
 
 ## Write (explicit ask only)
 
-Do not comment, submit, vote, or message unless Jess's current message
-clearly asks for that action. "Check reddit" is read-only.
+Do not comment, submit, vote, or message unless her current message
+clearly asks for that action.
 
-Write commands require `--confirm-write`:
-
-| Command | Official endpoint | Scope |
-| --- | --- | --- |
-| `comment <parent> <text>` | `POST /api/comment` | submit |
-| `submit <sub> <title> <url-or-text>` | `POST /api/submit` | submit |
-| `vote <id> <up\|down\|clear>` | `POST /api/vote` | vote |
-| `message <to> <subject> <text>` | `POST /api/compose` | privatemessages |
-
-`parent` and vote `id` are fullnames (`t1_...` comment, `t3_...` post).
-`submit` treats the third argument as a URL if it starts with `http`, else
-as self-text.
+After a write, report the resulting permalink or the on-page error.
 
 ## Forbidden
 
-- Shared browser sessions or saved site cookies
-- Unofficial or private Reddit APIs
-- `grant_type=client_credentials` or installed-client device grants
-- Creating a new Reddit account or script app under a different user
-- Printing or committing secrets
+- Copying Chrome cookies, tokens, or profile files
+- Calling Reddit HTTP APIs with a copied session
+- Creating a Reddit app or a new account
+- Printing or committing anything from the Chrome profile
 
 ## What to tell her
 
-- Read results: titles, permalinks, authors, and the specific ask. Do not
-  dump raw listing JSON unless she wants it.
-- Write results: the returned id and permalink, or the API error.
-- Auth missing: say the script app is not configured and what she needs to
-  create at /prefs/apps. Do not invent a workaround.
+- Read results: titles, permalinks, authors, and the specific ask.
+- Write results: the permalink or the on-page error.
+- Logged out: Chrome is not signed into Reddit. She needs to sign in on
+  the shared computer.
