@@ -1,66 +1,61 @@
 ---
 name: reddit
 description: >
-  Read and act on Reddit as Jess's existing account through the signed-in
-  Chrome session on the shared computer. Use for inbox, mentions, listings,
-  search, and thread reads. Write (comment, post, vote, message) only when
-  she explicitly asks. No Reddit app. Do not copy cookies or call unofficial
-  APIs.
+  Read and act on Reddit as u/whimsicaljess through the signed-in Chrome
+  session on the shared computer. Use page-level browser tools only.
+  Open old.reddit.com URLs for inbox, user, listings, search, and threads.
+  Write (comment, post, vote, message) only when Jess explicitly asks.
 ---
 
 # Reddit (signed-in Chrome)
 
-Act as Jess's existing Reddit account by driving the Chrome profile where
-she is already signed in. She cannot create a Reddit script app. There is
-no OAuth client and no credentials file.
+Act as u/whimsicaljess by driving the shared computer's Chrome profile
+where she is already signed in. Use page-level browser tools only
+(browserUse on Grok Bot).
 
-Do not create a new Reddit user. Do not copy cookies, tokens, or storage
-out of Chrome. Do not replay a session against reddit.com or any Reddit
-API.
+Confirm the account menu or https://old.reddit.com/user/whimsicaljess
+shows u/whimsicaljess before you do anything else. If Chrome is logged
+out, stop and have her sign in on that Chrome. Do not invent a
+workaround.
 
-## How to use it
+## Direct URLs
 
-1. Open Chrome on the shared computer, using the same profile she uses.
-2. Go to https://www.reddit.com
-3. Confirm the account menu shows her username.
-4. If the page is logged out, stop. Have her sign in on that Chrome.
-5. Do the read or write in the page.
+Open these. Do not click through the site to rebuild them.
 
-Use the harness browser or computer-use tools against that live Chrome.
-Do not attach a debugger. Do not launch a second browser that copies her
-profile files.
+- Inbox: https://old.reddit.com/message/inbox
+- Unread: https://old.reddit.com/message/unread
+- Mentions: https://old.reddit.com/message/mentions
+- User: https://old.reddit.com/user/whimsicaljess
+- Front: https://old.reddit.com/{hot|new|rising|top}
+- Listing: https://old.reddit.com/r/{sub}/{hot|new|rising|top}
+- Search: https://old.reddit.com/search?q={query}
+- Sub search: https://old.reddit.com/r/{sub}/search?q={query}&restrict_sr=on
+- Thread: https://old.reddit.com/r/{sub}/comments/{id}/
 
 ## Read (default)
 
-"Check reddit" is read-only. Navigate and read the page.
-
-- Inbox: https://www.reddit.com/message/inbox
-- Unread: https://www.reddit.com/message/unread
-- Mentions: https://www.reddit.com/message/mentions
-- Listing: https://www.reddit.com/r/{sub}/{sort} or https://www.reddit.com/{sort}
-- Search: https://www.reddit.com/search/?q=...
-- Thread: the comments URL she gave, or search and then open it
-
-Report titles, permalinks, authors, and the specific ask. Do not dump the
-whole page unless she wants it.
+"Check reddit" is read-only. Open the URL, read the page, report titles,
+permalinks, authors, and the specific ask. Do not dump the whole page
+unless she wants it.
 
 ## Write (explicit ask only)
 
 Do not comment, submit, vote, or message unless her current message
-clearly asks for that action.
-
-After a write, report the resulting permalink or the on-page error.
+clearly asks for that action. After a write, report the permalink or
+the on-page error.
 
 ## Forbidden
 
-- Copying Chrome cookies, tokens, or profile files
-- Calling Reddit HTTP APIs with a copied session
+- Copying cookies, tokens, or profile files out of Chrome
+- curl or any HTTP client with a copied session
+- oauth.reddit.com, script apps, or ~/.reddit/credentials
+- Attaching a debugger to Chrome or launching a second browser that
+  copies her profile
 - Creating a Reddit app or a new account
-- Printing or committing anything from the Chrome profile
 
 ## What to tell her
 
 - Read results: titles, permalinks, authors, and the specific ask.
 - Write results: the permalink or the on-page error.
-- Logged out: Chrome is not signed into Reddit. She needs to sign in on
-  the shared computer.
+- Logged out: Chrome is not signed in as u/whimsicaljess. She needs to
+  sign in on the shared computer.
