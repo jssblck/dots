@@ -5,9 +5,8 @@
 //
 // The problem this solves: Claude notices CI failures because they land in the
 // context as tool output. Branch staleness (feature branch is N commits behind
-// main) is invisible state that nothing reports, so Claude happily builds on
-// drifted code and opens stale PRs. This hook does the outside-the-model check
-// and hands the result back as `additionalContext`.
+// main) is otherwise invisible state. This hook reports that distance through
+// `additionalContext`; repository and session policy own any branch update.
 //
 // Wired to two events in settings.json (both invoke this one script; it
 // dispatches on the hook event name from stdin):
@@ -84,7 +83,7 @@ if (git(["rev-parse", "--is-inside-work-tree"]) !== "true") process.exit(0);
 
 // Per-repo opt-out. Some repos don't derive their branches from a single base:
 // a dotfiles repo with a branch per machine (macos, arch, agents), for example,
-// where "N commits behind main" is meaningless and the rebase prompt is wrong.
+// where "N commits behind main" is meaningless.
 // Disable the check there with:
 //   git config claude.branchStaleness.disabled true
 const optOut = git(["config", "--get", "claude.branchStaleness.disabled"]);
@@ -134,25 +133,12 @@ if (!Number.isFinite(behind) || behind <= 0) process.exit(0);
 // ── Emit context ─────────────────────────────────────────────────────────────
 
 const plural = behind === 1 ? "commit" : "commits";
-let context;
-if (event === "PreToolUse") {
-  context =
-    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref} and is ` +
-    `about to open a PR. By default, rebase onto ${ref} first (prefer \`git rebase\` with autostash; use a ` +
-    `merge only if a rebase would be inappropriate) so the PR diff is clean and mergeable, then open the PR. ` +
-    `Do this proactively rather than only offering. Skip the rebase and ask the user first only if there is a ` +
-    `concrete reason: conflicts you cannot resolve cleanly, history shared with others, or an in-progress git ` +
-    `operation. If the branch is already pushed, force-push with \`--force-with-lease\` before creating the PR.`;
-} else {
-  context =
-    `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref}. By default, ` +
-    `rebase this branch onto ${ref} now (prefer \`git rebase\` with autostash; use a merge only if a rebase ` +
-    `would be inappropriate), then continue the work on top of the updated base. Do this proactively rather ` +
-    `than only offering. Pause and ask the user first only if there is a concrete reason not to: a dirty or ` +
-    `conflicting working tree you cannot safely autostash, an in-progress merge or rebase, or history shared ` +
-    `with others where rewriting it would disrupt them. If the branch is already pushed, force-push with ` +
-    `\`--force-with-lease\` after rebasing. Tell the user briefly that you rebased.`;
-}
+const timing = event === "PreToolUse" ? " This check ran before opening a PR." : "";
+const context =
+  `Branch staleness check: the current branch "${current}" is ${behind} ${plural} behind ${ref}.${timing} ` +
+  `Commit distance alone does not establish a merge conflict. Follow explicit repository and session ` +
+  `policy for branch updates. In a read-only review, report observations without changing the checkout. ` +
+  `If the hosting service reports a PR conflict, follow the repository's supported conflict workflow.`;
 
 process.stdout.write(
   JSON.stringify({

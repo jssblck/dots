@@ -210,6 +210,38 @@ curated file as-is.
 8. Sign in to Claude, Codex, Pi, and other services separately. Never restore
    auth.
 
+### Restore a branch-staleness hook fix only
+
+For a reviewed hook-only fix, use step 3 of Restore for the single tracked
+`dotclaude/hooks/branch-staleness.mjs` path. Do not run a whole-directory mirror
+or restore settings, skills, instructions, credentials, or other hooks.
+
+1. Fetch the merged `agents` commit into an isolated checkout on each machine.
+   Record its commit and the hook's SHA-256. Read the local settings' hook
+   commands to identify which installed paths invoke this source. Jess's
+   `~/.claudex/hooks/branch-staleness.mjs` is an additional installation of this
+   same source when `~/.claudex/settings.json` invokes it; it follows the same
+   single-path restore procedure.
+2. Compare each installed hook byte-for-byte with the pre-fix tracked version.
+   If it differs, stop that path's restore and report the difference to its
+   owner. Preserve unrelated configuration edits and repository-local
+   `claude.branchStaleness.disabled` settings.
+3. Copy the merged tracked hook to each verified installation path, preserving
+   its existing permissions. This is a source restore, not a live-file edit.
+   Verify that each restored file's SHA-256 equals the merged source.
+4. Invoke each installed command with real `SessionStart` and pre-PR
+   `PreToolUse` payloads against temporary real Git repositories. Run
+   `HOOK_RUNTIME=bun node --test tests/branch-staleness.integration.test.mjs`
+   for the source CLI's clean/conflicting branch and opt-out scenarios. Record
+   installed-command outputs and confirm existing settings are unchanged.
+   Set `HOOK_PATH` to the installed hook's absolute path to run the same real
+   Git scenarios against each restored installation.
+
+The hook reports commit distance and defers branch actions to explicit
+repository and session policy. A clean stale branch and a read-only review
+receive observations; a host-reported conflict uses the repository's supported
+conflict workflow. Both hook entrypoints share this behavior.
+
 ## Cloud restore for Claude Code on the web
 
 The machine restore targets a trusted personal computer. Claude Code on the web
